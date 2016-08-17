@@ -1,7 +1,8 @@
 % Drag Fin Analysis
-% Ian Gomez, 08/15/16
+% Ian Gomez,  08/15/16
+% Joan Creus, 08/16/16
 % This script runs a simulation of the rocket in flight with the goal of
-% optimizing the size, number, and max angle of the drag fins.
+% simulating the flight profile + drag fins
 
 % Primary Method:
 % 1. Load the thrust data from ThrustCurve.org
@@ -17,10 +18,8 @@
 % PE-PE_desired = D_df * t_open
 % where D_df is the drag of the drag fins and t_open is time the drag fins
 % are deployed
-% Use the drag equation to get an estimate on size of fins
-% Cd_df = D_df/(0.5 * rho * u^2 * S)
-% Guess a Cd_df so to close the problem to solve for total area, S, required
-% of drag fins
+% You can choose the deployment time of the drag fins and the percentage of
+% extra drag they cause the rocket
 
 clear; close all; clc;
 
@@ -44,18 +43,20 @@ rocket.d   = 0.14; % diameter, m
 rocket.Cd  = 0.6;  % coeff of drag
 rocket.S   = pi.*(rocket.d./2).^2; % front cross sectional area, m^2
 rocket.nomotormass = 19.428; % kg
-rocket.deploydrogue = 1;
-rocket.deployparachute = 1;
+rocket.deploydrogue = 0;
+rocket.deployparachute = 0;
 
 % Recovery Information
 parachute.d  = 6.1;                    % m
 parachute.S  = pi.*(parachute.d./2)^2;  % m^2
 parachute.deploy_h = 450;               % m
 parachute.Cd = 0.8;
+parachute.deployed = rocket.deployparachute;
 drogue.Cd = 0.8;
 drogue.d  = 1.22;                      % m
 drogue.S  = pi.*(drogue.d./2)^2;        % m^2
 drogue.deploy_u = -1;                % m/s
+drogue.deployed = rocket.deploydrogue;
 
 % Specify the motor you want
 motor.name = 'M1939';
@@ -111,10 +112,10 @@ altitude_launch_site = 1219; % m
 parachute.deploy_h = altitude_launch_site + parachute.deploy_h;
 
 altitude_target = 3048;  % m
-t_fins_deployed = -1;   % s
-per_normal_drag = 1; % *100%
-launch_angle = 0.*pi./180;  % rad
-lam = cos(launch_angle); % launch angle multiplier for drag terms
+dragfin.deploy_t = 10;   % s
+dragfin.extra_drag_percent = 1.2; % *100%
+rocket.launch_angle = 0.*pi./180;  % rad
+lam = cos(rocket.launch_angle); % launch angle multiplier for drag terms
 
 % Atmospheric properties
 mach1const = 343; % m/s
@@ -149,8 +150,8 @@ for i = 1:length(t)
     % for the drag fins
     rho = density(h(i));
     k = 0.5.*rocket.Cd.*rocket.S.*rho;
-    if (t(i)>t_fins_deployed && t_fins_deployed > 0)
-        k = per_normal_drag*k;
+    if (t(i)>dragfin.deploy_t && dragfin.deploy_t > 0)
+        k = dragfin.extra_drag_percent*k;
     end
     dragloss(i) = lam.*k.*u(i).^2;
     
@@ -199,7 +200,16 @@ for i = 1:length(t)
         t_apogee = t_apogee(2);
     end
     
+    
 end
+
+% Reset altitude for plotting. Air density already taken into account
+h = h-altitude_launch_site;
+
+% Store useful information
+rocket.flight_time = t_land;
+rocket.burnout_h = h(length(t_powered));
+rocket.apogee = max(h);
 
 % If an error occurs at t_land, you need to let the sim run longer
 t_xlim = t_apogee;
@@ -208,9 +218,7 @@ xlimit = [0 t_xlim];  % plots up to the specified limits
 
 %% Simulation Plots
 
-% Reset altitude for plotting. Air density already taken into account
-h = h-altitude_launch_site;
-
+% Makes apogee label
 apogee_label_dim = [.4 .3 .6 .1];
 apogee_label_str = strcat(strcat(strcat({'Apogee = '},num2str(max(h)))),'m');
 altitude = altitude_launch_site + altitude_target;
@@ -308,48 +316,39 @@ if plot_recovery_drag == 1
     legend('Parachute','Drogue')
 end
 
-%% Drag fin characteristics
-
-rocket.burnout_h = h(length(t_powered));
-rocket.apogee = max(h);
+%% Drag fin energy characteristics
 
 % Energy calculations [J]
 e_net = rocket.drymass.*g(1).*rocket.apogee;
 e_want = rocket.drymass.*g(end).*altitude_target;
 e_loss = e_net - e_want;
 e_loss_perc = (e_net - e_want)/e_want;
-disp('Percentage of energy need to lose to drag')
+disp('Additional percentage of energy need to lose to drag')
 disp(strcat(num2str(e_loss_perc.*100),'%'))
 
 % Find index of distance to altitude target from altitude at fin deployment
 % Setting t_fins_deployed below 0 will effectively stop them from deploying
-if t_fins_deployed > 0
+if dragfin.deploy_t > 0
     
-    disp(strcat(strcat(({'Fins deployed at '}),...
-        strcat(num2str(t_fins_deployed),'s')), strcat({', creating '},...
-        strcat(num2str(per_normal_drag*100),...
-        '% more drag than just the rocket'))))
-    
+    tol = time_step; % this allows you to put in precise times for t_deploy
     for i = 1:length(t)
-        if t(i) == t_fins_deployed
-            i_fins_deployed = i;
+        if abs(t(i)-dragfin.deploy_t) < tol
+            dragfin.deploy_index = i;
         end
     end
-    d2at =  altitude_target - h(i_fins_deployed); % m
+    dragfin.deploy_h = h(dragfin.deploy_index);
+    d2at =  altitude_target - dragfin.deploy_h; % m
     D_df = e_loss./d2at;                          % N
     
-    disp('Additional drag needed to hit target')
-    disp(strcat(num2str(D_df),'N'))
-end
-if t_fins_deployed > 0
-    disp('Drag fins were deployed')
+    %disp('Additional drag needed to hit target')
+    %disp(strcat(num2str(D_df),'N'))
 else
     disp('Drag fins were not deployed')
 end
-disp('Launch Angle')
-disp(strcat(num2str(launch_angle*180/pi),'deg'))
-disp('Flight time')
-disp(strcat(num2str(t_land),'s'))
-disp('Altitude Achieved')
-disp(strcat(num2str(rocket.apogee),'m'))
 
+% Show other useful info
+rocket
+motor
+dragfin
+parachute
+drogue
