@@ -104,9 +104,12 @@ end
 % data. Specify your altitude goal, when you want the fins deployed, and
 % how much you want the fins to increase the intrinsic drag of the rocket
 t = 0:time_step:400;      % s
+altitude_launch_site = 1219; % m
 altitude_target = 3048;  % m
-t_fins_deployed = 10;   % s 7.3
-per_normal_drag = 1.5; % *100%   1.544
+t_fins_deployed = -1;   % s
+per_normal_drag = 1; % *100%
+launch_angle = 0.*pi./180;  % rad
+lam = cos(launch_angle); % launch angle multiplier for drag terms
 
 % Atmospheric properties
 mach1const = 343; % m/s
@@ -125,9 +128,9 @@ a = zeros(1,length(t)); h = zeros(1,length(t)); gravityloss = zeros(1,length(t))
 parachutedrag = zeros(1,length(t)); droguedrag = zeros(1,length(t));
 
 % Initial conditions
-h(1) = 0;                              % rocket is at sea level
-u(1) = 0;                              % rocket is stationary
-m(1) = rocket.wetmass;                 % rocket is full of prop
+h(1) = altitude_launch_site; % m,   rocket is not at sea level
+u(1) = 0;                    % m/s, rocket is stationary
+m(1) = rocket.wetmass;       % kg,  rocket is full of prop
 
 % Flight simulation
 for i = 1:length(t)
@@ -137,12 +140,14 @@ for i = 1:length(t)
     end
     
     % Drag calculation
+    % The launch angle is taken into account here and the drag multiplier
+    % for the drag fins
     rho = density(h(i));
     k = 0.5.*rocket.Cd.*rocket.S.*rho;
     if (t(i)>t_fins_deployed && t_fins_deployed > 0)
         k = per_normal_drag*k;
-    end % Drag fin multiplier
-    dragloss(i) = k.*u(i).^2;
+    end 
+    dragloss(i) = lam.*k.*u(i).^2;
     
     currentmomentum(i) = u(i).*m(i);
     gravityloss(i)     = m(i).*g(i);
@@ -152,9 +157,9 @@ for i = 1:length(t)
     % Second if statemnet checks if the rocket is below the parachute
     % deployment height
     if u(i) < drogue.deploy_u && h(i) > parachute.deploy_h
-        droguedrag(i)     = 0.5.*   drogue.Cd.*   drogue.S.*rho.*u(i).^2;
+        droguedrag(i)    = lam.*0.5.*drogue.Cd.*drogue.S.*rho.*u(i).^2;
     elseif h(i) < parachute.deploy_h && u(i) < 0 && t(i) > 1
-        parachutedrag(i) = 0.5.*parachute.Cd.*parachute.S.*rho.*u(i).^2;
+        parachutedrag(i) = lam.*0.5.*parachute.Cd.*parachute.S.*rho.*u(i).^2;
     end
     
     % Solve out forces on rocket
@@ -197,8 +202,12 @@ xlimit = [0 t_land];  % plots up to the specified limits
 
 %% Simulation Plots
 
+% Reset altitude for plotting. Air density already taken into account
+h = h-altitude_launch_site;
+
 apogee_label_dim = [.4 .3 .6 .1];
 apogee_label_str = strcat(strcat(strcat({'Apogee = '},num2str(max(h)))),'m');
+altitude = altitude_launch_site + altitude_target;
 
 if plot_h_u_a == 1
     figure
@@ -210,7 +219,7 @@ if plot_h_u_a == 1
     ylabel('Height (m)')
     xlim(xlimit)
     grid on
-    legend('3048m','Location','Southwest')
+    legend('3048m above launch site','Location','Southwest')
     % label apogee
     annotation('textbox',apogee_label_dim,'String',...
         apogee_label_str,'FitBoxToText','on');
@@ -250,7 +259,7 @@ if plot_combined_hu == 1
 end
 
 if plot_h == 1
-   
+    
     figure
     hold on
     y1=get(gca,'ylim');
@@ -261,9 +270,9 @@ if plot_h == 1
     xlabel('Time (s)')
     ylabel('Height (m)')
     xlim(xlimit)
-        
-grid on
-    legend('3048m','Location','Southwest')
+    
+    grid on
+    legend('3048m above launch site','Location','Southwest')
     % label apogee
     annotation('textbox',apogee_label_dim,'String',...
         apogee_label_str,'FitBoxToText','on');
@@ -300,7 +309,7 @@ rocket.apogee = max(h);
 
 % Energy calculations [J]
 e_net = rocket.drymass.*g(1).*rocket.apogee;
-e_want = rocket.drymass.*g(end).*altitude_target;
+e_want = rocket.drymass.*g(end).*altitude;
 e_loss = e_net - e_want;
 e_loss_perc = (e_net - e_want)/e_want;
 disp('Percentage of energy need to lose to drag')
@@ -320,7 +329,7 @@ if t_fins_deployed > 0
             i_fins_deployed = i;
         end
     end
-    d2at =  altitude_target - h(i_fins_deployed); % m
+    d2at =  altitude - h(i_fins_deployed); % m
     D_df = e_loss./d2at;                          % N
     
     disp('Additional drag needed to hit target')
