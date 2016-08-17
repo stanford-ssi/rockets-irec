@@ -309,7 +309,7 @@ rocket.apogee = max(h);
 
 % Energy calculations [J]
 e_net = rocket.drymass.*g(1).*rocket.apogee;
-e_want = rocket.drymass.*g(end).*altitude;
+e_want = rocket.drymass.*g(end).*altitude_target;
 e_loss = e_net - e_want;
 e_loss_perc = (e_net - e_want)/e_want;
 disp('Percentage of energy need to lose to drag')
@@ -329,7 +329,7 @@ if t_fins_deployed > 0
             i_fins_deployed = i;
         end
     end
-    d2at =  altitude - h(i_fins_deployed); % m
+    d2at =  altitude_target - h(i_fins_deployed); % m
     D_df = e_loss./d2at;                          % N
     
     disp('Additional drag needed to hit target')
@@ -339,9 +339,3 @@ end
 disp('Altitude Achieved')
 disp(strcat(num2str(rocket.apogee),'m'))
 
-% small angle
-theta_max_deg = 17.5; % degrees
-theta_max_rad = 0.3054326; % rad
-
-% factor of safety for control authority
-fs = 1.5;
