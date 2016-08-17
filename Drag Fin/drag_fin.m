@@ -27,7 +27,7 @@ clear; close all; clc;
 % Plots
 linesize = 2;  % line width
 
-plot_landing = 0; % 1 plots time up to landing, 0 plots to apogee
+plot_landing = 1; % 1 plots time up to landing, 0 plots to apogee
 
 plot_thrust = 0;
 plot_h_u_a = 0;
@@ -44,6 +44,8 @@ rocket.d   = 0.14; % diameter, m
 rocket.Cd  = 0.6;  % coeff of drag
 rocket.S   = pi.*(rocket.d./2).^2; % front cross sectional area, m^2
 rocket.nomotormass = 19.428; % kg
+rocket.deploydrogue = 1;
+rocket.deployparachute = 1;
 
 % Recovery Information
 parachute.d  = 6.1;                    % m
@@ -104,7 +106,10 @@ end
 % data. Specify your altitude goal, when you want the fins deployed, and
 % how much you want the fins to increase the intrinsic drag of the rocket
 t = 0:time_step:400;      % s
+
 altitude_launch_site = 1219; % m
+parachute.deploy_h = altitude_launch_site + parachute.deploy_h;
+
 altitude_target = 3048;  % m
 t_fins_deployed = -1;   % s
 per_normal_drag = 1; % *100%
@@ -146,7 +151,7 @@ for i = 1:length(t)
     k = 0.5.*rocket.Cd.*rocket.S.*rho;
     if (t(i)>t_fins_deployed && t_fins_deployed > 0)
         k = per_normal_drag*k;
-    end 
+    end
     dragloss(i) = lam.*k.*u(i).^2;
     
     currentmomentum(i) = u(i).*m(i);
@@ -156,9 +161,10 @@ for i = 1:length(t)
     % speed and above parachute height
     % Second if statemnet checks if the rocket is below the parachute
     % deployment height
-    if u(i) < drogue.deploy_u && h(i) > parachute.deploy_h
+    
+    if u(i) < drogue.deploy_u && h(i) > parachute.deploy_h && rocket.deploydrogue == 1
         droguedrag(i)    = lam.*0.5.*drogue.Cd.*drogue.S.*rho.*u(i).^2;
-    elseif h(i) < parachute.deploy_h && u(i) < 0 && t(i) > 1
+    elseif h(i) < parachute.deploy_h && u(i) < 0 && t(i) > 1 && rocket.deployparachute == 1
         parachutedrag(i) = lam.*0.5.*parachute.Cd.*parachute.S.*rho.*u(i).^2;
     end
     
@@ -182,23 +188,23 @@ for i = 1:length(t)
     % silly bullshit to find the apogee or landing time
     % u(i) < 0 is apogee
     % h(i) < 0 is landing
-    if plot_landing == 1
-        if t(i) > 10 && h(i) < 0
-            t_land(i) = t(i);
-            t_land = unique(t_land(:));
-            t_land = t_land(2);
-        end
-    else
-        if t(i) > 10 && u(i) < 0
-            t_land(i) = t(i);
-            t_land = unique(t_land(:));
-            t_land = t_land(2);
-        end
+    if t(i) > 10 && h(i) < (0 + altitude_launch_site)
+        t_land(i) = t(i);
+        t_land = unique(t_land(:));
+        t_land = t_land(2);
     end
+    if t(i) > 10 && u(i) < 0
+        t_apogee(i) = t(i);
+        t_apogee = unique(t_apogee(:));
+        t_apogee = t_apogee(2);
+    end
+    
 end
 
 % If an error occurs at t_land, you need to let the sim run longer
-xlimit = [0 t_land];  % plots up to the specified limits
+t_xlim = t_apogee;
+if plot_landing == 1 t_xlim = t_land; end
+xlimit = [0 t_xlim];  % plots up to the specified limits
 
 %% Simulation Plots
 
@@ -335,7 +341,15 @@ if t_fins_deployed > 0
     disp('Additional drag needed to hit target')
     disp(strcat(num2str(D_df),'N'))
 end
-
+if t_fins_deployed > 0
+    disp('Drag fins were deployed')
+else
+    disp('Drag fins were not deployed')
+end
+disp('Launch Angle')
+disp(strcat(num2str(launch_angle*180/pi),'deg'))
+disp('Flight time')
+disp(strcat(num2str(t_land),'s'))
 disp('Altitude Achieved')
 disp(strcat(num2str(rocket.apogee),'m'))
 
