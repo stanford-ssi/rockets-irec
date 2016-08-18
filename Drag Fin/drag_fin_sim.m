@@ -21,12 +21,12 @@
 % You can choose the deployment time of the drag fins and the percentage of
 % extra drag they cause the rocket
 
-clear; close all; clc;
+clear; close all; clc; tic
 
 % Plots
 linesize = 2;  % line width
 
-plot_landing = 1; % 1 plots time up to landing, 0 plots to apogee
+plot_landing = 0; % 1 plots time up to landing, 0 plots to apogee
 
 plot_thrust = 0;
 plot_h_u_a = 0;
@@ -150,7 +150,7 @@ for i = 1:length(t)
     % for the drag fins
     rho = density(h(i));
     k = 0.5.*rocket.Cd.*rocket.S.*rho;
-    if (t(i)>dragfin.deploy_t && dragfin.deploy_t > 0)
+    if (t(i)>dragfin.deploy_t && dragfin.deploy_t > 0 && u(i) > 0)
         k = dragfin.extra_drag_percent*k;
     end
     dragloss(i) = lam.*k.*u(i).^2;
@@ -189,18 +189,12 @@ for i = 1:length(t)
     % silly bullshit to find the apogee or landing time
     % u(i) < 0 is apogee
     % h(i) < 0 is landing
-    if t(i) > 10 && h(i) < (0 + altitude_launch_site)
-        t_land(i) = t(i);
-        t_land = unique(t_land(:));
-        t_land = t_land(2);
+    if t(i) > 5 && h(i) >= (0 + altitude_launch_site)
+        t_land = t(i);
     end
-    if t(i) > 10 && u(i) < 0
-        t_apogee(i) = t(i);
-        t_apogee = unique(t_apogee(:));
-        t_apogee = t_apogee(2);
+    if t(i) > 5 && u(i) > 0
+        t_apogee = t(i);
     end
-    
-    
 end
 
 % Reset altitude for plotting. Air density already taken into account
@@ -329,6 +323,7 @@ disp(strcat(num2str(e_loss_perc.*100),'%'))
 % Find index of distance to altitude target from altitude at fin deployment
 % Setting t_fins_deployed below 0 will effectively stop them from deploying
 if dragfin.deploy_t > 0
+    disp('Drag fins were deployed')
     
     tol = time_step; % this allows you to put in precise times for t_deploy
     for i = 1:length(t)
@@ -352,3 +347,4 @@ motor
 dragfin
 parachute
 drogue
+toc
