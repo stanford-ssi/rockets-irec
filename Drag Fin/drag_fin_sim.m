@@ -32,7 +32,7 @@ plot_thrust = 0;
 plot_h_u_a = 0;
 plot_combined_hu = 0;
 plot_h = 1;
-plot_forces  = 0; % doesn't plot the parachute or drogue drag
+plot_forces  = 1; % doesn't plot the parachute or drogue drag
 plot_recovery_drag = 0;
 
 %% Rocket characteristics
@@ -288,12 +288,18 @@ end
 if plot_forces == 1
     figure
     plot(t,gravityloss,t_powered,T,t,dragloss,'LineWidth',linesize);
+    legend('Gravity','Thrust','Drag + Drag Fins')
+    hold on;
+    yl = get(gca,'YLim');
+    plot([dragfin.deploy_t dragfin.deploy_t], yl,'black')
+    txt = text(dragfin.deploy_t+0.1, yl(2)*0.9, 'Drag fin deployment');
+    txt.Color = 'black';
     title('In-Flight Forces')
     xlabel('Time (s)')
     ylabel('Force (N)')
     xlim(xlimit)
     grid on
-    legend('Gravity','Thrust','Drag + Drag Fins')
+    hold off;
 end
 
 if plot_recovery_drag == 1
