@@ -132,7 +132,6 @@ currentmomentum = zeros(1,length(t));
 F = zeros(1,length(t)); u = zeros(1,length(t)); dragloss = zeros(1,length(t));
 a = zeros(1,length(t)); h = zeros(1,length(t)); gravityloss = zeros(1,length(t));
 parachutedrag = zeros(1,length(t)); droguedrag = zeros(1,length(t));
-
 % Initial conditions
 h(1) = altitude_launch_site; % m,   rocket is not at sea level
 u(1) = 0;                    % m/s, rocket is stationary
@@ -153,10 +152,10 @@ for i = 1:length(t)
     if (t(i)>dragfin.deploy_t && dragfin.deploy_t > 0 && u(i) > 0)
         k = dragfin.extra_drag_percent*k;
     end
-    dragloss(i) = lam.*k.*u(i).^2;
-    
+    dragloss(i)        = lam.*k.*u(i).^2;
+
+    gravityloss(i)     = lam.*m(i).*g(i);
     currentmomentum(i) = u(i).*m(i);
-    gravityloss(i)     = m(i).*g(i);
     
     % First if statement checks if the rocket is past the drogue deployment
     % speed and above parachute height
@@ -171,7 +170,7 @@ for i = 1:length(t)
     
     % Solve out forces on rocket
     if t(i) <= motor.burntime          % powered ascent
-        F(i) = - gravityloss(i) - dragloss(i) + T(i);
+        F(i) = - gravityloss(i) - dragloss(i) + lam.*T(i); % added launch angle multiplier directly to T
     elseif u(i) > 0                    % coasting to apogee
         F(i) = - gravityloss(i) - dragloss(i);
     elseif 0 >= u(i) > drogue.deploy_u % descent
@@ -331,6 +330,7 @@ if dragfin.deploy_t > 0
             dragfin.deploy_index = i;
         end
     end
+    dragfin.deploy_u = u(dragfin.deploy_index);
     dragfin.deploy_h = h(dragfin.deploy_index);
     d2at =  altitude_target - dragfin.deploy_h; % m
     D_df = e_loss./d2at;                          % N
@@ -347,4 +347,6 @@ motor
 dragfin
 parachute
 drogue
+
+disp('Code performance:')
 toc
