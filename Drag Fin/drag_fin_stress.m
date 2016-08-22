@@ -12,14 +12,15 @@ if exist('dragfin','var')==0; run('drag_fin_sim'); end
 clc; close all; format short eng
 
 % Characteristics of the plate
-in2m = 0.0254;      % in/m
-t = .125.*in2m;     % m, thickness
-b = 6.*in2m;        % m, distance from rod
-h = 3.*in2m;        % m
-Al.E = 68.9e9;
-Al.tensile_yield = 276e6;  % Pa
+in2m = 0.0254;             % in/m
+t = .125.*in2m;            % m, thickness
+b = 6.*in2m;               % m, distance from rod
+h = 3.*in2m;               % m
+Al.E = 68.9e9;             % Pa
+Al.tensile_yield  = 276e6; % Pa
 Al.shear_strength = 207e6; % Pa
-Al.thermal_cond = 167; %  W/(m*K)
+Al.thermal_cond   = 167;   % W/(m*K)
+Al.poisson        = 0.334;
 
 % Solve for atmospheric conditions: temperature, pressure, density and
 % speed of sound at deployment altitude

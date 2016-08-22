@@ -21,48 +21,62 @@
 % You can choose the deployment time of the drag fins and the percentage of
 % extra drag they cause the rocket
 
-clear; close all; clc; tic
+%function [dragfin] = drag_fin_sim(plot,linesize,rocket,parachute,drogue,...
+ %   motor,altitude,dragfin,time_step)
+ 
+ clear; close all; clc
 
+%% Inputs
+ 
 % Plots
 linesize = 2;  % line width
 
-plot_landing = 0; % 1 plots time up to landing, 0 plots to apogee
-
-plot_thrust = 0;
-plot_h_u_a = 0;
-plot_combined_hu = 0;
-plot_h = 1;
-plot_forces  = 1; % doesn't plot the parachute or drogue drag
+plot_landing       = 0; % 1 plots time up to landing, 0 plots to apogee
+plot_thrust        = 0;
+plot_h_u_a         = 0;
+plot_combined_hu   = 1;
+plot_h             = 1;
+plot_forces        = 1; % doesn't plot the parachute or drogue drag
 plot_recovery_drag = 0;
 
-%% Rocket characteristics
-
 % IREC Rocket Baseline is current rocket
-rocket.l   = 3.44; % length, m
-rocket.d   = 0.14; % diameter, m
-rocket.Cd  = 0.6;  % coeff of drag
-rocket.S   = pi.*(rocket.d./2).^2; % front cross sectional area, m^2
+rocket.l   = 3.44;           % length, m
+rocket.d   = 0.14;           % diameter, m
+rocket.Cd  = 0.6;            % coeff of drag
 rocket.nomotormass = 19.428; % kg
 rocket.deploydrogue = 0;
 rocket.deployparachute = 0;
 
 % Recovery Information
-parachute.d  = 6.1;                    % m
-parachute.S  = pi.*(parachute.d./2)^2;  % m^2
-parachute.deploy_h = 450;               % m
+parachute.d  = 6.1;       % m
+parachute.deploy_h = 450; % m
 parachute.Cd = 0.8;
-parachute.deployed = rocket.deployparachute;
 drogue.Cd = 0.8;
-drogue.d  = 1.22;                      % m
-drogue.S  = pi.*(drogue.d./2)^2;        % m^2
-drogue.deploy_u = -1;                % m/s
-drogue.deployed = rocket.deploydrogue;
+drogue.d  = 1.22;         % m
+drogue.deploy_u = -1;     % m/s
 
 % Specify the motor you want
-motor.name = 'M1939';
 % Input motor data (always check that these values match chosen motor)
-motor.wetmass  = 8.9882; % kg
-motor.propmass = 5.7191; % kg
+motor.name     = 'M1939';
+motor.wetmass  = 8.9882;  % kg
+motor.propmass = 5.7191;  % kg
+
+time_step = 0.02;
+
+altitude.launch_site = 1219; % m
+
+altitude.target = 3048;           % m
+dragfin.deploy_t = 10;            % s
+dragfin.extra_drag_percent = 1.2; % *100%
+rocket.launch_angle = 0.*pi./180; % rad
+
+%% Simulation
+
+drogue.deployed    = rocket.deploydrogue;
+parachute.deployed = rocket.deployparachute;
+parachute.S        = pi.*(parachute.d./2)^2;  % m^2
+drogue.S   = pi.*(drogue.d./2)^2;        % m^2
+rocket.S   = pi.*(rocket.d./2).^2; % front cross sectional area, m^2
 
 % Load thrust curve
 motor_str = strcat('AeroTech_',strcat(motor.name,'.txt'));
@@ -78,7 +92,6 @@ thrust_curve = thrust_curve(1:length(thrust_curve)-1,2);
 % Interpolate the data, original data samples at 0.05s or 20 Hz
 % Change time step to add discrete data points to the simulation
 % Currently the time step doesn't like to go above 0.02
-time_step = 0.02;
 t_powered = 0:time_step:t_thrust(end);
 T = interp1(t_thrust,thrust_curve,t_powered);
 
@@ -89,43 +102,23 @@ motor.mdotavg  = motor.propmass./motor.burntime; % kg/s
 rocket.drymass = rocket.nomotormass + motor.drymass; % kg
 rocket.wetmass = rocket.nomotormass + motor.wetmass; % kg
 
-% Plot the thrust data
-if plot_thrust == 1
-    figure
-    plot(t_thrust,thrust_curve,'-mo','LineWidth',linesize)
-    xlim([0 t_thrust(end)])
-    thrust_title = strcat({'Thrust Curve of '},motor.name);
-    title(thrust_title)
-    xlabel('Time (s)')
-    ylabel('Thrust (N)')
-    grid on
-end
-
-%% Simulation
-
 % In order to change the time_step, go to the interpolation of the thrust
 % data. Specify your altitude goal, when you want the fins deployed, and
 % how much you want the fins to increase the intrinsic drag of the rocket
 t = 0:time_step:400;      % s
 
-altitude_launch_site = 1219; % m
-parachute.deploy_h = altitude_launch_site + parachute.deploy_h;
-
-altitude_target = 3048;  % m
-dragfin.deploy_t = 10;   % s
-dragfin.extra_drag_percent = 1.2; % *100%
-rocket.launch_angle = 0.*pi./180;  % rad
+parachute.deploy_h = altitude.launch_site + parachute.deploy_h;
 lam = cos(rocket.launch_angle); % launch angle multiplier for drag terms
 
 % Atmospheric properties
-mach1const = 343; % m/s
-density = @(x) 1.2250.*(288.15/(288.15-0.0065.*x)).^...
-    (1+9.80665.*0.0289644/(8.31432.*0.0065));
+% mach1const = 343; % m/s
+% density = @(x) 1.2250.*(288.15/(288.15-0.0065.*x)).^...
+%     (1+9.80665.*0.0289644/(8.31432.*0.0065));
 
 % Flight conditions
 m = rocket.drymass.*ones(1,length(t)); % kg
 g = 9.81.*ones(1,length(t));           % m/s^2
-mach1 = mach1const.*ones(1,length(t)); % m/s
+% mach1 = mach1const.*ones(1,length(t)); % m/s
 
 % Vector initialization for speed
 currentmomentum = zeros(1,length(t));
@@ -133,7 +126,7 @@ F = zeros(1,length(t)); u = zeros(1,length(t)); dragloss = zeros(1,length(t));
 a = zeros(1,length(t)); h = zeros(1,length(t)); gravityloss = zeros(1,length(t));
 parachutedrag = zeros(1,length(t)); droguedrag = zeros(1,length(t));
 % Initial conditions
-h(1) = altitude_launch_site; % m,   rocket is not at sea level
+h(1) = altitude.launch_site; % m,   rocket is not at sea level
 u(1) = 0;                    % m/s, rocket is stationary
 m(1) = rocket.wetmass;       % kg,  rocket is full of prop
 
@@ -147,7 +140,7 @@ for i = 1:length(t)
     % Drag calculation
     % The launch angle is taken into account here and the drag multiplier
     % for the drag fins
-    rho = density(h(i));
+    [~,~,rho,~] = getAtmoConditions(h(i));
     k = 0.5.*rocket.Cd.*rocket.S.*rho;
     if (t(i)>dragfin.deploy_t && dragfin.deploy_t > 0 && u(i) > 0)
         k = dragfin.extra_drag_percent*k;
@@ -180,15 +173,15 @@ for i = 1:length(t)
     
     % Solve for new velocity and acceleration
     if(i < length(t)) % checks to not exceed index
-        u(i+1) = (1./m(i+1)).*(currentmomentum(i) + ((F(i)).*time_step));
-        a(i) = F(i)./m(i);
-        h(i+1) = trapz([0 time_step],[u(i) u(i+1)])+h(i);
+        u(i+1)  = (1./m(i+1)).*(currentmomentum(i) + ((F(i)).*time_step));
+        a(i)    = F(i)./m(i);
+        h(i+1)  = trapz([0 time_step],[u(i) u(i+1)])+h(i);
+        [~,~,~,mach1(i)] = getAtmoConditions(h(i));
     end
     
-    % silly bullshit to find the apogee or landing time
     % u(i) < 0 is apogee
     % h(i) < 0 is landing
-    if t(i) > 5 && h(i) >= (0 + altitude_launch_site)
+    if t(i) > 5 && h(i) >= (0 + altitude.launch_site)
         t_land = t(i);
     end
     if t(i) > 5 && u(i) > 0
@@ -197,29 +190,40 @@ for i = 1:length(t)
 end
 
 % Reset altitude for plotting. Air density already taken into account
-h = h-altitude_launch_site;
+h = h-altitude.launch_site;
 
 % Store useful information
 rocket.flight_time = t_land;
 rocket.burnout_h = h(length(t_powered));
 rocket.apogee = max(h);
 
+%% Simulation Plots
+
 % If an error occurs at t_land, you need to let the sim run longer
 t_xlim = t_apogee;
-if plot_landing == 1 t_xlim = t_land; end
+if plot_landing == 1; t_xlim = t_land; end
 xlimit = [0 t_xlim];  % plots up to the specified limits
-
-%% Simulation Plots
 
 % Makes apogee label
 apogee_label_dim = [.4 .3 .6 .1];
 apogee_label_str = strcat(strcat(strcat({'Apogee = '},num2str(max(h)))),'m');
-altitude = altitude_launch_site + altitude_target;
+
+% Plot the thrust data
+if plot_thrust == 1
+    figure
+    plot(t_thrust,thrust_curve,'-mo','LineWidth',linesize)
+    xlim([0 t_thrust(end)])
+    thrust_title = strcat({'Thrust Curve of '},motor.name);
+    title(thrust_title)
+    xlabel('Time (s)')
+    ylabel('Thrust (N)')
+    grid on
+end
 
 if plot_h_u_a == 1
     figure
     hold on
-    plot(t,altitude_target.*ones(1,length(t)),'--','LineWidth',linesize)
+    plot(t,altitude.target.*ones(1,length(t)),'--','LineWidth',linesize)
     plot(t,h,'LineWidth',linesize)
     title(strcat(strcat({'Altitude ('},motor.name),')'))
     xlabel('Time (s)')
@@ -254,14 +258,14 @@ end
 if plot_combined_hu == 1
     figure
     yyaxis right
-    plot(t,h,t,altitude_target.*ones(1,length(t)),'LineWidth',linesize)
+    plot(t,h,t,altitude.target.*ones(1,length(t)),'LineWidth',linesize)
     title(strcat(strcat({'Altitude and Velocity ('},motor.name),')'))
     xlabel('Time (s)')
     ylabel('Height (m)')
     xlim(xlimit)
     grid on
     yyaxis left
-    plot(t,u,t,mach1,'LineWidth',linesize)
+    plot(t,u,t(1:length(mach1)),mach1,'LineWidth',linesize)
     ylabel('Velocity (m/s)')
 end
 
@@ -270,7 +274,7 @@ if plot_h == 1
     figure
     hold on
     y1=get(gca,'ylim');
-    plot(t,altitude_target.*ones(1,length(t)),'--','LineWidth',linesize)
+    plot(t,altitude.target.*ones(1,length(t)),'--','LineWidth',linesize)
     plot(t,h,'LineWidth',linesize)
     plot([t_powered(end) t_powered(end)],y1)
     title(strcat(strcat({'Altitude ('},motor.name),')'))
@@ -319,7 +323,7 @@ end
 
 % Energy calculations [J]
 e_net = rocket.drymass.*g(1).*rocket.apogee;
-e_want = rocket.drymass.*g(end).*altitude_target;
+e_want = rocket.drymass.*g(end).*altitude.target;
 e_loss = e_net - e_want;
 e_loss_perc = (e_net - e_want)/e_want;
 disp('Additional percentage of energy need to lose to drag')
@@ -338,7 +342,7 @@ if dragfin.deploy_t > 0
     end
     dragfin.deploy_u = u(dragfin.deploy_index);
     dragfin.deploy_h = h(dragfin.deploy_index);
-    d2at =  altitude_target - dragfin.deploy_h; % m
+    d2at =  altitude.target - dragfin.deploy_h; % m
     D_df = e_loss./d2at;                          % N
     
     %disp('Additional drag needed to hit target')
@@ -347,12 +351,4 @@ else
     disp('Drag fins were not deployed')
 end
 
-% Show other useful info
-rocket
-motor
-dragfin
-parachute
-drogue
-
-disp('Code performance:')
-toc
+%end
