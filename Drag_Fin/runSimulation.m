@@ -13,12 +13,8 @@
 % https://spacegrant.carthage.edu/ojs/index.php/wsc/article/viewFile/23/23
 
 function [h,u,a,time,t,t_powered,mach1,rocket,gravityloss,T,dragloss,...
-    parachutedrag,droguedrag] = runSimulation(rocket,motor,parachute,...
-    drogue,altitude,dragfin,time,g)
-
-% -------------------------------------------------------------------------
-% Simulation
-% -------------------------------------------------------------------------
+    parachutedrag,droguedrag,e,dragfin] = runSimulation(rocket,motor,...
+    parachute,drogue,altitude,dragfin,time,g)
 
 lam = cos(rocket.launch_angle.*pi./180); % launch angle multiplier for drag terms
 drogue.deployed    = rocket.deploydrogue;
@@ -37,7 +33,7 @@ t = 0:time.step:time.end;                    % s
 
 % Initialize gravity and mass for flight
 m = rocket.drymass.*ones(1,length(t));       % kg
-g = g.*ones(1,length(t));                 % m/s^2
+g = g.*ones(1,length(t));                    % m/s^2
 % Vector initialization for speed
 currentmomentum = zeros(1,length(t));
 F = zeros(1,length(t)); u = zeros(1,length(t)); dragloss = zeros(1,length(t));
@@ -116,5 +112,36 @@ h = h-altitude.launch_site;
 rocket.flight_time = time.land;
 rocket.burnout_h = h(length(t_powered));
 rocket.apogee = max(h);
+
+% Energy calculations [J]
+e.net = rocket.drymass.*g(1).*rocket.apogee;
+e.want = rocket.drymass.*g(end).*altitude.target;
+e.loss = e.net - e.want;
+e.loss_perc = (e.net - e.want)/e.want;
+
+% Find index of distance to altitude target from altitude at fin deployment
+if dragfin.deploy_t > 0
+    tol = time.step; % this allows you to put in precise times for t_deploy
+    for i = 1:length(t)
+        if abs(t(i)-dragfin.deploy_t) < tol
+            dragfin.deploy_index = i;
+        end
+    end
+    dragfin.deploy_u = u(dragfin.deploy_index);
+    dragfin.deploy_h = h(dragfin.deploy_index);
+    dragfin.dist_to_apogee =  altitude.target - dragfin.deploy_h; % m
+    dragfin.extra_D_req = e.loss./dragfin.dist_to_apogee;                        % N
+    clearvars i tol
+    disp(strcat(strcat('Drag fins were deployed at ',...
+        num2str(dragfin.deploy_t),'s')))
+else
+    % If we deploy fins at 3113m
+    default_deploy_h = 3113; % m
+    dragfin.dist_to_apogee = altitude.target - default_deploy_h; % m
+    dragfin.extra_D_req = e.loss./dragfin.dist_to_apogee;
+    disp(strcat(strcat(...
+        'Drag fins were not deployed, but if we did deploy at',...
+        num2str(default_deploy_h),'m')))
+end
 
 end
