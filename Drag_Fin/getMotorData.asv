@@ -9,22 +9,13 @@ function [motor,rocket,T,t_powered] = getMotorData(motor,rocket,time)
 % your directory, or this will not work
 cd('Motors');
 aerotech_str  = strcat('AeroTech_' ,strcat(motor.name,'.eng'));
-cesaroni_str = strcat('cesaroni_',strcat(motor.name,'.eng'));
-if exist(aerotech_str,'file')
-    motor_str = aerotech_str;
-elseif exist(cesaroni_str,'file')
-    motor_str = cesaroni_str;
-else
-    error('Motor manufacturer not set up in getMotorData')
-end
+cessaroni_str = strcat('Cessaroni_',strcat(motor.name,'.eng'));
+if exist(aero_str,'file')
+    motor_str = aerotech_str
 
 fileID = fopen(motor_str);
-motor_info = '';
-while(1)
+for i = 1:4 % only care about 4th line
     motor_info = fgets(fileID); % grabs mass information
-    if motor_info(1) ~= ';' 
-        break
-    end
 end
 motor.thrust_curve = textscan(fileID,'%f %f');
 fclose(fileID);

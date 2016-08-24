@@ -46,11 +46,12 @@ drogue.d           = 1.22;   % m
 drogue.deploy_u    = -1;     % m/s
 
 % Motor Selection
-motors = {'M1939','M2500'};
-%motor.name = motors{1};
+% Check motors_available for what motors exist in the folder
+cd('Motors'); motors_available = ls; cd ..;
+motors = {'M1939','M2500','M3400'};
 
 % Simulation Inputs
-time.step = 0.02;            % Choose time step, currently only <0.02 works
+time.step = 8e-3;            % Choose time step, currently only <0.02 works
 time.end  = 600;             % Choose the duration of the simulation
 altitude.launch_site = 1219; % m
 altitude.target      = 3048; % m

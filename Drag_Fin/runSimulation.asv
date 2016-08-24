@@ -1,8 +1,7 @@
 % Drag Fin Sim
+
 % This script runs a simulation of the rocket in flight with the goal of
 % simulating the flight profile + drag fins
-% Ian Gomez,  08/15/16
-% Joan Creus, 08/16/16
 
 % Primary Method:
 % 1. Load the thrust data from ThrustCurve.org
