@@ -57,148 +57,30 @@ altitude.target = 3048;           % m
 dragfin.deploy_t = -1;            % s, -1 will not deploy drag fins
 dragfin.extra_drag_percent = 1.2; % *100%
 rocket.launch_angle = 0.*pi./180; % rad
-g = 9.81;
+g = 9.81;                         % m/s^2
 
 % -------------------------------------------------------------------------
 % Simulation
 % -------------------------------------------------------------------------
 
-[h,u,a,time,t,t_powered,mach1,forces,rocket,gravityloss,T,dragloss,...
-    parachutedrag,droguedrag] = drag_fin_sim(rocket,motor,parachute,...
-    drogue,altitude,dragfin,time);
+[h,u,a,time,t,t_powered,mach1,rocket,gravityloss,T,dragloss,...
+    parachutedrag,droguedrag] = runSimulation(rocket,motor,parachute,...
+    drogue,altitude,dragfin,time,g);
 
 % -------------------------------------------------------------------------
 % Simulation Plots
 % -------------------------------------------------------------------------
 
-% If an error occurs at t_land, you need to let the sim run longer
-time.xlim = time.apogee;
-if plot_landing == 1; time.xlim = time.land; end
-xlimit = [0 time.xlim];  % plots up to the specified limits
-
-% Makes apogee label
-apogee_label_dim = [.4 .3 .6 .1];
-apogee_label_str = strcat(strcat(strcat({'Apogee = '},num2str(max(h)))),'m');
-
-% Plot the thrust data
-if plot_thrust == 1
-    figure
-    plot(t_powered,T,'-mo','LineWidth',linesize)
-    xlim([0 t_powered(end)])
-    thrust_title = strcat({'Thrust Curve of '},motor.name);
-    title(thrust_title)
-    xlabel('Time (s)')
-    ylabel('Thrust (N)')
-    grid on
-end
-
-if plot_h_u_a == 1
-    figure
-    hold on
-    plot(t,altitude.target.*ones(1,length(t)),'--','LineWidth',linesize)
-    plot(t,h,'LineWidth',linesize)
-    title(strcat(strcat({'Altitude ('},motor.name),')'))
-    xlabel('Time (s)')
-    ylabel('Height (m)')
-    xlim(xlimit)
-    grid on
-    legend('3048m above launch site','Location','Southwest')
-    % label apogee
-    annotation('textbox',apogee_label_dim,'String',...
-        apogee_label_str,'FitBoxToText','on');
-    
-    figure
-    hold on
-    plot(t,mach1,'--','LineWidth',linesize)
-    plot(t,u,'LineWidth',linesize)
-    title(strcat(strcat({'Velocity ('},motor.name),')'))
-    xlabel('Time (s)')
-    ylabel('Velocity (m/s)')
-    xlim(xlimit)
-    grid on
-    legend('Mach 1','Location','Southwest')
-    
-    figure
-    plot(t(1:length(a)),a./g,'LineWidth',linesize)
-    title(strcat(strcat({'Acceleration ('},motor.name),')'))
-    xlabel('Time (s)')
-    ylabel('g')
-    xlim(xlimit)
-    grid on
-end
-
-if plot_combined_hu == 1
-    figure
-    yyaxis right
-    plot(t,h,t,altitude.target.*ones(1,length(t)),'LineWidth',linesize)
-    title(strcat(strcat({'Altitude and Velocity ('},motor.name),')'))
-    xlabel('Time (s)')
-    ylabel('Height (m)')
-    xlim(xlimit)
-    grid on
-    yyaxis left
-    plot(t,u,t(1:length(mach1)),mach1,'LineWidth',linesize)
-    ylabel('Velocity (m/s)')
-end
-
-if plot_h == 1
-    
-    figure
-    hold on
-    y1=get(gca,'ylim');
-    plot(t,altitude.target.*ones(1,length(t)),'--','LineWidth',linesize)
-    plot(t,h,'LineWidth',linesize)
-    plot([t_powered(end) t_powered(end)],y1)
-    title(strcat(strcat({'Altitude ('},motor.name),')'))
-    xlabel('Time (s)')
-    ylabel('Height (m)')
-    xlim(xlimit)
-    
-    grid on
-    legend('3048m above launch site','Location','Southwest')
-    % label apogee
-    annotation('textbox',apogee_label_dim,'String',...
-        apogee_label_str,'FitBoxToText','on');
-end
-
-if plot_forces == 1
-    figure
-    plot(t,gravityloss,t_powered,T,t,dragloss,'LineWidth',linesize);
-    legend('Gravity','Thrust','Drag + Drag Fins')
-    hold on
-    if dragfin.deploy_t > -1
-        yl = get(gca,'YLim');
-        plot([dragfin.deploy_t dragfin.deploy_t], yl,'black')
-        txt = text(dragfin.deploy_t+0.1, yl(2)*0.9, 'Drag fin deployment');
-        txt.Color = 'black';
-    end
-    title('In-Flight Forces')
-    xlabel('Time (s)')
-    ylabel('Force (N)')
-    xlim(xlimit)
-    grid on
-    hold off;
-end
-
-if plot_recovery_drag == 1
-    figure
-    hold on
-    plot(t,parachutedrag,'LineWidth',linesize)
-    plot(t,droguedrag,'LineWidth',linesize);
-    title('In-Flight Forces')
-    xlabel('Time (s)')
-    ylabel('Force (N)')
-    xlim(xlimit)
-    grid on
-    legend('Parachute','Drogue')
-end
+plot_options = [plot_landing,plot_thrust,plot_h_u_a,plot_combined_hu,...
+    plot_h,plot_forces,plot_recovery_drag];
+getPlots(plot_options,time,t,t_powered,mach1,gravityloss,T,dragloss,...
+    parachutedrag,droguedrag,h,u,a,altitude,motor,dragfin,g);
 
 % -------------------------------------------------------------------------
 % Drag fin energy characteristics
 % -------------------------------------------------------------------------
 
 % Energy calculations [J]
-g = 9.81;
 e_net = rocket.drymass.*g(1).*rocket.apogee;
 e_want = rocket.drymass.*g(end).*altitude.target;
 e_loss = e_net - e_want;

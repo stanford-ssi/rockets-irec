@@ -12,9 +12,9 @@
 % 5. Calculate altitude and acceleration from velocity
 % https://spacegrant.carthage.edu/ojs/index.php/wsc/article/viewFile/23/23
 
-function [h,u,a,time,t,t_powered,mach1,forces,rocket,gravityloss,T,dragloss,...
-    parachutedrag,droguedrag] = drag_fin_sim(rocket,motor,parachute,...
-    drogue,altitude,dragfin,time)
+function [h,u,a,time,t,t_powered,mach1,rocket,gravityloss,T,dragloss,...
+    parachutedrag,droguedrag] = runSimulation(rocket,motor,parachute,...
+    drogue,altitude,dragfin,time,g)
 
 % -------------------------------------------------------------------------
 % Simulation
@@ -34,7 +34,7 @@ t = 0:time.step:time.end;                    % s
 
 % Initialize gravity and mass for flight
 m = rocket.drymass.*ones(1,length(t));       % kg
-g = 9.81.*ones(1,length(t));                 % m/s^2
+g = g.*ones(1,length(t));                 % m/s^2
 % Vector initialization for speed
 currentmomentum = zeros(1,length(t));
 F = zeros(1,length(t)); u = zeros(1,length(t)); dragloss = zeros(1,length(t));
@@ -114,5 +114,4 @@ rocket.flight_time = time.land;
 rocket.burnout_h = h(length(t_powered));
 rocket.apogee = max(h);
 
-forces = [gravityloss,T,dragloss,parachutedrag,droguedrag];
 end
