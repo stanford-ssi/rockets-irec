@@ -6,7 +6,12 @@
 function [motor,rocket,T,t_powered] = getMotorData(motor,rocket,time)
 
 % Enter motor data folder
-listOfFiles = ls; if ismember('Motors',listOfFiles); cd('Motors'); end
+listOfFiles = ls;
+if ismember('Motors',listOfFiles)==0;
+    warning('Change directories to Drag Fin main directory')
+else
+    cd('Motors');
+end
 motor_str = strcat('AeroTech_',strcat(motor.name,'.txt'));
 fileID = fopen(motor_str);
 motor.thrust_curve = textscan(fileID,'%f %f','headerLines',5);
@@ -15,11 +20,11 @@ fclose(fileID);
 % All masses are in kg
 switch motor.name
     case 'M1939'
-        motor.wetmass  = 8.9882;  
-        motor.propmass = 5.7191;  
+        motor.wetmass  = 8.9882;
+        motor.propmass = 5.7191;
     case 'M2500'
-        motor.wetmass  = 8.064;  
-        motor.propmass = 4.659; 
+        motor.wetmass  = 8.064;
+        motor.propmass = 4.659;
     otherwise
         warning('Motor information does not exist in this database.')
 end
