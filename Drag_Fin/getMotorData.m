@@ -17,19 +17,19 @@ elseif exist(cesaroni_str,'file')
 else
     error('Motor manufacturer not set up in getMotorData')
 end
-
 fileID = fopen(motor_str);
 motor_info = '';
-while(1)
+while(1)         % eng files are not all the same format
     motor_info = fgets(fileID); % grabs mass information
     if motor_info(1) ~= ';' 
         break
     end
 end
-motor.thrust_curve = textscan(fileID,'%f %f');
+motor.thrust_curve = textscan(fileID,'%f %f'); % scans actual thrust info
 fclose(fileID);
 cd .. 
 
+% Read in useful motor data (besides the thrust curve)
 motor_info = strsplit(motor_info); 
 motor.diameter = strcat(motor_info{2},'mm');      % mm
 motor.length   = str2double(motor_info{3}).*1e-3; % m
@@ -41,9 +41,7 @@ thrust_curve = cell2mat(motor.thrust_curve);
 t_thrust = thrust_curve(1:length(thrust_curve)-1,1).';
 thrust_curve = thrust_curve(1:length(thrust_curve)-1,2).';
 
-% Interpolate the data, original data samples at 0.05s or 20 Hz
-% Change time step to add discrete data points to the simulation
-% Currently the time step doesn't like to go above 0.02
+% Interpolate the data (keep time step low ~1e-2 to catch all thrust data)
 if t_thrust(1) ~= 0; warning('Thrust file must start at 0s'); end
 t_powered = 0:time.step:t_thrust(end);
 T = interp1(t_thrust,thrust_curve,t_powered);
