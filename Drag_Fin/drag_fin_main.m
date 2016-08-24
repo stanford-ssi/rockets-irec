@@ -52,10 +52,13 @@ motor.name = motors{1};
 % Simulation Inputs
 time.step = 0.02;            % Choose time step, currently only <0.02 works
 time.end  = 400;             % Choose the duration of the simulation
-altitude.launch_site = 1219;      % m
-altitude.target = 3048;           % m
-dragfin.deploy_t = -1;            % s, -1 will not deploy drag fins
+
+altitude.launch_site = 1219; % m
+altitude.target = 3048;      % m
+
+dragfin.deploy_t = 10;            % s, -1 will not deploy drag fins
 dragfin.extra_drag_percent = 1.2; % *100%
+
 rocket.launch_angle = 0.*pi./180; % rad
 g = 9.81;                         % m/s^2
 

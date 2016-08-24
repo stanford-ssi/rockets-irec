@@ -8,7 +8,7 @@
 % No axial loadings
 
 % Need to populate dragfin struct
-if exist('dragfin','var')==0; run('drag_fin_simulation'); end
+if exist('dragfin','var')==0; run('drag_fin_main'); end
 clc; close all; format short eng
 
 if dragfin.deploy_t < 0; 
@@ -42,6 +42,7 @@ Al.poisson        = 0.334;
 % Solve for atmospheric conditions: temperature, pressure, density and
 % speed of sound at deployment altitude
 [T,P,rho,sp_sound] = getAtmoConditions(h);
+k = 1.4; % ratio of specific heats of air
 
 % Grab highest Mach number that dragfins experience (deployment) and solve
 % for the stagnation pressure (maximum pressure)
@@ -92,7 +93,7 @@ end
 
 dragfin.S_normal = dam.*(plate.S + rod.S);
 dragfin.drag = -(plate.Fy + rod.Fy);
-dragfin.Cd   = dragfin.drag./(0.5.*rho.*dragfin.deploy_u.*dragfin.S);
+dragfin.Cd   = dragfin.drag./(0.5.*rho.*dragfin.deploy_u.*dragfin.S_normal);
 
 % dragfin
 plate
