@@ -52,15 +52,12 @@ motor.name = motors{1};
 % Simulation Inputs
 time.step = 0.02;            % Choose time step, currently only <0.02 works
 time.end  = 400;             % Choose the duration of the simulation
-
 altitude.launch_site = 1219; % m
 altitude.target      = 3048; % m
-
-dragfin.deploy_t = 10;            % s, -1 will not deploy drag fins
-dragfin.extra_drag_percent = 1.2; % *100%
-
 rocket.launch_angle = 0;     % deg
 g = 9.81;                    % m/s^2
+dragfin.deploy_t = 10;            % s, -1 will not deploy drag fins
+dragfin.extra_drag_percent = 1.2; % *100%
 
 % -------------------------------------------------------------------------
 % Simulation
@@ -73,6 +70,7 @@ g = 9.81;                    % m/s^2
 % -------------------------------------------------------------------------
 % Simulation Plots
 % -------------------------------------------------------------------------
+
 plot_options = [plot_landing,plot_thrust,plot_h_u_a,plot_combined_hu,...
     plot_h,plot_forces,plot_recovery_drag];
 getPlots(plot_options,time,t,t_powered,mach1,gravityloss,T,dragloss,...
