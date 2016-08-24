@@ -45,10 +45,10 @@ drogue.Cd          = 0.8;    % coefficient of drag
 drogue.d           = 1.22;   % m
 drogue.deploy_u    = -1;     % m/s
 
-% Motor Selection
+% Motor Selection (just need impulse class + avg thrust)
 % Check motors_available for what motors exist in the folder
 cd('Motors'); motors_available = ls; cd ..;
-motors = {'M1939','M2500','M3400'};
+motors = {'M1939','N2540'};
 
 % Simulation Inputs
 time.step = 8e-3;            % Choose time step, currently only <0.02 works
@@ -84,11 +84,6 @@ for i = 1:length(motors)
     % Results
     % -------------------------------------------------------------------------
     
-    if altitude.target-rocket.apogee<0;
-        disp('Warning: Below target altitude');
-        e.loss_perc = -e.loss_perc; % signs make this positive
-        dragfin.extra_D_req = -dragfin.extra_D_req;
-    end
     disp('Additional percentage of energy need to lose to drag')
     disp(strcat(num2str(e.loss_perc.*100),'%'))
     disp('Additional drag needed to hit target')
