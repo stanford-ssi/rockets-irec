@@ -5,38 +5,33 @@
 
 function [motor,rocket,T,t_powered] = getMotorData(motor,rocket,time)
 
-% Enter motor data folder
-listOfFiles = ls;
-if ismember('Motors',listOfFiles)==0;
-    warning('Change directories to Drag Fin main directory')
-else
-    cd('Motors');
-end
-motor_str = strcat('AeroTech_',strcat(motor.name,'.txt'));
+% Enter motor data folder (You need to start from the Drag_Fin folder as
+% your directory, or this will not work
+cd('Motors');
+motor_str = strcat('AeroTech_',strcat(motor.name,'.eng'));
 fileID = fopen(motor_str);
-motor.thrust_curve = textscan(fileID,'%f %f','headerLines',5);
-fclose(fileID);
-
-% All masses are in kg
-switch motor.name
-    case 'M1939'
-        motor.wetmass  = 8.9882;
-        motor.propmass = 5.7191;
-    case 'M2500'
-        motor.wetmass  = 8.064;
-        motor.propmass = 4.659;
-    otherwise
-        warning('Motor information does not exist in this database.')
+for i = 1:4 % only care about 4th line
+    motor_info = fgets(fileID); % grabs mass information
 end
+motor.thrust_curve = textscan(fileID,'%f %f');
+fclose(fileID);
+cd .. 
+
+motor_info = strsplit(motor_info); 
+motor.diameter = strcat(motor_info{2},'mm');      % mm
+motor.length   = str2double(motor_info{3}).*1e-3; % m
+motor.propmass = str2double(motor_info{5});       % kg 
+motor.wetmass  = str2double(motor_info{6});       % kg
 
 % Converts the cells to a matrix and removes the last line
 thrust_curve = cell2mat(motor.thrust_curve);
-t_thrust = thrust_curve(1:length(thrust_curve)-1,1);
-thrust_curve = thrust_curve(1:length(thrust_curve)-1,2);
+t_thrust = thrust_curve(1:length(thrust_curve)-1,1).';
+thrust_curve = thrust_curve(1:length(thrust_curve)-1,2).';
 
 % Interpolate the data, original data samples at 0.05s or 20 Hz
 % Change time step to add discrete data points to the simulation
 % Currently the time step doesn't like to go above 0.02
+if t_thrust(1) ~= 0; warning('Thrust file must start at 0s'); end
 t_powered = 0:time.step:t_thrust(end);
 T = interp1(t_thrust,thrust_curve,t_powered);
 
@@ -46,8 +41,5 @@ motor.burntime = t_powered(end);   % s
 motor.mdotavg  = motor.propmass./motor.burntime; % kg/s
 rocket.drymass = rocket.nomotormass + motor.drymass; % kg
 rocket.wetmass = rocket.nomotormass + motor.wetmass; % kg
-
-% Once done, leave motor data folder
-cd ..
 
 end

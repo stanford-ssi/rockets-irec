@@ -64,6 +64,8 @@ for i = 1:length(t)
     dragloss(i)        = k.*u(i).^2;
     
     % Gravity loss and current momentum calculation
+    % need to not allow gravity to move the rocket below starting altitude
+    % if thrust doesn't take off right away
     gravityloss(i)     = m(i).*g(i);
     currentmomentum(i) = u(i).*m(i);
     

@@ -107,7 +107,7 @@ end
 if plot_forces == 1
     figure
     plot(t,gravityloss,t_powered,T,t,dragloss,'LineWidth',linesize);
-    legend('Gravity','Thrust','Drag + Drag Fins')
+    legend('Gravity','Thrust','Drag + Drag Fins - Recovery Drag')
     hold on
     if dragfin.deploy_t > -1
         yl = get(gca,'YLim');
@@ -115,7 +115,7 @@ if plot_forces == 1
         txt = text(dragfin.deploy_t+0.1, yl(2)*0.9, 'Drag fin deployment');
         txt.Color = 'black';
     end
-    title('In-Flight Forces')
+    title(strcat(strcat('In-Flight Forces (',motor.name,')')))
     xlabel('Time (s)')
     ylabel('Force (N)')
     xlim(xlimit)
@@ -128,7 +128,7 @@ if plot_recovery_drag == 1
     hold on
     plot(t,parachutedrag,'LineWidth',linesize)
     plot(t,droguedrag,'LineWidth',linesize);
-    title('In-Flight Forces')
+    title(strcat(strcat('In-Flight Recovery Forces (',motor.name,')')))
     xlabel('Time (s)')
     ylabel('Force (N)')
     xlim(xlimit)
