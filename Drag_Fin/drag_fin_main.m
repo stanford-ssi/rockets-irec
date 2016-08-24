@@ -7,8 +7,8 @@
 % Implementation of drag fins
 % Look at the potential energy (PE = m*g*h) on the control flight
 % We want to reduce PE to PE_desired = m*g*h_desired
-% PE-PE_desired = D_df * t_open
-% where D_df is the drag of the drag fins and t_open is time the drag fins
+% PE-PE_desired = dragfin.extra_D_req * t_open
+% where dragfin.extra_D_req is the drag of the drag fins and t_open is time the drag fins
 % are deployed
 % You can choose the deployment time of the drag fins and the percentage of
 % extra drag they cause the rocket
@@ -34,7 +34,7 @@ rocket.l   = 3.44;           % length, m
 rocket.d   = 0.14;           % diameter, m
 rocket.Cd  = 0.6;            % coeff of drag
 rocket.nomotormass  = 19.43; % kg
-rocket.deploydrogue = 1;     % 1 will deploy drogue, 0 will not
+rocket.deploydrogue = 1;     % 1 will deploy drogue,    0 will not
 rocket.deployparachute = 1;  % 1 will deploy parachute, 0 will not
 
 % Recovery Information
@@ -54,13 +54,13 @@ time.step = 0.02;            % Choose time step, currently only <0.02 works
 time.end  = 400;             % Choose the duration of the simulation
 
 altitude.launch_site = 1219; % m
-altitude.target = 3048;      % m
+altitude.target      = 3048; % m
 
 dragfin.deploy_t = 10;            % s, -1 will not deploy drag fins
 dragfin.extra_drag_percent = 1.2; % *100%
 
-rocket.launch_angle = 0.*pi./180; % rad
-g = 9.81;                         % m/s^2
+rocket.launch_angle = 0;     % deg
+g = 9.81;                    % m/s^2
 
 % -------------------------------------------------------------------------
 % Simulation
@@ -73,29 +73,26 @@ g = 9.81;                         % m/s^2
 % -------------------------------------------------------------------------
 % Simulation Plots
 % -------------------------------------------------------------------------
-
 plot_options = [plot_landing,plot_thrust,plot_h_u_a,plot_combined_hu,...
     plot_h,plot_forces,plot_recovery_drag];
 getPlots(plot_options,time,t,t_powered,mach1,gravityloss,T,dragloss,...
     parachutedrag,droguedrag,h,u,a,altitude,motor,dragfin,g);
+clearvars plot_landing plot_thrust plot_h_u_a plot_combined_hu ...
+    plot_h plot_forces plot_recovery_drag linesize
 
 % -------------------------------------------------------------------------
 % Drag fin energy characteristics
 % -------------------------------------------------------------------------
 
 % Energy calculations [J]
-e_net = rocket.drymass.*g(1).*rocket.apogee;
-e_want = rocket.drymass.*g(end).*altitude.target;
-e_loss = e_net - e_want;
-e_loss_perc = (e_net - e_want)/e_want;
-disp('Additional percentage of energy need to lose to drag')
-disp(strcat(num2str(e_loss_perc.*100),'%'))
+e.net = rocket.drymass.*g(1).*rocket.apogee;
+e.want = rocket.drymass.*g(end).*altitude.target;
+e.loss = e.net - e.want;
+e.loss_perc = (e.net - e.want)/e.want;
 
 % Find index of distance to altitude target from altitude at fin deployment
 % Setting t_fins_deployed below 0 will effectively stop them from deploying
 if dragfin.deploy_t > 0
-    disp('Drag fins were deployed')
-    
     tol = time.step; % this allows you to put in precise times for t_deploy
     for i = 1:length(t)
         if abs(t(i)-dragfin.deploy_t) < tol
@@ -104,16 +101,26 @@ if dragfin.deploy_t > 0
     end
     dragfin.deploy_u = u(dragfin.deploy_index);
     dragfin.deploy_h = h(dragfin.deploy_index);
-    d2at =  altitude.target - dragfin.deploy_h; % m
-    D_df = e_loss./d2at;                          % N
-    
+    dragfin.dist_to_apogee =  altitude.target - dragfin.deploy_h; % m
+    dragfin.extra_D_req = e.loss./dragfin.dist_to_apogee;                        % N
+    clearvars i tol
+    disp(strcat(strcat('Drag fins were deployed at ',...
+        num2str(dragfin.deploy_t),'s')))
 else
-    disp('Drag fins were not deployed')
     % If we deploy fins at 3113m
-    d2at = altitude.target - 3113; % m
-    D_df = e_loss./d2at;
+    default_deploy_h = 3113; % m
+    dragfin.dist_to_apogee = altitude.target - default_deploy_h; % m
+    dragfin.extra_D_req = e.loss./dragfin.dist_to_apogee;
+    disp(strcat(strcat(...
+        'Drag fins were not deployed, but if we did deploy at',...
+        num2str(default_deploy_h),'m')))
 end
 
+if altitude.target-rocket.apogee<0; 
+    disp('Warning: Below target altitude'); 
+    e.loss_perc = -e.loss_perc; % signs make this positive
+end
+disp('Additional percentage of energy need to lose to drag')
+disp(strcat(num2str(e.loss_perc.*100),'%'))
 disp('Additional drag needed to hit target')
-disp(strcat(num2str(D_df),'N'))
-
+disp(strcat(num2str(dragfin.extra_D_req),'N'))

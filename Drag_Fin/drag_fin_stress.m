@@ -19,6 +19,7 @@ end
 in2m = 0.0254;                   % in/m
 
 % Characteristics of the plate & rod
+% MAX THETA DOES NOT TAKE INTO ACCOUNT LAUNCH ANGLE
 dragfin.max_theta = 17;          % deg
 plate.max_theta   = dragfin.max_theta;
 rod.max_theta     = dragfin.max_theta;
@@ -42,7 +43,7 @@ Al.poisson        = 0.334;
 % Solve for atmospheric conditions: temperature, pressure, density and
 % speed of sound at deployment altitude
 [T,P,rho,sp_sound] = getAtmoConditions(h);
-k = 1.4; % ratio of specific heats of air
+k = 1.4; % specific heat ratio of air
 
 % Grab highest Mach number that dragfins experience (deployment) and solve
 % for the stagnation pressure (maximum pressure)

@@ -20,13 +20,16 @@ function [h,u,a,time,t,t_powered,mach1,rocket,gravityloss,T,dragloss,...
 % Simulation
 % -------------------------------------------------------------------------
 
-lam = cos(rocket.launch_angle); % launch angle multiplier for drag terms
+lam = cos(rocket.launch_angle.*pi./180); % launch angle multiplier for drag terms
 drogue.deployed    = rocket.deploydrogue;
 parachute.deployed = rocket.deployparachute;
-parachute.S        = pi.*(parachute.d./2)^2; % m^2
 parachute.deploy_h = altitude.launch_site + parachute.deploy_h;
+parachute.S        = pi.*(parachute.d./2)^2; % m^2
 drogue.S   = pi.*(drogue.d./2)^2;            % m^2
 rocket.S   = pi.*(rocket.d./2).^2;           % m^2
+parachute.S_normal = lam.*parachute.S;
+drogue.S_normal    = lam.*drogue.S;
+rocket.S_normal    = lam.*rocket.S;
 
 [motor,rocket,T,t_powered] = getMotorData(motor,rocket,time);
 
@@ -58,11 +61,11 @@ for i = 1:length(t)
     % The launch angle is taken into account here as well as the drag
     % multiplier for the drag fins
     [~,~,rho,mach1(i)] = getAtmoConditions(h(i));
-    k = 0.5.*rocket.Cd.*rocket.S.*rho;
+    k = 0.5.*rocket.Cd.*rocket.S_normal.*rho;
     if (t(i)>dragfin.deploy_t && dragfin.deploy_t > 0 && u(i) > 0)
         k = dragfin.extra_drag_percent*k;
     end
-    dragloss(i)        = lam.*k.*u(i).^2;
+    dragloss(i)        = k.*u(i).^2;
     
     % Gravity loss and current momentum calculation
     gravityloss(i)     = m(i).*g(i);
@@ -74,9 +77,9 @@ for i = 1:length(t)
     % Second if statemnet checks if the rocket is below the parachute
     % deployment height
     if u(i) < drogue.deploy_u && h(i) > parachute.deploy_h && rocket.deploydrogue == 1
-        droguedrag(i)    = lam.*0.5.*drogue.Cd.*drogue.S.*rho.*u(i).^2;
+        droguedrag(i)    = 0.5.*drogue.Cd.*drogue.S_normal.*rho.*u(i).^2;
     elseif h(i) < parachute.deploy_h && u(i) < 0 && t(i) > 1 && rocket.deployparachute == 1
-        parachutedrag(i) = lam.*0.5.*parachute.Cd.*parachute.S.*rho.*u(i).^2;
+        parachutedrag(i) = 0.5.*parachute.Cd.*parachute.S_normal.*rho.*u(i).^2;
     end
     
     % Solve out forces on rocket
