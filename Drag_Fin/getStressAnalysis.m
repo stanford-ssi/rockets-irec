@@ -3,28 +3,7 @@
 % This script attempts to do a simplified analysis of a the drag fins in
 % order to characterize the order of magnitudes of stress
 
-function   [dragfin,plate,rod] = getStressAnalysis(dragfin,plate,rod)
-
-if dragfin.deploy_t < 0; error('Drag fins did not deploy in simulation');
-end
-
-in2m = 0.0254;                   % in/m
-
-% Characteristics of the plate & rod
-% MAX THETA DOES NOT TAKE INTO ACCOUNT LAUNCH ANGLE
-dragfin.max_theta = 17;          % deg
-plate.max_theta   = dragfin.max_theta;
-rod.max_theta     = dragfin.max_theta;
-
-plate.t = .125.*in2m;            % m, thickness
-plate.b = 6.*in2m;               % m, distance from rod
-plate.h = 6.*in2m;               % m
-plate.S = plate.b*plate.h;       % m^2
-
-rod.t = 0.5.*in2m;               % m
-rod.b = 3.*in2m;                 % m
-rod.h = rod.t;                   % m
-rod.S = rod.b*rod.h;             % m^2
+function   [dragfin,plate,rod] = getStressAnalysis(dragfin,plate,rod,h)
 
 Al.E = 68.9e9;                   % Pa
 Al.tensile_yield  = 276e6;       % Pa
@@ -33,7 +12,7 @@ Al.thermal_cond   = 167;         % W/(m*K)
 Al.poisson        = 0.334;
 
 % Solve for atmospheric conditions: temperature, pressure, density and
-% speed of sound at deployment altitude
+% speed of sound at deployment altitudes
 [T,P,rho,sp_sound] = getAtmoConditions(h);
 k = 1.4; % specific heat ratio of air
 
