@@ -2,7 +2,7 @@
 % Grabs the matching flight data from a previously simulation in OpenRocket
 % Ian Gomez,  08/25/16
 
-function [openRocket] = getOpenRocketData(motor)
+function [openRocket] = getOpenRocketData(motor,openRocket)
 
 openRocket.csv_name = strcat(motor.name,'.csv');
 

@@ -5,14 +5,15 @@
 function getPlots(plot_options,time,t,t_powered,mach1,gravityloss,T,dragloss,...
     parachutedrag,droguedrag,h,u,a,altitude,motor,dragfin,g,openRocket)
 
-linesize = 2; 
-plot_landing       = plot_options(1); 
-plot_thrust        = plot_options(2); 
-plot_h_u_a         = plot_options(3); 
-plot_combined_hu   = plot_options(4); 
+linesize = 2;
+plot_landing       = plot_options(1);
+plot_thrust        = plot_options(2);
+plot_h_u_a         = plot_options(3);
+plot_combined_hu   = plot_options(4);
 plot_h             = plot_options(5);
-plot_forces        = plot_options(6); 
-plot_recovery_drag = plot_options(7); 
+plot_forces        = plot_options(6);
+plot_recovery_drag = plot_options(7);
+plot_openRocket    = openRocket.retrieve;
 
 % If an error occurs at t_land, you need to let the sim run longer
 time.xlim = time.apogee;
@@ -38,28 +39,41 @@ end
 if plot_h_u_a == 1
     figure
     hold on
-    plot(t,altitude.target.*ones(1,length(t)),'--','LineWidth',linesize)
-    plot(t,h,'LineWidth',linesize)
+    if plot_openRocket
+        plot(t,altitude.target.*ones(1,length(t)),'--',t,h,openRocket.t,...
+            openRocket.h,'LineWidth',linesize)
+        legend('3048m above launch site','SSI','OpenRocket','Location',...
+            'Southwest')
+    else
+        plot(t,altitude.target.*ones(1,length(t)),'--',t,h,'LineWidth',linesize)
+        legend('3048m above launch site','Location','Southwest')
+    end
     title(strcat(strcat({'Altitude ('},motor.name),')'))
     xlabel('Time (s)')
     ylabel('Height (m)')
     xlim(xlimit)
     grid on
-    legend('3048m above launch site','Location','Southwest')
     % label apogee
     annotation('textbox',apogee_label_dim,'String',...
         apogee_label_str,'FitBoxToText','on');
     
     figure
     hold on
-    plot(t,mach1,'--','LineWidth',linesize)
-    plot(t,u,'LineWidth',linesize)
+    if plot_openRocket
+        plot(t,mach1,'--',t,u,openRocket.t,openRocket.v_vert,'LineWidth',...
+            linesize)
+        legend('Mach 1','SSI','OpenRocket','Location','Southwest')
+        
+    else
+        plot(t,mach1,'--',t,u,'LineWidth',linesize)
+        legend('Mach 1','Location','Southwest')
+        
+    end
     title(strcat(strcat({'Velocity ('},motor.name),')'))
     xlabel('Time (s)')
     ylabel('Velocity (m/s)')
     xlim(xlimit)
     grid on
-    legend('Mach 1','Location','Southwest')
     
     figure
     plot(t(1:length(a)),a./g,'LineWidth',linesize)
@@ -73,14 +87,27 @@ end
 if plot_combined_hu == 1
     figure
     yyaxis right
-    plot(t,h,t,altitude.target.*ones(1,length(t)),'LineWidth',linesize)
+    if plot_openRocket
+        plot(t,altitude.target.*ones(1,length(t)),'--',t,h,openRocket.t,...
+            openRocket.h,'LineWidth',linesize)
+        legend('3048m above launch site','SSI','OpenRocket','Location',...
+            'Southwest')
+    else
+        plot(t,altitude.target.*ones(1,length(t)),'--',t,h,'LineWidth',linesize)
+    end
     title(strcat(strcat({'Altitude and Velocity ('},motor.name),')'))
     xlabel('Time (s)')
     ylabel('Height (m)')
     xlim(xlimit)
     grid on
     yyaxis left
-    plot(t,u,t(1:length(mach1)),mach1,'LineWidth',linesize)
+    if plot_openRocket
+        plot(t,u,openRocket.t,openRocket.v_vert,t,mach1,'--','LineWidth',...
+            linesize)
+        legend('SSI','OpenRocket','Location','Southwest')
+    else
+        plot(t,mach1,'--',t,u,'LineWidth',linesize)        
+    end
     ylabel('Velocity (m/s)')
 end
 

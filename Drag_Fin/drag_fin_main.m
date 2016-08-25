@@ -13,11 +13,11 @@ in2m = 0.0254;               % in/m
 
 % Plots
 linesize = 2;                % line width on plots
-plot_openRocket    = 0;
+plot_openRocket    = 1;
 plot_landing       = 0;      % 1 plots time up to landing, 0 plots to apogee
 plot_thrust        = 0;      % plot the thrust curve
-plot_h_u_a         = 0;      % plot h, u, and a separately
-plot_combined_hu   = 0;      % plot h & u together
+plot_h_u_a         = 1;      % plot h, u, and a separately
+plot_combined_hu   = 1;      % plot h & u together
 plot_h             = 0;      % plot just h
 plot_forces        = 0;      % doesn't plot the parachute or drogue drag
 plot_recovery_drag = 0;      % plots the parachute and drogue drag
@@ -56,7 +56,7 @@ rod.S = rod.b*rod.h;         % m^2
 % Motor Selection (just need impulse class + avg thrust)
 % Check motors_available for what motors exist in the folder
 cd('Motors'); motors_available = ls; cd ..;
-motors = {'M1939'};
+motors = {'M2500'};
 
 % Simulation Inputs
 time.step = 8e-3;            % Choose time step, currently only <0.02 works
@@ -70,10 +70,10 @@ t_pause = .05;
 for i = 1:length(motors)
     motor.name = motors{i}
     
-    if plot_openRocket ~= 0
-        fprintf('Beginning OpenRocket Data retrieval... \n');
-        % OpenRocket Data Retrieval
-        [openRocket] = getOpenRocketData(motor);
+    % OpenRocket Data Retrieval
+    openRocket.retrieve = plot_openRocket; 
+    if openRocket.retrieve ~= 0
+        [openRocket] = getOpenRocketData(motor,openRocket);
     end
     
     fprintf('Beginning simulation... \n');
@@ -84,9 +84,8 @@ for i = 1:length(motors)
     
     fprintf('\nReading simulation results... \n');
     % Simulation Plots
-    openRocket.retreive = plot_openRocket; % will we need openRocket check
     plot_options = [plot_landing,plot_thrust,plot_h_u_a,plot_combined_hu,...
-        plot_h,plot_forces,plot_recovery_drag,plot_openRocket];
+        plot_h,plot_forces,plot_recovery_drag];
     getPlots(plot_options,time,t,t_powered,mach1,gravityloss,T,dragloss,...
         parachutedrag,droguedrag,h,u,a,altitude,motor,dragfin,g,openRocket);
     
