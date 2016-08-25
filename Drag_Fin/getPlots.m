@@ -3,7 +3,7 @@
 % Ian Gomez,  08/23/16
 
 function getPlots(plot_options,time,t,t_powered,mach1,gravityloss,T,dragloss,...
-    parachutedrag,droguedrag,h,u,a,altitude,motor,dragfin,g)
+    parachutedrag,droguedrag,h,u,a,altitude,motor,dragfin,g,openRocket)
 
 linesize = 2; 
 plot_landing       = plot_options(1); 

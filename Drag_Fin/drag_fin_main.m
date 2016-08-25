@@ -13,6 +13,7 @@ in2m = 0.0254;               % in/m
 
 % Plots
 linesize = 2;                % line width on plots
+plot_openRocket    = 0;
 plot_landing       = 0;      % 1 plots time up to landing, 0 plots to apogee
 plot_thrust        = 0;      % plot the thrust curve
 plot_h_u_a         = 0;      % plot h, u, and a separately
@@ -69,18 +70,25 @@ t_pause = .05;
 for i = 1:length(motors)
     motor.name = motors{i}
     
+    if plot_openRocket ~= 0
+        fprintf('Beginning OpenRocket Data retrieval... \n');
+        % OpenRocket Data Retrieval
+        [openRocket] = getOpenRocketData(motor);
+    end
+    
     fprintf('Beginning simulation... \n');
     % Simulation
     [h,u,a,time,t,t_powered,mach1,rocket,gravityloss,T,dragloss,...
-        parachutedrag,droguedrag,e,dragfin] = runSimulation(rocket,motor,...
-        parachute,drogue,altitude,dragfin,time,g);
+        parachutedrag,droguedrag,e,dragfin,motor] = runSimulation(rocket,...
+        motor,parachute,drogue,altitude,dragfin,time,g);
     
-    fprintf('\nReading simulation results... \n'); 
+    fprintf('\nReading simulation results... \n');
     % Simulation Plots
+    openRocket.retreive = plot_openRocket; % will we need openRocket check
     plot_options = [plot_landing,plot_thrust,plot_h_u_a,plot_combined_hu,...
-        plot_h,plot_forces,plot_recovery_drag];
+        plot_h,plot_forces,plot_recovery_drag,plot_openRocket];
     getPlots(plot_options,time,t,t_powered,mach1,gravityloss,T,dragloss,...
-        parachutedrag,droguedrag,h,u,a,altitude,motor,dragfin,g);
+        parachutedrag,droguedrag,h,u,a,altitude,motor,dragfin,g,openRocket);
     
     % Simulation Results
     disp('Additional percentage of energy need to lose to drag')
