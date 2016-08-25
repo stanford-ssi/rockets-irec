@@ -6,32 +6,38 @@ function [openRocket] = getOpenRocketData(motor,openRocket)
 
 openRocket.csv_name = strcat(motor.name,'.csv');
 
-% Enter OpenRocket data folder (You need to start from the Drag_Fin folder 
+% Enter OpenRocket data folder (You need to start from the Drag_Fin folder
 % as your directory, or this will not work)
 cd('OpenRocket_Comparison_Data');
 
 if exist(openRocket.csv_name,'file')
     
     % get the headers + read in data
-    fileID = fopen(openRocket.csv_name); 
+    fileID = fopen(openRocket.csv_name);
     headers = fgets(fileID); headers = strsplit(headers,',');
     fclose(fileID);
-    data = csvread(openRocket.csv_name,1,0); 
+    data = csvread(openRocket.csv_name,1,0);
     cd ..
     
     % Store data in useful way
     openRocket.headers  = headers;
-    openRocket.t        = data(:,1);  % t
-    openRocket.h        = data(:,2);  % h
-    openRocket.v_vert   = data(:,3);  % m/s
-    openRocket.a_vert   = data(:,4);  % m/s^2
-    openRocket.v_total  = data(:,5);  % m/s
-    openRocket.a_total  = data(:,6);  % m/s
-    openRocket.T        = data(:,29); % N
-    openRocket.drag     = data(:,30); % N
+    openRocket.t        = data(:,1);        % t
+    openRocket.h        = data(:,2);        % h
+    openRocket.v_vert   = data(:,3);        % m/s
+    openRocket.a_vert   = data(:,4);        % m/s^2
+    openRocket.v_total  = data(:,5);        % m/s
+    openRocket.a_total  = data(:,6);        % m/s
+    openRocket.g_local  = data(:,15);       % m/s^2
+    openRocket.m        = data(:,20).*1e-3; % kg
+    openRocket.T        = data(:,29);       % N
+    openRocket.drag     = data(:,30);       % N
     openRocket.Cd       = data(:,31);
-    openRocket.P        = data(:,51); % mbar
-    openRocket.sp_sound = data(:,52); % m/s    
+    openRocket.P        = data(:,51);       % mbar
+    openRocket.sp_sound = data(:,52);       % m/s
+    
+    for i = 1:length(openRocket.t) % create gravitational force
+        openRocket.gravityloss(1,i) = openRocket.m(i).*openRocket.g_local(i); 
+    end
 else
     cd ..
     error(strcat('CSV file not found. Check directory for ',motor.name))

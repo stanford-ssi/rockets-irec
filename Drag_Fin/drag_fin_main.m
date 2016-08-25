@@ -12,13 +12,13 @@ clear; close all; clc
 in2m = 0.0254;               % in/m
 
 % Plots
-linesize = 2;                % line width on plots
-plot_openRocket    = 1;
+linesize = 1;                % line width on plots
+plot_openRocket    = 1;      % if csv exists, will plot openrocket data too
 plot_landing       = 0;      % 1 plots time up to landing, 0 plots to apogee
 plot_thrust        = 0;      % plot the thrust curve
-plot_h_u_a         = 1;      % plot h, u, and a separately
-plot_combined_hu   = 1;      % plot h & u together
-plot_h             = 0;      % plot just h
+plot_h_u_a         = 0;      % plot h, u, and a separately
+plot_combined_hu   = 0;      % plot h & u together
+plot_h             = 1;      % plot just h
 plot_forces        = 0;      % doesn't plot the parachute or drogue drag
 plot_recovery_drag = 0;      % plots the parachute and drogue drag
 
