@@ -13,7 +13,7 @@
 % https://spacegrant.carthage.edu/ojs/index.php/wsc/article/viewFile/23/23
 
 function [h,u,a,time,t,t_powered,mach1,rocket,gravityloss,T,dragloss,...
-    parachutedrag,droguedrag,e,dragfin] = runSimulation(rocket,motor,...
+    parachutedrag,droguedrag,e,dragfin,motor] = runSimulation(rocket,motor,...
     parachute,drogue,altitude,dragfin,time,g)
 
 lam = cos(rocket.launch_angle.*pi./180); % launch angle multiplier for drag terms
@@ -99,12 +99,14 @@ for i = 1:length(t)
     
     % Store time at apogee and time at landing
     % u(i) < 0 is apogee; h(i) < 0 is landing
-    if t(i) > 5 && h(i) >= (0 + altitude.launch_site)
+    if t(i) > 1 && h(i) >= (0 + altitude.launch_site)
         time.land = t(i);
     end
-    if t(i) > 5 && u(i) > 0
+    if t(i) > 1 && u(i) > 0
         time.apogee = t(i);
+        time.apogee_index = i;
     end
+   
 end
 
 % Reset altitude for plotting. Air density already taken into account
@@ -122,18 +124,20 @@ e.loss = e.net - e.want;
 e.loss_perc = (e.net - e.want)/e.want;
 
 % Find index of distance to altitude target from altitude at fin deployment
+% Walk through all the steps in the time vector and find the index where
+% the drag fins deploy. Drag fins deploy at time, t, and finding the exact
+% index of t allows us to find other important values at that time step
 if dragfin.deploy_t > 0
     tol = time.step; % this allows you to put in precise times for t_deploy
     for i = 1:length(t)
         if abs(t(i)-dragfin.deploy_t) < tol
-            dragfin.deploy_index = i;
+            dragfin.deploy_index = i; % once t(index) = dragfin deploy time
         end
     end
-    dragfin.deploy_u = u(dragfin.deploy_index);
-    dragfin.deploy_h = h(dragfin.deploy_index);
+    dragfin.deploy_u = u(dragfin.deploy_index); % finds dragfin deploy u
+    dragfin.deploy_h = h(dragfin.deploy_index); % finds dragfin deploy h
     dragfin.dist_to_apogee =  altitude.target - dragfin.deploy_h; % m
-    dragfin.extra_D_req = e.loss./dragfin.dist_to_apogee;                        % N
-    clearvars i tol
+    dragfin.extra_D_req = e.loss./dragfin.dist_to_apogee;         % N
     disp(strcat(strcat('Drag fins were deployed at ',...
         num2str(dragfin.deploy_t),'s')))
 else
