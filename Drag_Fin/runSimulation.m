@@ -61,7 +61,7 @@ for i = 1:length(t)
     if (t(i)>dragfin.deploy_t && dragfin.deploy_t > 0 && u(i) > 0)
         k = dragfin.extra_drag_percent*k;
     end
-    dragloss(i)        = k.*u(i).^2;
+    dragloss(i)        = k.*u(i).*abs(u(i));
     
     % Gravity loss and current momentum calculation
     % need to not allow gravity to move the rocket below starting altitude
