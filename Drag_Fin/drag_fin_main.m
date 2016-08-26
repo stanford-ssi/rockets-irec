@@ -39,7 +39,7 @@ drogue.d           = 1.22;   % m
 drogue.deploy_u    = -1;     % m/s
 
 % Drag Fin
-dragfin.deploy_t = 10;            % s, -1 will not deploy drag fins
+dragfin.deploy_t = -1;            % s, -1 will not deploy drag fins
 dragfin.extra_drag_percent = 1.2; % *100%
 dragfin.max_theta = 17;           % deg
 plate.max_theta   = dragfin.max_theta;
@@ -48,7 +48,7 @@ plate.b = 6.*in2m;           % m, distance from rod
 plate.h = 6.*in2m;           % m
 plate.S = plate.b*plate.h;   % m^2
 rod.max_theta     = dragfin.max_theta;
-rod.t = 0.75.*in2m;           % m
+rod.t = 0.75.*in2m;          % m
 rod.b = 3.*in2m;             % m
 rod.h = rod.t;               % m
 rod.S = rod.b*rod.h;         % m^2
@@ -56,7 +56,8 @@ rod.S = rod.b*rod.h;         % m^2
 % Motor Selection (just need impulse class + avg thrust)
 % Check motors_available for what motors exist in the folder
 cd('Motors'); motors_available = ls; cd ..;
-motors = {'M2500'};
+cd('OpenRocket_Comparison_Data'); openRocket_sims_avail = ls; cd ..;
+motors = {'M1939'};
 
 % Simulation Inputs
 time.step = 8e-3;            % Choose time step, currently only <0.02 works
@@ -65,7 +66,6 @@ altitude.launch_site = 1219; % m
 altitude.target      = 3048; % m
 rocket.launch_angle = 0;     % deg
 g = 9.81;                    % m/s^2
-t_pause = .05;
 
 for i = 1:length(motors)
     motor.name = motors{i}
@@ -105,4 +105,5 @@ end
 
 % Useful for cleaning up workspace for drag_fin_stress
 clearvars plot_landing plot_thrust plot_h_u_a plot_combined_hu ...
-    plot_h plot_forces plot_recovery_drag linesize
+    plot_h plot_forces plot_recovery_drag plot_options plot_openRocket...
+    linesize

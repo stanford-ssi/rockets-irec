@@ -5,6 +5,8 @@
 
 function   [dragfin,plate,rod] = getStressAnalysis(dragfin,plate,rod,h)
 
+if dragfin.deploy_t < 0; disp('No analysis required'); end
+
 Al.E = 68.9e9;                   % Pa
 Al.tensile_yield  = 276e6;       % Pa
 Al.shear_strength = 207e6;       % Pa
