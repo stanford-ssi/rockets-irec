@@ -118,10 +118,15 @@ rocket.burnout_h = h(length(t_powered));
 rocket.apogee = max(h);
 
 % Energy calculations [J]
-e.net = rocket.drymass.*g(1).*rocket.apogee;
+e.net  = rocket.drymass.*g(1).*rocket.apogee;
 e.want = rocket.drymass.*g(end).*altitude.target;
-e.loss = e.net - e.want;
-e.loss_perc = (e.net - e.want)/e.want;
+e.diff = abs(e.net - e.want);
+e.diff_perc = abs((e.net - e.want)/e.want);
+
+if altitude.target > rocket.apogee
+e.diff = -e.diff;
+e.diff_perc = -e.diff_perc;
+end
 
 % Find index of distance to altitude target from altitude at fin deployment
 % Walk through all the steps in the time vector and find the index where
@@ -138,13 +143,16 @@ if dragfin.deploy_t > 0
     dragfin.deploy_h = h(dragfin.deploy_index); % finds dragfin deploy h
     dragfin.dist_to_apogee =  altitude.target - dragfin.deploy_h; % m
     dragfin.extra_D_req = e.loss./dragfin.dist_to_apogee;         % N
+    if altitude.target > rocket.apogee; 
+%         dragfin.extra_D_req = -dragfin.extra_D_req; 
+    end
     disp(strcat(strcat('Drag fins were deployed at ',...
         num2str(dragfin.deploy_t),'s')))
 else
     % If we deploy fins at 3113m
-    default_deploy_h = 3113; % m
+    default_deploy_h = 2000; % m
     dragfin.dist_to_apogee = altitude.target - default_deploy_h; % m
-    dragfin.extra_D_req = e.loss./dragfin.dist_to_apogee;
+    dragfin.extra_D_req = e.diff./dragfin.dist_to_apogee;
     disp(strcat(strcat(...
         'Drag fins were not deployed, but if we did deploy at',...
         num2str(default_deploy_h),'m')))

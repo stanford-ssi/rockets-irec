@@ -57,7 +57,7 @@ rod.S = rod.b*rod.h;         % m^2
 % Check motors_available for what motors exist in the folder
 cd('Motors'); motors_available = ls; cd ..;
 cd('OpenRocket_Comparison_Data'); openRocket_sims_avail = ls; cd ..;
-motors = {'M1939'};
+motors = {'M2500'};
 
 % Simulation Inputs
 time.step = 8e-3;            % Choose time step, currently only <0.02 works
@@ -91,7 +91,7 @@ for i = 1:length(motors)
     
     % Simulation Results
     disp('Additional percentage of energy need to lose to drag')
-    disp(strcat(num2str(e.loss_perc.*100),'%'))
+    disp(strcat(num2str(e.diff_perc.*100),'%'))
     disp('Additional drag needed to hit target')
     disp(strcat(num2str(dragfin.extra_D_req),'N'))
     

@@ -15,7 +15,7 @@ if exist(aerotech_str,'file')
 elseif exist(cesaroni_str,'file')
     motor_str = cesaroni_str;
 else
-    error('Motor manufacturer not set up in getMotorData')
+    error('Motor does not exist or Motor manufacturer not set up in getMotorData')
 end
 fileID = fopen(motor_str);
 motor_info = '';
