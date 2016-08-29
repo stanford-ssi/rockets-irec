@@ -6,6 +6,7 @@ function getPlots(plot_options,time,t,t_powered,mach1,gravityloss,T,dragloss,...
     parachutedrag,droguedrag,h,u,a,altitude,motor,dragfin,g,openRocket)
 
 linesize = 2;
+background_color = 'w';
 
 plot_landing       = plot_options(1);
 plot_thrust        = plot_options(2);
@@ -46,7 +47,8 @@ end
 
 % Plot the thrust data
 if plot_thrust == 1
-    figure
+    figure; 
+    set(gcf,'color',background_color); 
     plot(t_powered,T,'-mo','LineWidth',linesize)
     xlim([0 t_powered(end)])
     thrust_title = strcat({'Thrust Curve of '},motor.name);
@@ -58,6 +60,7 @@ end
 
 if plot_h_u_a == 1
     figure
+    set(gcf,'color',background_color);
     hold on
     if plot_openRocket
         plot(t,altitude.target.*ones(1,length(t)),'--',t,h,openRocket.t,...
@@ -79,6 +82,7 @@ if plot_h_u_a == 1
         apogee_label_str,'FitBoxToText','on');
     
     figure
+    set(gcf,'color',background_color);
     hold on
     if plot_openRocket
         plot(t,mach1,'--',t,u,openRocket.t,openRocket.v_vert,'LineWidth',...
@@ -97,6 +101,7 @@ if plot_h_u_a == 1
     grid on
     
     figure
+    set(gcf,'color',background_color);
     if plot_openRocket
         plot(t(1:length(a)),a./g,openRocket.t,openRocket.a_vert./g,...
             'LineWidth',linesize)
@@ -113,6 +118,7 @@ end
 
 if plot_combined_hu == 1
     figure
+    set(gcf,'color',background_color);
     yyaxis right
     if plot_openRocket
         plot(t,h,openRocket.t,openRocket.h,'-.',t,altitude.target.*...
@@ -142,6 +148,7 @@ end
 if plot_h == 1
     
     figure
+    set(gcf,'color',background_color);
     hold on
     if plot_openRocket
         plot(t,altitude.target.*ones(1,length(t)),'--',t,h,openRocket.t,...
@@ -166,6 +173,7 @@ end
 
 if plot_forces == 1
     figure
+    set(gcf,'color',background_color);
     plot(t,gravityloss,t_powered,T,t,dragloss,'LineWidth',linesize);
     legend('Gravity','Thrust','Drag + Drag Fins - Recovery Drag')
     hold on
@@ -184,6 +192,7 @@ if plot_forces == 1
     
     if plot_openRocket
         figure
+        set(gcf,'color',background_color);
         plot(openRocket.t,openRocket.gravityloss,openRocket.t,...
             openRocket.T,openRocket.t,openRocket.drag,'LineWidth',linesize);
         legend('Gravity','Thrust','Drag')
@@ -199,6 +208,7 @@ end
 
 if plot_recovery_drag == 1
     figure
+    set(gcf,'color',background_color);
     hold on
     plot(t,parachutedrag,'LineWidth',linesize)
     plot(t,droguedrag,'LineWidth',linesize);

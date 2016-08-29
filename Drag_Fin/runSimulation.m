@@ -51,6 +51,8 @@ for i = 1:length(t)
     % if motor is on, lose mass
     if t(i) <= motor.burntime
         m(i+1) = m(i)-motor.mdotavg.*time.step;
+        motor.burnout_h = h(i);
+        motor.burnout_index = i;
     end
     
     % Drag calculation
@@ -61,7 +63,7 @@ for i = 1:length(t)
     if (t(i)>dragfin.deploy_t && dragfin.deploy_t > 0 && u(i) > 0)
         k = dragfin.extra_drag_percent*k;
     end
-    dragloss(i)        = k.*u(i).^2;
+    dragloss(i)        = k.*u(i).*abs(u(i));
     
     % Gravity loss and current momentum calculation
     % need to not allow gravity to move the rocket below starting altitude
@@ -106,7 +108,7 @@ for i = 1:length(t)
         time.apogee = t(i);
         time.apogee_index = i;
     end
-   
+    
 end
 
 % Reset altitude for plotting. Air density already taken into account
@@ -114,40 +116,40 @@ h = h-altitude.launch_site;
 
 % Store useful information
 rocket.flight_time = time.land;
-rocket.burnout_h = h(length(t_powered));
 rocket.apogee = max(h);
+rocket.burnout_h = motor.burnout_h;
 
 % Energy calculations [J]
-e.net = rocket.drymass.*g(1).*rocket.apogee;
+e.net  = rocket.drymass.*g(1).*rocket.apogee;
 e.want = rocket.drymass.*g(end).*altitude.target;
-e.loss = e.net - e.want;
-e.loss_perc = (e.net - e.want)/e.want;
+e.diff = abs(e.net - e.want);
+e.diff_perc = abs((e.net - e.want)/e.want);
 
-% Find index of distance to altitude target from altitude at fin deployment
-% Walk through all the steps in the time vector and find the index where
-% the drag fins deploy. Drag fins deploy at time, t, and finding the exact
-% index of t allows us to find other important values at that time step
+if altitude.target > rocket.apogee % sign correction... because
+    e.diff = -e.diff;
+    e.diff_perc = -e.diff_perc;
+end
+
+% Drag fins deploy at time, t; finding the exact index of t allows us to
+% find other important values at that time step
 if dragfin.deploy_t > 0
-    tol = time.step; % this allows you to put in precise times for t_deploy
-    for i = 1:length(t)
-        if abs(t(i)-dragfin.deploy_t) < tol
-            dragfin.deploy_index = i; % once t(index) = dragfin deploy time
-        end
-    end
-    dragfin.deploy_u = u(dragfin.deploy_index); % finds dragfin deploy u
-    dragfin.deploy_h = h(dragfin.deploy_index); % finds dragfin deploy h
-    dragfin.dist_to_apogee =  altitude.target - dragfin.deploy_h; % m
-    dragfin.extra_D_req = e.loss./dragfin.dist_to_apogee;         % N
+    dragfin.deploy_index = getTimeIndex(t,dragfin.deploy_t,time.step);
     disp(strcat(strcat('Drag fins were deployed at ',...
         num2str(dragfin.deploy_t),'s')))
-else
-    % If we deploy fins at 3113m
-    default_deploy_h = 3113; % m
-    dragfin.dist_to_apogee = altitude.target - default_deploy_h; % m
-    dragfin.extra_D_req = e.loss./dragfin.dist_to_apogee;
-    disp(strcat(strcat(...
-        'Drag fins were not deployed, but if we did deploy at',...
-        num2str(default_deploy_h),'m')))
+else % Pretend they deployed at some arbitrary time after burnout
+    dragfin.dtab = 2; % deployment time after burnout
+    dragfin.deploy_time = motor.burntime+dragfin.dtab;
+    dragfin.deploy_index = getTimeIndex(t,dragfin.deploy_time,time.step);
+    dragfin.deploy_h = h(dragfin.deploy_index); % m
+    fprintf(strcat(strcat(...
+        'Drag fins were not deployed, but if we did deploy at ',...
+        num2str(dragfin.deploy_h),'m \n')))
+    fields = {'extra_drag_percent','max_theta','dtab'};
+    dragfin = rmfield(dragfin,fields); % removes extra fields from dragfin
 end
+dragfin.deploy_u = u(dragfin.deploy_index); % finds dragfin deploy u
+dragfin.deploy_h = h(dragfin.deploy_index); % finds dragfin deploy h
+dragfin.dist_to_apogee =  altitude.target - dragfin.deploy_h; % m
+dragfin.extra_D_req = e.diff./dragfin.dist_to_apogee;         % N
 
 end

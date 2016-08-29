@@ -1,6 +1,8 @@
 Hi! You may be asking yourself, "How do?" or "Why do I exist?", so I'll point you towards the rest of this document for those answers.
 
 
+Make sure your openRocket simulation is up to date before freaking out if matlab and openrocket don't match (mass numbers should be consistent across simulations)!!
+
 Adding a motor
 ------------------
 If you would like to add a motor (.eng file from thrustcurve.org), please make sure the beginning of time = 0.
