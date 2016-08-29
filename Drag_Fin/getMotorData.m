@@ -9,7 +9,7 @@ function [motor,rocket,T,t_powered] = getMotorData(motor,rocket,time)
 % your directory, or this will not work
 cd('Motors');
 aerotech_str  = strcat('AeroTech_' ,strcat(motor.name,'.eng'));
-cesaroni_str = strcat('cesaroni_',strcat(motor.name,'.eng'));
+cesaroni_str = strcat('Cesaroni_',strcat(motor.name,'.eng'));
 if exist(aerotech_str,'file')
     motor_str = aerotech_str;
 elseif exist(cesaroni_str,'file')

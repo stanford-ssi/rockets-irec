@@ -16,10 +16,10 @@ linesize = 1;                % line width on plots
 plot_openRocket    = 0;      % if csv exists, will plot openrocket data too
 plot_landing       = 0;      % 1 plots time up to landing, 0 plots to apogee
 plot_thrust        = 0;      % plot the thrust curve
-plot_h_u_a         = 0;      % plot h, u, and a separately
+plot_h_u_a         = 1;      % plot h, u, and a separately
 plot_combined_hu   = 0;      % plot h & u together
 plot_h             = 1;      % plot just h
-plot_forces        = 0;      % doesn't plot the parachute or drogue drag
+plot_forces        = 1;      % doesn't plot the parachute or drogue drag
 plot_recovery_drag = 0;      % plots the parachute and drogue drag
 
 % IREC Rocket Baseline is current rocket
@@ -39,7 +39,7 @@ drogue.d           = 1.22;   % m
 drogue.deploy_u    = -1;     % m/s
 
 % Drag Fin
-dragfin.deploy_t = -1;            % s, -1 will not deploy drag fins
+dragfin.deploy_t = 10;            % s, -1 will not deploy drag fins
 dragfin.extra_drag_percent = 1.2; % *100%
 dragfin.max_theta = 17;           % deg
 plate.max_theta   = dragfin.max_theta;
@@ -57,7 +57,7 @@ rod.S = rod.b*rod.h;              % m^2
 % Check motors_available for what motors exist in the folder
 cd('Motors'); motors_available = ls; cd ..;
 cd('OpenRocket_Comparison_Data'); openRocket_sims_avail = ls; cd ..;
-motors = {'M2500','N2540'};
+motors = {'N2540'};
 
 % Simulation Inputs
 time.step = 8e-3;            % Choose time step, currently only <0.02 works
@@ -80,7 +80,7 @@ for i = 1:length(motors)
     fprintf('Beginning simulation... \n');
     % Simulation
     [h,u,a,time,t,t_powered,mach1,rocket,gravityloss,T,dragloss,...
-        parachutedrag,droguedrag,e,dragfin,motor,default] = runSimulation(rocket,...
+        parachutedrag,droguedrag,e,dragfin,motor] = runSimulation(rocket,...
         motor,parachute,drogue,altitude,dragfin,time,g);
     
     % Simulation Plots
