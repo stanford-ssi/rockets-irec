@@ -13,7 +13,7 @@ in2m = 0.0254;               % in/m
 
 % Plots
 linesize = 1;                % line width on plots
-plot_openRocket    = 1;      % if csv exists, will plot openrocket data too
+plot_openRocket    = 0;      % if csv exists, will plot openrocket data too
 plot_landing       = 0;      % 1 plots time up to landing, 0 plots to apogee
 plot_thrust        = 0;      % plot the thrust curve
 plot_h_u_a         = 0;      % plot h, u, and a separately
@@ -43,21 +43,21 @@ dragfin.deploy_t = -1;            % s, -1 will not deploy drag fins
 dragfin.extra_drag_percent = 1.2; % *100%
 dragfin.max_theta = 17;           % deg
 plate.max_theta   = dragfin.max_theta;
-plate.t = .125.*in2m;        % m, thickness
-plate.b = 6.*in2m;           % m, distance from rod
-plate.h = 6.*in2m;           % m
-plate.S = plate.b*plate.h;   % m^2
+plate.t = .125.*in2m;             % m, thickness
+plate.b = 6.*in2m;                % m, distance from rod
+plate.h = 6.*in2m;                % m
+plate.S = plate.b*plate.h;        % m^2
 rod.max_theta     = dragfin.max_theta;
-rod.t = 0.75.*in2m;          % m
-rod.b = 3.*in2m;             % m
-rod.h = rod.t;               % m
-rod.S = rod.b*rod.h;         % m^2
+rod.t = 0.75.*in2m;               % m
+rod.b = 3.*in2m;                  % m
+rod.h = rod.t;                    % m
+rod.S = rod.b*rod.h;              % m^2
 
 % Motor Selection (just need impulse class + avg thrust)
 % Check motors_available for what motors exist in the folder
 cd('Motors'); motors_available = ls; cd ..;
 cd('OpenRocket_Comparison_Data'); openRocket_sims_avail = ls; cd ..;
-motors = {'M2500'};
+motors = {'M2500','N2540'};
 
 % Simulation Inputs
 time.step = 8e-3;            % Choose time step, currently only <0.02 works
@@ -68,10 +68,11 @@ rocket.launch_angle = 0;     % deg
 g = 9.81;                    % m/s^2
 
 for i = 1:length(motors)
-    motor.name = motors{i}
+    motor.name = motors{i};
+    fprintf(strcat(motor.name,' engine loaded\n-----\n'));
     
     % OpenRocket Data Retrieval
-    openRocket.retrieve = plot_openRocket; 
+    openRocket.retrieve = plot_openRocket;
     if openRocket.retrieve ~= 0
         [openRocket] = getOpenRocketData(motor,openRocket);
     end
@@ -79,10 +80,9 @@ for i = 1:length(motors)
     fprintf('Beginning simulation... \n');
     % Simulation
     [h,u,a,time,t,t_powered,mach1,rocket,gravityloss,T,dragloss,...
-        parachutedrag,droguedrag,e,dragfin,motor] = runSimulation(rocket,...
+        parachutedrag,droguedrag,e,dragfin,motor,default] = runSimulation(rocket,...
         motor,parachute,drogue,altitude,dragfin,time,g);
     
-    fprintf('\nReading simulation results... \n');
     % Simulation Plots
     plot_options = [plot_landing,plot_thrust,plot_h_u_a,plot_combined_hu,...
         plot_h,plot_forces,plot_recovery_drag];
@@ -96,14 +96,14 @@ for i = 1:length(motors)
     disp(strcat(num2str(dragfin.extra_D_req),'N'))
     
     % Stress Analysis
-    fprintf('\nBeginning stress analysis... \n');
     if dragfin.deploy_t > 0
+        fprintf('\nBeginning stress analysis... \n');
         [dragfin,plate,rod] = getStressAnalysis(dragfin,plate,rod,h);
     end
+    fprintf('\n\n');
     
 end
 
-% Useful for cleaning up workspace for drag_fin_stress
 clearvars plot_landing plot_thrust plot_h_u_a plot_combined_hu ...
     plot_h plot_forces plot_recovery_drag plot_options plot_openRocket...
     linesize
