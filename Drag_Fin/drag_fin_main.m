@@ -13,30 +13,30 @@ in2m = 0.0254;               % in/m
 
 % Plots
 linesize = 1;                % line width on plots
-plot_openRocket    = 0;      % if csv exists, will plot openrocket data too
-plot_landing       = 0;      % 1 plots time up to landing, 0 plots to apogee
-plot_thrust        = 0;      % plot the thrust curve
-plot_h_u_a         = 1;      % plot h, u, and a separately
-plot_combined_hu   = 0;      % plot h & u together
-plot_h             = 1;      % plot just h
-plot_forces        = 1;      % doesn't plot the parachute or drogue drag
-plot_recovery_drag = 0;      % plots the parachute and drogue drag
+plot_openRocket     = 0;     % if csv exists, will plot openrocket data too
+plot_landing        = 0;     % 1 plots time up to landing, 0 plots to apogee
+plot_thrust         = 0;     % plot the thrust curve
+plot_h_u_a          = 0;     % plot h, u, and a separately
+plot_combined_hu    = 0;     % plot h & u together
+plot_h              = 1;     % plot just h
+plot_forces         = 0;     % doesn't plot the parachute or drogue drag
+plot_recovery_drag  = 0;     % plots the parachute and drogue drag
 
 % IREC Rocket Baseline is current rocket
-rocket.l   = 3.44;           % length, m
-rocket.d   = 0.14;           % diameter, m
-rocket.Cd  = 0.6;            % coeff of drag
+rocket.l            = 3.440; % length, m
+rocket.d            = 0.140; % diameter, m
+rocket.Cd           = 0.600; % coeff of drag
 rocket.nomotormass  = 19.43; % kg
 rocket.deploydrogue = 1;     % 1 will deploy drogue,    0 will not
 rocket.deployparachute = 1;  % 1 will deploy parachute, 0 will not
 
 % Recovery Information
-parachute.d        = 6.1;    % m
-parachute.deploy_h = 450;    % m
-parachute.Cd       = 0.8;    % coefficient of drag
-drogue.Cd          = 0.8;    % coefficient of drag
-drogue.d           = 1.22;   % m
-drogue.deploy_u    = -1;     % m/s
+parachute.d         = 6.1;   % m
+parachute.deploy_h  = 450;   % m
+parachute.Cd        = 0.8;   % coefficient of drag
+drogue.Cd           = 0.8;   % coefficient of drag
+drogue.d            = 1.22;  % m
+drogue.deploy_u     = -1;    % m/s
 
 % Drag Fin
 dragfin.deploy_t = 10;            % s, -1 will not deploy drag fins
