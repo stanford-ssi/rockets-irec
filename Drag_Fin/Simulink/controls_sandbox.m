@@ -1,1 +1,0 @@
-% m(dx^2/d^2t) + b(dx/dt) + k(x) = F
