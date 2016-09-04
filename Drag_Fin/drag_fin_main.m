@@ -60,16 +60,16 @@ cd('OpenRocket_Comparison_Data'); openRocket_sims_avail = ls; cd ..;
 motors = {'N2540'};
 
 % Simulation Inputs
-time.step = 8e-3;            % Choose time step, currently only <0.02 works
-time.end  = 600;             % Choose the duration of the simulation
+time.step            = 8e-3; % Choose time step, currently only <0.02 works
+time.end             = 600;  % Choose the duration of the simulation
 altitude.launch_site = 1219; % m
 altitude.target      = 3048; % m
-rocket.launch_angle = 0;     % deg
+rocket.launch_angle  = 0;    % deg
 g = 9.81;                    % m/s^2
 
 for i = 1:length(motors)
     motor.name = motors{i};
-    fprintf(strcat(motor.name,' engine loaded\n-----\n'));
+    fprintf(strcat(motor.name,' engine loaded\n---------------------\n'));
     
     % OpenRocket Data Retrieval
     openRocket.retrieve = plot_openRocket;
@@ -77,7 +77,7 @@ for i = 1:length(motors)
         [openRocket] = getOpenRocketData(motor,openRocket);
     end
     
-    fprintf('Beginning simulation... \n');
+    fprintf('Beginning simulation... \n---\n');
     % Simulation
     [h,u,a,time,t,t_powered,mach1,rocket,gravityloss,T,dragloss,...
         parachutedrag,droguedrag,e,dragfin,motor] = runSimulation(rocket,...
@@ -97,7 +97,7 @@ for i = 1:length(motors)
     
     % Stress Analysis
     if dragfin.deploy_t > 0
-        fprintf('\nBeginning stress analysis... \n');
+        fprintf('\nBeginning stress analysis... \n---\n');
         [dragfin,plate,rod] = getStressAnalysis(dragfin,plate,rod,h);
     end
     fprintf('\n\n');
