@@ -4,7 +4,7 @@
 % Output: Plot of T0 v Ma
 close all; clc;
 
-Ma = 0:.01:1.5;
+Ma = 0:.01:2.5;
 Tatm = 293; %K
 Tmelt = 273+150; %K
 
