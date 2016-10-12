@@ -75,10 +75,10 @@
   <MachAlt />
   <SimulationList>
     <Simulation>
-      <SustainerEngine>N2850-BS  (CTI)</SustainerEngine>
-      <SustainerLaunchWt>50</SustainerLaunchWt>
+      <SustainerEngine>N2900-CL  (CTI)</SustainerEngine>
+      <SustainerLaunchWt>61</SustainerLaunchWt>
       <SustainerNozzleDiameter>1.5</SustainerNozzleDiameter>
-      <SustainerCG>73</SustainerCG>
+      <SustainerCG>80</SustainerCG>
       <SustainerIgnitionDelay>0</SustainerIgnitionDelay>
       <Booster1LaunchWt>0</Booster1LaunchWt>
       <Booster1SeparationDelay>0</Booster1SeparationDelay>
@@ -92,11 +92,11 @@
       <Booster2NozzleDiameter>0</Booster2NozzleDiameter>
       <IncludeBooster2>False</IncludeBooster2>
       <FlightTime>0</FlightTime>
-      <TimetoApogee>44.57853</TimetoApogee>
-      <MaxAltitude>35212.63</MaxAltitude>
-      <MaxVelocity>2020.185</MaxVelocity>
-      <OptimumWt>65.625</OptimumWt>
-      <OptimumMaxAlt>65.625</OptimumMaxAlt>
+      <TimetoApogee>42.04895</TimetoApogee>
+      <MaxAltitude>31988.9</MaxAltitude>
+      <MaxVelocity>1999.129</MaxVelocity>
+      <OptimumWt>34.3373</OptimumWt>
+      <OptimumMaxAlt>34.3373</OptimumMaxAlt>
     </Simulation>
     <Simulation>
       <SustainerEngine>N2900-CL  (CTI)</SustainerEngine>
