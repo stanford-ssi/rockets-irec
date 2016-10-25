@@ -1,5 +1,6 @@
 %Take in parameters
-function T_layer_history = Surface_Temperature(h_vec, v_vec, dt, length, specific_heat, thermal_cond, surface_thickness, density)
+function T_layer_history = Surface_Temperature(h_vec, v_vec, dt, length,...
+    specific_heat, thermal_cond, surface_thickness, density)
 %dt should be a multiple of .1, is time step between h and v data points
 %Length is the length down the rocket that we are considering a point at
 %specific heat of surface material
