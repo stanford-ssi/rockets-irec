@@ -2,7 +2,7 @@
 % Ian Gomez, 10/20/2016
 % Source:
 % https://www.apogeerockets.com/education/downloads/Newsletter291.pdf
-clear;
+clear; close all; clc
 
 RAD = csvread('4in_CF.CSV',2,1);
 RAD_Ma = RAD(:,2);
@@ -30,8 +30,9 @@ S = 0.5.*(cr + ct).*b; % in^2
 AR = (b.^2)/S;
 lambda = ct/cr;
 G.CF = 5 *145000; % shear modulus of fin (psi)
-G.Al = 24*145000; 
+G.Al = 24*145000;
 
+scaling = 1e3;
 line = 2;
 figure
 for i = 1:length(t)
@@ -40,14 +41,15 @@ for i = 1:length(t)
     vf = a.*sqrt(G.Al./(x./y)); %ft/s
     Ma_max = vf./a;
     hold on
-    plot(h,Ma_max,'LineWidth',line)
+    plot(h./scaling,Ma_max,'LineWidth',line)
 end
 
-plot(RAD_h,RAD_Ma,'LineWidth',line*1.5)
+set(gcf,'color','w');
+plot(RAD_h./scaling,RAD_Ma,'LineWidth',line*1.5)
 title('Flutter velocity with changing height')
 ylabel('Speed (Ma)')
 xlabel('Height(ft)')
-xlim([0 max(RAD_h)])
+xlim([0 max(RAD_h./scaling)])
 legend('1/16"','1/8"','3/16"','1/4"','Flight Conditions')
 
 rho.CF = 0.0578; %lbs/in^3
