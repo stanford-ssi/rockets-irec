@@ -44,7 +44,10 @@ title('Flutter velocity with changing height')
 ylabel('Speed (Ma)')
 xlabel('Height(ft)')
 xlim([0 max(RAD.h./scaling)])
-legend('1/16"','1/8"','3/16"','1/4"','Flight Conditions')
+for j = 1:length(fin.t)
+   leg{j} = strcat(num2str(fin.t(j)),'"'); 
+end
+legend(leg,'Flight Conditions')
 grid on
 
 rho.CF = 0.0578; %lbs/in^3
