@@ -34,17 +34,14 @@ function [CNalpha_total] = CNalpha_compute( fin, bodytube, Ma )
     end            
     
     beta = sqrt(1-Ma^2);
-    area_fin = 0.5*(fin.rootlength+fin.tiplength)*fin.height;
     Gammac = atan( (fin.sweepdistance+fin.tiplength/2-fin.rootlength/2) / fin.height );  % radians
-    bodytube_outerradius = bodytube.outerdiameter/2;
-    KTB = 1 + bodytube_outerradius / (fin.height + bodytube_outerradius);
-    ARef = pi * bodytube_outerradius^2;
+    KTB = 1 + bodytube.outerradius / (fin.height + bodytube.outerradius);
 % turns out not all of these are necessary. There's a simplified formula I
 % missed at first. gamma and K's are for transonic/low supersonic 
 % correction, which is not implemented
 %     CNalphanot = 2*pi/beta;
 %     FD = AR*2*pi / (CNalphanot * cos(Gammac) );
-%     AR = 2*fin.height^2 / area_fin;
+%     AR = 2*fin.height^2 / fin.S;
 %     gamma = 1.400;
 %     K1 = 2/beta;
 %     K2 = ((gamma+1)*Ma^4 - 4*beta^2)/(4*beta^4);
@@ -52,7 +49,8 @@ function [CNalpha_total] = CNalpha_compute( fin, bodytube, Ma )
 
     
     % Sampo Niskanen thesis equation 3.40 with equation 3.56
-    CNalpha = KTB * (2*pi*fin.height^2/ARef) / ( 1+sqrt(1+(beta*fin.height^2 / (area_fin*cos(Gammac)))^2) );
+    CNalpha = KTB * (2*pi*fin.height^2/bodytube.ARef) /...
+        ( 1+sqrt(1+(beta*fin.height^2 / (fin.S*cos(Gammac)))^2) );
     
     % Sampo Niskanen thesis equation 3.53    
     CNalpha_total = 0.5 * fin.number * CNalpha;
