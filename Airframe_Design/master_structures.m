@@ -3,6 +3,9 @@
 % This script is meant to call the new methods we've implemented to drive
 % airframe design (ie flutter, fin ability to generate lift and drag, and
 % max Q)
+% Units: speed = [ft/s or m/s], length = [in], pressure = [psi or Pa],
+% force = [lb or N], moment = [lb-in or N-m]
+
 clc; clear; close all;
 
 ft2m = 0.3048;                   % ft/m
@@ -14,10 +17,11 @@ RAD.h  = data(:,18).*ft2m;       % m
 
 % Rocket characteristics
 
-rocket.alpha = 0:7;                  % angle of attack in deg
+rocket.alpha = 0:0.1:8;                  % angle of attack in deg
+rocket.cg = 81;                      % in from nosecone tip
+rocket.length = 107;                 % in
 
 bodytube.lengthunit = 'in';
-bodytube.full_l = 10*12;             % 10ft
 bodytube.OD = 4;                     % in
 bodytube.OR = bodytube.OD/2;         % in
 bodytube.t = 0.08;                   % in 
@@ -40,7 +44,7 @@ rocket.fin = fin;
 % Max dynamic pressure
 metric = 0; % not in metric
 maxq = max_q(RAD,metric);
-[compression bending] = aero_loads(maxq,rocket);
+[compression, sigma] = aero_loads(maxq,rocket,metric);
 
 % Flutter Velocity based on different fin thickness
 % currently set to aluminum
