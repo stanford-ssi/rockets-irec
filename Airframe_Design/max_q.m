@@ -1,4 +1,4 @@
-function [maxq] = maxQ(RAD, metric)
+function [maxq] = max_q(RAD, metric)
 % Max Q from RASAero
 % Ian Gomez, 10/24
 % This will output maxQ in either metric (Pa) or english units (psi)
@@ -12,7 +12,7 @@ ft2m = 0.3048; % m/ft
 m2ft = 1/ft2m; % ft/m
 pa2psi = 0.000145038; % psi/Pa
 
-[~,~,rho,~] = getAtmoConditions(RAD.h); % kg/m^3
+[~,~,rho,~] = atmo_conditions(RAD.h); % kg/m^3
 
 maxq = 0.5.*rho.*RAD.v.^2; % Pa
 
@@ -33,5 +33,8 @@ end
 title('Max Q over flight')
 legend('Higher Ma = yellower')
 grid on
+
+% send only max q
+maxq = max(maxq);
 
 end

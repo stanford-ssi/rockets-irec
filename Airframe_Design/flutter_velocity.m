@@ -1,4 +1,4 @@
-function [fin] = imperial_flutter_NACA(RAD,fin)
+function [fin] = flutter_velocity(RAD,fin)
 % Fin Flutter Velocity
 % Ian Gomez, 10/20/2016
 % Source:
