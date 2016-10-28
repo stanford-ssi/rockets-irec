@@ -3,17 +3,13 @@ function [compression, sigma] = aero_loads(maxq,rocket,metric)
 % This function spits out the maximum compressive load and bending moment
 % on the rocket based on max Q, angle of attack, and rocket geometry
 
+% metric is broken...
 
-in2m  = 0.0254;     % m/in
-in22m2 = 0.00064516; % in^2/m^2
-if metric == 1;
-    rocket.bodytube.OD = rocket.bodytube.OD.*in2m;
-    rocket.bodytube.OR = rocket.bodytube.OR.*in2m;
-    rocket.bodytube.ID = rocket.bodytube.ID.*in2m;
-    rocket.cg = rocket.cg.*in2m;
-    rocket.length = rocket.length.*in2m;
-    rocket.bodytube.S_ref = rocket.bodytube.S_ref.*in22m2;
+N2lb = 0.22480894244323335; % lb/N
+if metric == 1
+   maxq = maxq.*N2lb;
 end
+
 % calculate moment based on alpha
 transverse_q = maxq.*sind(rocket.alpha);
 area = [rocket.bodytube.OD.*rocket.cg,...           % area above cg
@@ -34,6 +30,13 @@ for i = 1:length(rocket.alpha)
     compression(i) = maxq .* cosd(rocket.alpha(i)).*rocket.bodytube.S_ref;
     sigma(i) = M(i).*c./inertia_body;
     
+end
+
+lb2N    =  4.44822162825; % N/lb
+inlb2Nm =  0.112984829;   % N-m/in-lb
+if metric == 1
+   compression = compression*lb2N;
+   sigma = sigma*inlb2Nm;
 end
 
 figure

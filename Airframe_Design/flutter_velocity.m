@@ -42,7 +42,7 @@ set(gcf,'color','w');
 plot(RAD.h./scaling,RAD.Ma,'LineWidth',line)
 title('Flutter velocity with changing height')
 ylabel('Speed (Ma)')
-xlabel('Height(ft)')
+xlabel('Height(kft)')
 xlim([0 max(RAD.h./scaling)])
 for j = 1:length(fin.t)
    leg{j} = strcat(num2str(fin.t(j)),'"'); 
