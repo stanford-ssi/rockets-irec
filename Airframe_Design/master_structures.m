@@ -42,7 +42,7 @@ rocket.bodytube = bodytube;
 rocket.fin = fin;
 
 % Max dynamic pressure
-metric = 0; % not in metric
+metric = 1; % not in metric
 maxq = max_q(RAD,metric);
 [compression, sigma] = aero_loads(maxq,rocket,metric);
 
