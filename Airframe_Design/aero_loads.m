@@ -4,11 +4,15 @@ function [compression, sigma] = aero_loads(maxq,rocket,metric)
 % on the rocket based on max Q, angle of attack, and rocket geometry
 
 
-in2m = 0.0254; % m/in
+in2m  = 0.0254;     % m/in
+in22m2 = 0.00064516; % in^2/m^2
 if metric == 1;
     rocket.bodytube.OD = rocket.bodytube.OD.*in2m;
+    rocket.bodytube.OR = rocket.bodytube.OR.*in2m;
+    rocket.bodytube.ID = rocket.bodytube.ID.*in2m;
     rocket.cg = rocket.cg.*in2m;
     rocket.length = rocket.length.*in2m;
+    rocket.bodytube.S_ref = rocket.bodytube.S_ref.*in22m2;
 end
 % calculate moment based on alpha
 transverse_q = maxq.*sind(rocket.alpha);
@@ -35,7 +39,8 @@ end
 figure
 set(gcf,'color','w');
 scaling = 1e3; % Pa -> kPa, ft to kft
-plot(rocket.alpha,compression)
+line = 2;
+plot(rocket.alpha,compression,'LineWidth',line)
 if metric == 1
     ylabel('Compression force (N)')
     xlabel('Angle of attack (deg)')
@@ -49,12 +54,12 @@ grid on
 figure
 set(gcf,'color','w');
 if metric == 1
-    plot(rocket.alpha,sigma)
+    plot(rocket.alpha,sigma,'LineWidth',line)
     ylabel('Bending stress (N-m)')
     xlabel('Angle of attack (deg)')
 else
-    plot(rocket.alpha,sigma./scaling)
-    ylabel('Bending stress (kip-in)')
+    plot(rocket.alpha,sigma./scaling,'LineWidth',line)
+    ylabel('Bending stress (kip-in)','LineWidth',line)
     xlabel('Angle of attack (deg)')
 end
 title('Max bending stress with different angle of attacks')

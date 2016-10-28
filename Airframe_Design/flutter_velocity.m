@@ -39,7 +39,7 @@ for i = 1:length(fin.t)
 end
 
 set(gcf,'color','w');
-plot(RAD.h./scaling,RAD.Ma,'LineWidth',line*1.5)
+plot(RAD.h./scaling,RAD.Ma,'LineWidth',line)
 title('Flutter velocity with changing height')
 ylabel('Speed (Ma)')
 xlabel('Height(ft)')

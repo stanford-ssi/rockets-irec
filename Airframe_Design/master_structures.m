@@ -8,6 +8,7 @@
 
 clc; clear; close all;
 
+inkip2kNm = 0.11298; 
 ft2m = 0.3048;                   % ft/m
 RASAero_csv = '4in_CF.CSV';      % Flight data from RASAero
 data = csvread(RASAero_csv,2,1); % Need to modify csv first for parsing
