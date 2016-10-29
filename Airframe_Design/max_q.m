@@ -14,7 +14,7 @@ pa2psi = 0.000145038; % psi/Pa
 
 [~,~,rho,~] = atmo_conditions(RAD.h); % kg/m^3
 
-maxq = 0.5.*rho.*RAD.v.^2; % Pa
+maxq = RAD.cd.*0.5.*rho.*RAD.v.^2; % Pa
 
 figure
 set(gcf,'color','w');
