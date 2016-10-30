@@ -23,16 +23,16 @@ function [CNalpha_total] = CNalpha_compute( fin, bodytube, Ma )
 %     bodytube.lengthunit;
 
 % start by doing some basic error checking.
-    if ~isstruct(fin)
-        error('fin input must be a struct')
-    elseif ~isstruct(bodytube)
-        error('bodytube input must be a struct')
-    elseif (fin.lengthunit ~= bodytube.lengthunit)
-        error('fin and bodytube length units must match')
-    elseif ~isnumeric(Ma)
-        error('Mach number input must be numeric')
-    end            
-    
+%     if ~isstruct(fin)
+%         error('fin input must be a struct')
+%     elseif ~isstruct(bodytube)
+%         error('bodytube input must be a struct')
+%     elseif (fin.lengthunit ~= bodytube.lengthunit)
+%         error('fin and bodytube length units must match')
+%     elseif ~isnumeric(Ma)
+%         error('Mach number input must be numeric')
+%     end            
+%     
     beta = sqrt(1-Ma^2);
     Gammac = atan( (fin.sweepdistance+fin.tiplength/2-fin.rootlength/2) / fin.h );  % radians
     KTB = 1 + bodytube.OR / (fin.h + bodytube.OR);
