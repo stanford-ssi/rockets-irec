@@ -17,7 +17,6 @@ RAD.h  = data(:,18).*ft2m;       % m
 RAD.cd = data(:,4);
 
 %% Rocket characteristics
-load('rocket_struct')
 
 rocket.alpha = 0:0.1:8;              % angle of attack in deg
 rocket.cg = 79;                      % in from nosecone tip

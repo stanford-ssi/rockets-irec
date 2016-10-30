@@ -1,6 +1,12 @@
 function [velocities,heights,n] = terminal_velocity_fun(m,cd_parachute,S_parachute)
 % Terminal velocity solver
+% Uses metric values, so we convert from lbs to kg and 
 
+% Puts values in metric
+lbs2kg = 0.453592;   % kg/lbs
+in22m2 = 0.00064516; % m^2/in^2
+m = m.*lbs2kg;
+S_parachute = S_parachute.*in22m2; 
 
 % Density profile of the atmosphere (0-13000m) 
 g_0 = 9.8;  
