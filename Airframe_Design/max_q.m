@@ -18,7 +18,7 @@ maxq = RAD.cd.*0.5.*rho.*RAD.v.^2; % Pa
 
 figure
 set(gcf,'color','w');
-pointsize = 40;
+pointsize = 20;
 scaling = 1e3; % Pa -> kPa, ft to kft
 if metric == 1
     scatter(RAD.h./scaling,maxq./scaling,pointsize,RAD.Ma)

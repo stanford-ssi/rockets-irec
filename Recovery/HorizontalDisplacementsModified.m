@@ -6,9 +6,7 @@
 
 %% Initial conditions, measurements, variables, etc.
 %units (m,kg)
-clc
-clear all 
-close all
+clc; clear; close all
 g_0 = 9.8;
 m_nosecone = 4.535;
 d_rocket_nosecone = .10551;
