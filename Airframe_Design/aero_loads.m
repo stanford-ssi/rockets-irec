@@ -3,24 +3,13 @@ function [compression, sigma] = aero_loads(maxq,rocket,metric)
 % This function spits out the maximum compressive load and bending moment
 % on the rocket based on max Q, angle of attack, and rocket geometry
 
-
-% in2m = 0.0254; % m/in
-% if metric == 1;
-%     rocket.bodytube.OD = rocket.bodytube.OD *in2m;
-%     rocket.bodytube.ID = rocket.bodytube.ID * in2m;
-%     rocket.cg = rocket.cg *in2m;
-%     rocket.length = rocket.length *in2m;
-%     rocket.bodytube.S_ref = rocket.bodytube.S_ref * in2m^2;
-%     fin.rootlength = fin.rootlength * in2m;
-%     fin.S = fin.S * in2m^2
-% end
 % calculate moment based on alpha
 transverse_q = maxq.*sind(rocket.alpha);
 %Area above and below the CG
 %Factor of four on the fins cause two face the air, then top and bottom on
 %each
 area = [rocket.bodytube.OD.*rocket.cg,...           % area above cg
-    rocket.bodytube.OD.*(rocket.length-rocket.cg) + rocket.fin.S * 4] % area below cg
+    rocket.bodytube.OD.*(rocket.length-rocket.cg) + rocket.fin.S * 4]; % area below cg
 transverse_force = [transverse_q.*area(1); transverse_q.*area(2)];
 %The force from the fins dominates the second term, so moment arm from the
 %center of them
