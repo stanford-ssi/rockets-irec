@@ -28,7 +28,7 @@ G.Al = 24*145000;
 
 scaling = 1e3;
 line = 2;
-figure
+figure(4)
 for i = 1:length(fin.t)
     x = 1.337.*(fin.AR.^3).*P.*(fin.lambda+1);
     y = 2.*(fin.AR+2).*(fin.t(i)./fin.rootlength).^3;

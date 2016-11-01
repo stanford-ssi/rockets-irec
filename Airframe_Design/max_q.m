@@ -14,9 +14,13 @@ pa2psi = 0.000145038; % psi/Pa
 
 [~,~,rho,~] = atmo_conditions(RAD.h); % kg/m^3
 
-maxq = RAD.cd.*0.5.*rho.*RAD.v.^2; % Pa
+maxq = 0.5.*rho.*RAD.v.^2; % Pa
 
-figure
+if metric == 0
+    maxq = maxq.*pa2psi; % for imperial conversion is here
+end
+
+figure(1)
 set(gcf,'color','w');
 pointsize = 20;
 scaling = 1e3; % Pa -> kPa, ft to kft
@@ -25,7 +29,6 @@ if metric == 1
     ylabel('Dynamic Pressure (kPa)')
     xlabel('Height AGL (km)')
 else
-    maxq = maxq.*pa2psi; % for imperial conversion is here
     scatter(RAD.h.*m2ft./scaling,maxq,pointsize,RAD.Ma)  % converts to EE
     ylabel('Dynamic Pressure (psi)')
     xlabel('Height AGL (kft)')

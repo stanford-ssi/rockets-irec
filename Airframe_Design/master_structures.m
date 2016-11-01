@@ -6,7 +6,7 @@
 % Units: speed = [ft/s or m/s], length = [in], pressure = [psi or Pa],
 % force = [lb or N], moment = [lb-in or N-m]
 
-clc; clear; close all;
+clc; clear;
 
 ft2m = 0.3048;                   % ft/m
 RASAero_csv = '4in_CF.CSV';      % Flight data from RASAero
@@ -24,11 +24,10 @@ cd ..
 load('rocket')
 cd('Airframe_Design')
 
-
 % Max dynamic pressure
 metric = 0; % in metric == 1
 maxq = max_q(RAD,metric);
-[compression, sigma] = aero_loads(maxq,rocket,metric);
+[compression_force, sigma] = aero_loads2(RAD,maxq,rocket,metric);
 
 % Flutter Velocity based on different fin thickness
 % currently set to aluminum
