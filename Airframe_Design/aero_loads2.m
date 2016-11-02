@@ -17,6 +17,9 @@ end
 
 sigma = 0;
 
+
+%% 
+
 lbs2N = 4.448222; % N/lbs
 if metric == 1
     compression_force = lbs2N.*compression_force;
