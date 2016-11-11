@@ -31,8 +31,15 @@ rocket.nosecone.t = n_ns*dt;
 rocket.bodytube.t = n_pl*dt;
 rocket.engine.t = n_eng*dt;
 
+rocket.nosecone.t = 1:length(rocket.nosecone.h);
+rocket.bodytube.t = 1:length(rocket.bodytube.h);
+rocket.engine.t   = 1:length(rocket.engine.h);
+
+%%
+
 % Velocities are negative, so multiplied by -1 to make positive
 linewidth = 2;
+figure(1)
 plot(rocket.nosecone.h,  abs(rocket.nosecone.v),...
      rocket.bodytube.h,  abs(rocket.bodytube.v),... 
      rocket.engine.h,    abs(rocket.engine.v),'LineWidth',linewidth);

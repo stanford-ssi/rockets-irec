@@ -16,7 +16,7 @@ ballast.side = 5;    % cm
 V = ballast.side^3;  % cm^3
 
 ballast.weightpercube = ballast.rho.*V.*g2lbs; % lbs
-ballast.target_weight = 8.8;                   % lbs
+ballast.target_weight = 3.2;                   % lbs
 
 number = zeros(1,length(ballast.rho));
 for i = 1:length(ballast.rho)

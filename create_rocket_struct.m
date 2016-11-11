@@ -13,37 +13,56 @@
 % easily using load('rocket') (as long as you're in the correct directory)
 % The script has a difficult time rewriting information, so delete the old
 % struct if you actually change anything and rerun the script.
-clear; clc; close all;
+clear; clc; 
+ft2in = 12;          % in/ft
+lbs2kg = 0.453592;   % kg/lbs
+in22m2 = 0.00064516; % m^2/in^2
+in2m   = 0.0254;     % m/in
+fts2ms = 0.3048;     % (m*s^-1)/(ft*s^-1)
 
 %% General rocket parameters
 
 rocket.maxMa = 2;                    % Mach number
 rocket.alpha = 0:0.1:8;              % angle of attack in deg
 rocket.cg = 79;                      % in from nosecone tip
+rocket.drymasswpayload = 42.03;      % lbs
+rocket.drymass = 32.67;              % lbs
 rocket.massunit = 'lbs';
 rocket.lengthunit = 'in';
 
 %% Structures
 
 % Nose cone
-rocket.nosecone.m = 2;       % lb
-rocket.nosecone.OD = 4;      % in 
-rocket.nosecone.length = 24; % in 
+rocket.nosecone.wetmass = 11.8178;       % lb
+rocket.nosecone.drymass = 2.45178;       % lb
+rocket.nosecone.OD = 4;                  % in 
+rocket.nosecone.length = 28;             % in 
+rocket.nosecone.finenessratio = 4;       % in 
+rocket.nosecone.S_x = rocket.nosecone.length.*rocket.nosecone.OD.*0.5; %in^2
+rocket.nosecone.type = 'conical';
+rocket.nosecone.Cd = 1; % crossflow Cd
 
 % Forward airframe
-rocket.bodytube.m  = 24;                                   % lbs
-rocket.bodytube.length = 44;                               % in
-rocket.bodytube.OD = 4;                                    % in
-rocket.bodytube.OR = rocket.bodytube.OD/2;                 % in
-rocket.bodytube.t = 0.08;                                  % in 
-rocket.bodytube.ID = rocket.bodytube.OD-rocket.bodytube.t; % in 
-rocket.bodytube.IR = rocket.bodytube.ID/2;                 % in
-rocket.bodytube.S_ref = pi * rocket.bodytube.OR^2;         % in^2
+rocket.bodytube.mass =  13.81;                              % lbs
+rocket.bodytube.length = 42;                                % in
+rocket.bodytube.OD = 4;                                     % in
+rocket.bodytube.OR = rocket.bodytube.OD/2;                  % in
+rocket.bodytube.t = 0.08;                                   % in 
+rocket.bodytube.ID = rocket.bodytube.OD-rocket.bodytube.t;  % in 
+rocket.bodytube.IR = rocket.bodytube.ID/2;                  % in
+rocket.bodytube.S_ref = pi * rocket.bodytube.OR^2;          % in^2
+rocket.bodytube.S_x   = rocket.bodytube.OD.*rocket.bodytube.length;
+rocket.bodytube.Cd = 1; % crossflow Cd
+
 
 % Aft airframe
-rocket.engine.m = 27.2;                                    % lbs
-rocket.engine.OD = rocket.bodytube.OD;                     % in
-rocket.engine.length =  52;                                % in
+rocket.engine.wetmass = 31.23;                              % lbs
+rocket.engine.drymass = 12.6;                               % lbs
+rocket.engine.OD = rocket.bodytube.OD;                      % in
+rocket.engine.length =  52;                                 % in
+rocket.engine.S_x = rocket.engine.OD.*rocket.engine.length;
+rocket.engine.Cd = 1; % crossflow Cd
+
 
 % Fins!
 rocket.fin.t = (1/16):(1/16):(1/4);         % thickness
@@ -61,15 +80,14 @@ rocket.length = rocket.nosecone.length + rocket.bodytube.length +...
 %% Recovery
 
 % Parachutes
-rocket.nosecone.chute_D = 36; % in 
-rocket.bodytube.chute_D = 48; % in 
-rocket.engine.chute_D   = 84; % in
-rocket.nosecone.chute_S = (rocket.nosecone.chute_D.^2)/4 * pi; % in^2
-rocket.bodytube.chute_S = (rocket.bodytube.chute_D.^2)/4 * pi; % in^2
-rocket.engine.chute_S   = (rocket.engine.chute_D.^2)/4 * pi;   % in^2 
-
-% Coefficient of drag for the parachutes
-rocket.parachutes.cd = 2.2;
+rocket.drogue.S  = 48;                  % in^2
+rocket.drogue.Cd = 1.5;      
+rocket.drogue.deploy_u  = -0.2;         % ft/s
+rocket.main.S    = 96;                  % in^2
+rocket.main.Cd   = 2.2;                 
+rocket.main.deploy_h    =  10000.*ft2in; % in
+rocket.payload.chute__S = 1;            % in^2
+rocket.payload.chute_Cd = 2; 
 
 
 %% Save Rocket
