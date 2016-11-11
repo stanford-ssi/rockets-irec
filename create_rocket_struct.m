@@ -80,13 +80,15 @@ rocket.length = rocket.nosecone.length + rocket.bodytube.length +...
 %% Recovery
 
 % Parachutes
-rocket.drogue.S  = 48;                  % in^2
+rocket.drogue.d  = 48;                         % in
+rocket.drogue.S  = pi.*(rocket.drogue.d/2).^2; % in^2
 rocket.drogue.Cd = 1.5;      
-rocket.drogue.deploy_u  = -0.2;         % ft/s
-rocket.main.S    = 96;                  % in^2
+rocket.drogue.deploy_u  = -0.2;                % ft/s
+rocket.main.d    = 96;                         % in
+rocket.main.S    = pi.*(rocket.main.d/2).^2;   % in^2
 rocket.main.Cd   = 2.2;                 
-rocket.main.deploy_h    =  10000.*ft2in; % in
-rocket.payload.chute__S = 1;            % in^2
+rocket.main.deploy_h    =  10000.*ft2in;       % in
+rocket.payload.chute__d = 1;                   % in^2
 rocket.payload.chute_Cd = 2; 
 
 

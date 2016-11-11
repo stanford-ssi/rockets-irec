@@ -33,7 +33,7 @@ else
     ylabel('Dynamic Pressure (psi)')
     xlabel('Height AGL (kft)')
 end
-title('Max Q over flight')
+title('Q over flight')
 legend('Higher Ma = yellower')
 grid on
 

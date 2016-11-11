@@ -9,12 +9,15 @@
 clc; clear;
 
 ft2m = 0.3048;                   % ft/m
-RASAero_csv = '4in_CF.CSV';      % Flight data from RASAero
+RASAero_csv = 'Final2900.CSV';   % Flight data from RASAero
 data = csvread(RASAero_csv,2,1); % Need to modify csv first for parsing
 RAD.Ma = data(:,2);              % Mach number
-RAD.v  = data(:,13).*ft2m;       % m/s
-RAD.h  = data(:,18).*ft2m;       % m
+RAD.v  = data(:,16).*ft2m;       % m/s
+RAD.h  = data(:,21).*ft2m;       % m
 RAD.cd = data(:,4);              % coefficient of drag
+RAD.t  = data(:,1);
+
+%%
 
 % Rocket characteristics
 
