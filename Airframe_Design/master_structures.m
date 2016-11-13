@@ -35,7 +35,3 @@ maxq = max_q(RAD,metric);
 % Flutter Velocity based on different fin thickness
 % currently set to aluminum
 fin = flutter_velocity(RAD,rocket.fin);
-
-% Only useful for subsonic flight
-Ma_CNalpha = 0.8;
-CN_alpha_total = CNalpha_compute(rocket.fin, rocket.bodytube, Ma_CNalpha);

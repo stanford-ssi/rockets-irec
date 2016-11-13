@@ -11,8 +11,7 @@
 % the entire rocket, rocket.property
 % This struct is saved as a .mat workspace which can be loaded in a script
 % easily using load('rocket') (as long as you're in the correct directory)
-% The script has a difficult time rewriting information, so delete the old
-% struct if you actually change anything and rerun the script.
+% Make sure to save the struct in the correct folder (the root folder)
 clear; clc; 
 ft2in = 12;          % in/ft
 lbs2kg = 0.453592;   % kg/lbs
