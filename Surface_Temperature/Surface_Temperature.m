@@ -15,9 +15,9 @@ emissivity = .8;
 
 n_layers = 5;                               %Layers to the surface for the FEA
 thickness_layer = surface_thickness / n_layers;
-T_surr = 273 + 50;                          %K
+T_surr = 273;                               %K
 T_layers = zeros(1, n_layers);
-thermal_capacity = thickness_layer * density * specific_heat;
+thermal_capacity = thickness_layer * density * specific_heat
 
 for i=1:n_layers
     T_layers(i) = 293;
@@ -49,6 +49,7 @@ for i=1:n_steps
 %Get stagnation temp, pressure, density
 %Tr is the recovery temp, from http://www.thermopedia.com/content/291/
     [T_stag, P_stag, rho_stag, Tr] = Stagnation_Properties(v, P, rho, T, Pr, Re);
+    h
     T
     T_stag
     Tr
@@ -96,8 +97,8 @@ for i=1:n_steps
     end
     %T_layers
     %End for loop
-    in_C = T_layers - 273
-    in_F = in_C * 9 / 5 + 32
+    in_C = T_layers - 273;
+    in_F = in_C * 9 / 5 + 32;
     T_layer_history(i,:) = T_layers;
 end
 end
