@@ -34,7 +34,9 @@ else
     xlabel('Height AGL (kft)')
 end
 title('Q over flight')
-legend('Higher Ma = yellower')
+dim = [.6 .5 .5 .3];
+str = 'Yellower = Higher Mach';
+annotation('textbox',dim,'String',str,'FitBoxToText','on');
 grid on
 
 % send only max q
