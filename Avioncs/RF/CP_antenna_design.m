@@ -47,8 +47,8 @@ QFH.bigloop.height = 0.26 * wavelength;
 QFH.bigloop.diameter = 0.173 * wavelength;
 QFH.bigloop.length = 0.560 * wavelength;
 QFH.smallloop.height = 0.238 * wavelength;
-QFH.smalloop.diameter = 0.156 * wavelength;
-QFH.smalloop.length = 0.508 * wavelength;
+QFH.smallloop.diameter = 0.156 * wavelength;
+QFH.smallloop.length = 0.508 * wavelength;
 QFH.conductordiameter.inches = 0.0088 * wavelength * 12;
 QFH.conductordiameter.millimeters = QFH.conductordiameter.inches * 25.4;
 
