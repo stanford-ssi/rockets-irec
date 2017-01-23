@@ -17,8 +17,3 @@ alt_a = data(:,13); % ft, based on accelerometer
 alt_b_AGL = data(:,14); % ft, AGL (based on barometer)
 alt_b_ASL = data(:, 15); % ft, ASL (based on barometer)
 
-%% Plotting
-clc; close all
-
-figure(1)
-plot(t,vel)
