@@ -1,6 +1,7 @@
 import sys
 import glob
 import serial
+import struct
 
 
 def serial_ports():
@@ -33,9 +34,18 @@ def serial_ports():
 
 
 if __name__ == '__main__':
-    print(serial_ports())
     
+    print(serial_ports())
     teensy = serial.Serial('COM6')
+    while(1):
+        request = teensy.read(5)
+        sensor = request[0]
+        time = struct.unpack('f',request[1:5])
+        
+        
+
+    
+    
     
     
     
