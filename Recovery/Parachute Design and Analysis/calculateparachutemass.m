@@ -18,12 +18,13 @@ totalriserlength = parachute.numgores * parachute.nominaldiameter * riserlengthf
 
 % need to switch on all possible paracord types
 if strcmp(parachute.riser.type_II_OK,'TRUE')
-    risermass = 1.57e-3 * totalriserlength;
+    % risermass = 1.57e-3 * totalriserlength;
+    risermass = 6.0e-4 * totalriserlength;
 else
 end
 
 % thread length is a total guess
-totalthreadlength = 10 * totalriserlength;
+totalthreadlength = 1 * totalriserlength;
 threadmass = 8.268e-5 * totalthreadlength;
 
 mass = fabricmass + risermass + threadmass;

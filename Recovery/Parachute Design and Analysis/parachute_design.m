@@ -127,6 +127,8 @@ switch type
 end
 
 % Figure 5-62
+% reduce effective CDo based on fabric porosity. As porosity increases
+% CDo decreases
 parachute.CDo = parachute.CDo * 2*(0.5-total_porosity);
 
 air_density_ground = tropos(ground_alt, temp_delta);
@@ -134,6 +136,13 @@ air_pressure_open = tropos(open_alt, temp_delta);
 dynamic_pressure_ground = 0.5 * air_density_ground * descent_velocity^2;
 dynamic_pressure_open = 0.5 * air_pressure_open * freefall_velocity^2;
 
+% find the reference surface area based on necessary drag for ground hit
+% velocity at ground altitude and temp. Reference area is not identical
+% to actual fabric area. The parachute type determines the relationship.
+%
+% the projected diameter is smaller than the nominal diameter. This
+% corresponds to the difference between the parachute resting on the ground
+% versus the parachute in operation suspending a load in air
 parachute.surfacearea = mass*g / (dynamic_pressure_ground*parachute.CDo);
 parachute.nominaldiameter = sqrt(4*parachute.surfacearea / pi);
 parachute.projecteddiameter = parachute.nominaldiameter * parachute.DpDo;
@@ -142,8 +151,33 @@ parachute.dragarea = pi/4 * parachute.projecteddiameter^2;
 parachute.numgores = 12;
 geometry_factor = 1/parachute.numgores;
 
+% canopy loading is weight per area. Unclear if this is the reference area
+% or drag area. Latter makes more sense to Logan H. 
 parachute.canopyloading = g * mass / parachute.dragarea;
+
+% every type of parachute has a cone of constant aspect ratio the projected
+% area of the parachute will traverse as it opens. The length is the
+% canopy fill constant * nominal diameter. The time to traverse this
+% distance is no faster than this distanec divided bu the freefall velocity 
 parachute.inflationtime = parachute.canopyfillconstant * parachute.nominaldiameter / freefall_velocity;
+
+% these are two different methods for determining the maximum opening force.
+% The worst case opening force "infinite mass condition" is the drag area *
+% freefall velocity * opening force coefficient. The opening force is
+% reduced if the parachute - mass systems slows down as it opens "finite
+% mass condition". An additional opening force reduction factor (X1) term
+% is multiplied to the previous expression to take this into account. A
+% numerical approach is very useful if there is significant horizontal
+% velocity (eg cargo deployed from back of plane). It is not considered
+% here.
+%
+% X1_method1 depends only on canopy loading. 
+%
+% The Pflanz method (named after Pflanz) uses a "ballistic parameter" A and
+% the shape of the inflation surface to fins max force
+%
+% Finally, to be maximally conservative, the greatest opening force of
+% the two methods is returned as the maximum opening force
 
 % study Figures 5-64 and 5-65 for porosity correction factor
 X1 = X1_method1(mass, parachute.dragarea);               
@@ -158,6 +192,10 @@ parachute.maxforce = max(maxforce_method1, maxforce_Pflanz);
 % see Figure 5-20 and 5-21
 forebody_diameter = sqrt(4*forebody_area / pi);
 % this forebody correction factor is unfinished
+% it corrects for the size of the object in front of the parachute
+% disturbing the flow
+
+% now start designing the actual fabric and ropes of the parachute
 
 parachute.ventarea = 0.005 * parachute.surfacearea;
 parachute.ventdiameter = sqrt(4*parachute.ventarea / pi);
