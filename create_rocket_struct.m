@@ -64,7 +64,7 @@ rocket.engine.Cd = 1; % crossflow Cd
 
 
 % Fins!
-rocket.fin.t = (1/16):(1/16):(1/4);         % thickness
+rocket.fin.t = (1/32):(1/32):(1/8);         % thickness
 rocket.fin.h = 4;                           % span
 rocket.fin.rootlength = 8;                  % root chord
 rocket.fin.tiplength = 2;                   % tip chord
