@@ -1,3 +1,5 @@
+%for github 
+
 %Plot Wind Speed Variations
 WindSpeed = [4 8 12 16 20]
 Altitude_Wind = [44.927 44.098 43.126 42.001 40.720]
