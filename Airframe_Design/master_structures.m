@@ -6,7 +6,7 @@
 % Units: speed = [ft/s or m/s], length = [in], pressure = [psi or Pa],
 % force = [lb or N], moment = [lb-in or N-m]
 
-clc; clear;
+clc; clear all; close all;
 
 ft2m = 0.3048;                   % ft/m
 RASAero_csv = 'Final2900.CSV';   % Flight data from RASAero
