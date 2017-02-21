@@ -12,7 +12,7 @@
     </NoseCone>
     <BodyTube>
       <PartType>BodyTube</PartType>
-      <Length>112</Length>
+      <Length>115</Length>
       <Diameter>4</Diameter>
       <LaunchLugDiameter>0</LaunchLugDiameter>
       <LaunchLugLength>0</LaunchLugLength>
@@ -39,7 +39,7 @@
         <FX3>0</FX3>
       </Fin>
     </BodyTube>
-    <Surface>Smooth Paint</Surface>
+    <Surface>Cast Iron</Surface>
     <CP>0</CP>
     <ModifiedBarrowman>False</ModifiedBarrowman>
     <Turbulence>False</Turbulence>
@@ -76,9 +76,9 @@
   <SimulationList>
     <Simulation>
       <SustainerEngine>N2900-CL  (CTI)</SustainerEngine>
-      <SustainerLaunchWt>59.3</SustainerLaunchWt>
+      <SustainerLaunchWt>69</SustainerLaunchWt>
       <SustainerNozzleDiameter>2</SustainerNozzleDiameter>
-      <SustainerCG>76.5</SustainerCG>
+      <SustainerCG>79</SustainerCG>
       <SustainerIgnitionDelay>0</SustainerIgnitionDelay>
       <Booster1LaunchWt>0</Booster1LaunchWt>
       <Booster1SeparationDelay>0</Booster1SeparationDelay>
@@ -92,9 +92,9 @@
       <Booster2NozzleDiameter>0</Booster2NozzleDiameter>
       <IncludeBooster2>False</IncludeBooster2>
       <FlightTime>0</FlightTime>
-      <TimetoApogee>47.82798</TimetoApogee>
-      <MaxAltitude>40720</MaxAltitude>
-      <MaxVelocity>2209.663</MaxVelocity>
+      <TimetoApogee>41.47905</TimetoApogee>
+      <MaxAltitude>29271.87</MaxAltitude>
+      <MaxVelocity>1739.785</MaxVelocity>
       <OptimumWt>0</OptimumWt>
       <OptimumMaxAlt>0</OptimumMaxAlt>
     </Simulation>
