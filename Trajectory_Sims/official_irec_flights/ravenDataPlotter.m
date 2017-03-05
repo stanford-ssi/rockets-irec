@@ -46,3 +46,13 @@ xlabel('Time (s)'); ylabel('Altitude (ft)')
 yyaxis right
 plot(t_Amp, Amp)
 ylabel('Current Draw (A)')
+
+figure(4)
+yyaxis left
+plot(t_altBaro, alt_Baro, t_altAccel, alt_Accel)
+title('Altitude and Velocity')
+xlabel('Time (s)'); ylabel('Altitude (ft)')
+legend('Barometer', 'Accelerometer')
+yyaxis right
+plot(t_v, v./local_c, t_v, local_c./local_c)
+ylabel('Local Mach')
