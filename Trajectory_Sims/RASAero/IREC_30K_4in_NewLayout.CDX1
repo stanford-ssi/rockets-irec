@@ -146,5 +146,29 @@
       <OptimumWt>0</OptimumWt>
       <OptimumMaxAlt>0</OptimumMaxAlt>
     </Simulation>
+    <Simulation>
+      <SustainerEngine>M1230-IM  (CTI)</SustainerEngine>
+      <SustainerLaunchWt>40.7</SustainerLaunchWt>
+      <SustainerNozzleDiameter>1</SustainerNozzleDiameter>
+      <SustainerCG>65</SustainerCG>
+      <SustainerIgnitionDelay>0</SustainerIgnitionDelay>
+      <Booster1LaunchWt>0</Booster1LaunchWt>
+      <Booster1SeparationDelay>0</Booster1SeparationDelay>
+      <Booster1IgnitionDelay>0</Booster1IgnitionDelay>
+      <Booster1CG>0</Booster1CG>
+      <Booster1NozzleDiameter>0</Booster1NozzleDiameter>
+      <IncludeBooster1>False</IncludeBooster1>
+      <Booster2LaunchWt>0</Booster2LaunchWt>
+      <Booster2Delay>0</Booster2Delay>
+      <Booster2CG>0</Booster2CG>
+      <Booster2NozzleDiameter>0</Booster2NozzleDiameter>
+      <IncludeBooster2>False</IncludeBooster2>
+      <FlightTime>0</FlightTime>
+      <TimetoApogee>26.85052</TimetoApogee>
+      <MaxAltitude>10913.51</MaxAltitude>
+      <MaxVelocity>885.3767</MaxVelocity>
+      <OptimumWt>0</OptimumWt>
+      <OptimumMaxAlt>0</OptimumMaxAlt>
+    </Simulation>
   </SimulationList>
 </RASAeroDocument>
