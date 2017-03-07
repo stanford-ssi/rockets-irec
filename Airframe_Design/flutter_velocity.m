@@ -23,7 +23,7 @@ k = 1.4; % ratio of specific heats
 a = sqrt(T.*Rair_imperial.*k); % ft/s, should be around 1,126ft/s
 
 fin.lambda = fin.tiplength/fin.rootlength;
-G.CF = 5 *145000; % shear modulus of fin (psi)
+G.CF = 12 *145000; % shear modulus of fin (psi)
 G.Al = 24*145000;
 
 scaling = 1e3;
@@ -32,7 +32,7 @@ figure(4)
 for i = 1:length(fin.t)
     x = 1.337.*(fin.AR.^3).*P.*(fin.lambda+1);
     y = 2.*(fin.AR+2).*(fin.t(i)./fin.rootlength).^3;
-    vf = a.*sqrt(G.Al./(x./y)); %ft/s
+    vf = a.*sqrt(G.CF./(x./y)); %ft/s
     Ma_max = vf./a;
     hold on
     plot(h./scaling,Ma_max,'LineWidth',line)
