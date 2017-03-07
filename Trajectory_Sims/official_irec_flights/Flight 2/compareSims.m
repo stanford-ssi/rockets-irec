@@ -1,3 +1,5 @@
+%%% Compare Sims
+% Ian Gomez, 03/07/17
 
 % Pull raven data out
 motor = 'H242';
@@ -27,10 +29,10 @@ OR_Ma = OR_data(:,27);
 
 % RASAero (remove stage column)
 RA_filename = 'RA_subscaleH242.csv';
-RA_data = csvread(RA_filename);
-OR_t = RA_data(:,1);
-OR_Ma = RA_data(:,3);
-OR_alt = RA_data(:,19);
+RA_data = csvread(RA_filename, 1, 0);
+RA_t = RA_data(:,1);
+RA_Ma = RA_data(:,3);
+RA_alt = RA_data(:,19);
 
 
 % Speed of sound calculation
@@ -50,13 +52,12 @@ local_c = sqrt(gamma*R*T_R); % local speed of sound
 
 figure(3)
 yyaxis left
-plot(t_altBaro, alt_Baro, OR_t, OR_alt, 'm')
+plot(t_altBaro, alt_Baro, OR_t, OR_alt, RA_t, RA_alt)
 title(strcat('Altitude and Velocity - ', motor))
 xlabel('Time (s)'); ylabel('Altitude (ft)')
 yyaxis right
-plot(t_v, v./local_c, OR_t, OR_Ma, t_v, local_c./local_c)
+plot(t_v, v./local_c, OR_t, OR_Ma, RA_t, RA_Ma, t_v, local_c./local_c)
 legend('Raven Baro','OR','RASAero','Raven','OR','RASAero')
-% legend('Raven data','OR')
 ylabel('Local Mach')
 xlim([0, 20])
 saveas(gcf, strcat(strcat('alt_v', motor), '.png'))
