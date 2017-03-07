@@ -4,7 +4,9 @@
 clc
 
 % Pull data out
-filename = 'subscale_J1799.xlsx';
+% motor = 'H242';
+motor = 'J1799';
+filename = strcat(strcat('subscale_', motor), '.xlsx');
 data = xlsread(filename);
 t_axialA = data(:,1);
 axialAGs = data(:,2);
@@ -29,30 +31,25 @@ local_c = sqrt(gamma*R*T_R); % local speed of sound
 
 figure(1)
 plot(t_axialA, axialAGs)
-title('Axial Acceleration')
+title(strcat('Axial Acceleration - ', motor))
 xlabel('Time (s)'); ylabel('Acceleration (G''s)')
+saveas(gcf, strcat(strcat('axial_a', motor), '.png'))
 
 figure(2)
 plot(t_v, v, 'r', t_T, local_c)
-title('Velocity'); legend('Velocity profile', 'Local speed of sound')
+title(strcat('Velocity - ', motor)); 
+legend('Velocity profile', 'Local speed of sound')
 xlabel('Time (s)'); ylabel('Velocity (ft/s)')
 xlim([0, 25]); ylim([0, max(v)*1.1])
+saveas(gcf, strcat(strcat('velocity', motor), '.png'))
 
 figure(3)
 yyaxis left
-plot(t_altAccel, alt_Accel, t_altBaro, alt_Baro)
-title('Altitude'); legend('Accelerometer data', 'Barometer data', 'Charges')
+plot(t_altBaro, alt_Baro, t_altAccel, alt_Accel, 'm')
+title(strcat('Altitude and Velocity - ', motor))
 xlabel('Time (s)'); ylabel('Altitude (ft)')
-yyaxis right
-plot(t_Amp, Amp)
-ylabel('Current Draw (A)')
-
-figure(4)
-yyaxis left
-plot(t_altBaro, alt_Baro, t_altAccel, alt_Accel)
-title('Altitude and Velocity')
-xlabel('Time (s)'); ylabel('Altitude (ft)')
-legend('Barometer', 'Accelerometer')
+legend('Barometer', 'Accelerometer','Location','southwest')
 yyaxis right
 plot(t_v, v./local_c, t_v, local_c./local_c)
 ylabel('Local Mach')
+saveas(gcf, strcat(strcat('alt_v', motor), '.png'))
