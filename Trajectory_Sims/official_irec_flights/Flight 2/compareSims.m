@@ -1,48 +1,62 @@
 %%% Compare Sims
 % Ian Gomez, 03/07/17
+clc;
+%% Data extraction
+% You need an xlsx file from the raven data, and csvs from the OR and
+% RASAero simulations. 
 
 % Pull raven data out
 motor = 'H242';
 % motor = 'J1799';
 filename = strcat(strcat('subscale_', motor), '.xlsx');
-data = xlsread(filename);
-t_axialA = data(:,1);
-axialAGs = data(:,2);
-t_Amp = data(:,7);
-Amp = data(:,8);
-t_T = data(:,13); 
-T = data(:,14);
-t_v = data(:,16);
-v = data(:,17);
-t_altAccel = data(:,34);
-alt_Accel  = data(:,35);
-t_altBaro  = data(:,37);
-alt_Baro   = data(:,38);
+data = xlsread(filename);  
+t_axialA = data(:,1);      % time for axial acceleration
+axialAGs = data(:,2);      % axial acceleration in gs
+t_amp = data(:,7);         % time for current draw
+amp = data(:,8);           % current draw in amps
+t_T = data(:,13);          % time for local temperature
+T = data(:,14);            % local temperature in deg F
+t_v = data(:,16);          % time for velocity (most likely axial)
+v = data(:,17);            % velocity in ft/s
+t_alt_accel = data(:,34);  % time for accelerometer based altitude
+alt_accel  = data(:,35);   % accelerometer based altitude
+t_alt_baro  = data(:,37);  % time for barometric based altitude
+alt_baro   = data(:,38);   % barometric based altitude
 
 % OpenRocket data extraction
 OR_filename = 'OR_subscaleH242.csv';
 OR_data = csvread(OR_filename, 1, 0);
-OR_t = OR_data(:,1);
-OR_alt = OR_data(:,2);
-OR_v = OR_data(:,5);
-OR_Ma = OR_data(:,27);
+OR_t = OR_data(:,1);       % time 
+OR_alt = OR_data(:,2);     % altitude (ft)
+OR_v = OR_data(:,5);       % velocity magnitude (ft/s)
+OR_Ma = OR_data(:,27);     % local Mach number
 
 % RASAero (remove stage column)
 RA_filename = 'RA_subscaleH242.csv';
 RA_data = csvread(RA_filename, 1, 0);
-RA_t = RA_data(:,1);
-RA_Ma = RA_data(:,3);
-RA_alt = RA_data(:,19);
+RA_t = RA_data(:,1);       % time
+RA_Ma = RA_data(:,3);      % local mach number
+RA_alt = RA_data(:,19);    % altitude (ft)
 
+%% Calculations
 
 % Speed of sound calculation
-gamma = 1.4;
-R = 1716; % ft*lb/(slug*Rankine)
-T_R = 459.67 + T; % Rankine
-local_c = sqrt(gamma*R*T_R); % local speed of sound
+gamma = 1.4;                    % air specific heats ratio
+R = 1716;                       % ft*lb/(slug*Rankine)
+T_R = 459.67 + T;               % Rankine
+local_c = sqrt(gamma*R*T_R);    % local speed of sound
+Ma = v./local_c;
 
-%%
-% figure(2)
+% Altitude comparisions
+max_alt    = max(alt_baro); 
+OR_max_alt = max(OR_alt); 
+RA_max_alt = max(RA_alt);
+OR_alt_error = abs(max_alt - OR_max_alt)/max_alt 
+RA_alt_error = abs(max_alt - RA_max_alt)/max_alt
+
+%% Plots
+
+% figure(1)
 % plot(t_v, v, 'r', t_T, local_c)
 % title(strcat('Velocity - ', motor)); 
 % legend('Velocity profile', 'Local speed of sound')
@@ -50,13 +64,13 @@ local_c = sqrt(gamma*R*T_R); % local speed of sound
 % xlim([0, 25]); ylim([0, max(v)*1.1])
 % saveas(gcf, strcat(strcat('velocity', motor), '.png'))
 
-figure(3)
+figure(2)
 yyaxis left
-plot(t_altBaro, alt_Baro, OR_t, OR_alt, RA_t, RA_alt)
+plot(t_alt_baro, alt_baro, OR_t, OR_alt, RA_t, RA_alt)
 title(strcat('Altitude and Velocity - ', motor))
 xlabel('Time (s)'); ylabel('Altitude (ft)')
 yyaxis right
-plot(t_v, v./local_c, OR_t, OR_Ma, RA_t, RA_Ma, t_v, local_c./local_c)
+plot(t_v, Ma, OR_t, OR_Ma, RA_t, RA_Ma, t_v, local_c./local_c)
 legend('Raven Baro','OR','RASAero','Raven','OR','RASAero')
 ylabel('Local Mach')
 xlim([0, 20])
