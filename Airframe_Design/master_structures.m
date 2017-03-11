@@ -27,6 +27,14 @@ cd ..
 load('rocket')
 cd('Airframe_Design')
 
+rocket.fin.h = 3;
+rocket.fin.rootlength = 6;
+rocket.fin.tiplength = 1;
+rocket.fin.S = .5 * 7 * 3;
+rocket.fin.AR = rocket.fin.h^2 / rocket.fin.S;
+rocket.fin.sweepdistance = 4.5;
+rocket.fin
+
 % Max dynamic pressure
 metric = 0; % in metric == 1
 maxq = max_q(RAD,metric);
