@@ -1,14 +1,12 @@
-# Source: http://doswa.com/2009/01/02/fourth-order-runge-kutta-numerical-integration.html
-# Last Modified: 3/10/17
+function [new_x, new_v] = rk4_step(x, v, F)
 
-"ASSUME mass is constant"
-ROCKET_MASS = 5
-TIME_STEP = .01
+%ASSUME mass is constant
+ROCKET_MASS = 5;
+TIME_STEP = .01;
 
-state = 50, 5 # Initial position and velocity 
-def F(x, v, t):
-    #Place holder value
-    return 10
+x1 = x;
+v1 = v;
+a1 = F(x1, v1, 0)*1.0 / (ROCKET_MASS);
 
 def rk4_step(x, v, F):
     """Returns final (position, velocity) tuple after
