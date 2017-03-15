@@ -1,3 +1,6 @@
+# Source: http://doswa.com/2009/01/02/fourth-order-runge-kutta-numerical-integration.html
+# Last Modified: 3/10/17
+
 "ASSUME mass is constant"
 ROCKET_MASS = 5
 TIME_STEP = .01
@@ -35,11 +38,11 @@ def rk4_step(x, v, F):
 
     return xf, vf
 
-print "Initial -position: %6.2f, velocity: %6.2f"%state
-
-t = 0
-# Run for 100 seconds
-while t < 100:
-    t += TIME_STEP
-    state = rk4(state[0], state[1], F)
-    print " -position: %6.2f, velocity: %6.2f"%state
+def simulate (runtime):
+    print "Initial -position: %6.2f, velocity: %6.2f"%state
+    t = 0
+    # Run for 100 seconds
+    while t < runtime:
+        t += TIME_STEP
+        state = rk4(state[0], state[1], F)
+        print " -position: %6.2f, velocity: %6.2f"%state
