@@ -33,13 +33,13 @@
         <TipChord>1</TipChord>
         <Thickness>0.07</Thickness>
         <LERadius>0</LERadius>
-        <Location>11</Location>
+        <Location>10</Location>
         <AirfoilSection>Rounded</AirfoilSection>
         <FX1>0</FX1>
         <FX3>0</FX3>
       </Fin>
     </BodyTube>
-    <Surface>Camouflage Paint</Surface>
+    <Surface>Galvanized Metal</Surface>
     <CP>0</CP>
     <ModifiedBarrowman>False</ModifiedBarrowman>
     <Turbulence>False</Turbulence>
@@ -51,12 +51,12 @@
     <Comments />
   </RocketDesign>
   <LaunchSite>
-    <Altitude>5000</Altitude>
+    <Altitude>253</Altitude>
     <Pressure>0</Pressure>
-    <RodAngle>7</RodAngle>
-    <RodLength>18</RodLength>
-    <Temperature>95</Temperature>
-    <WindSpeed>8</WindSpeed>
+    <RodAngle>0</RodAngle>
+    <RodLength>8</RodLength>
+    <Temperature>65</Temperature>
+    <WindSpeed>0</WindSpeed>
   </LaunchSite>
   <Recovery>
     <Altitude1>1000</Altitude1>
@@ -73,5 +73,30 @@
     <CD2>2.2</CD2>
   </Recovery>
   <MachAlt />
-  <SimulationList />
+  <SimulationList>
+    <Simulation>
+      <SustainerEngine>J1999N  (AT)</SustainerEngine>
+      <SustainerLaunchWt>5.34</SustainerLaunchWt>
+      <SustainerNozzleDiameter>0.5</SustainerNozzleDiameter>
+      <SustainerCG>35.7</SustainerCG>
+      <SustainerIgnitionDelay>0</SustainerIgnitionDelay>
+      <Booster1LaunchWt>0</Booster1LaunchWt>
+      <Booster1SeparationDelay>0</Booster1SeparationDelay>
+      <Booster1IgnitionDelay>0</Booster1IgnitionDelay>
+      <Booster1CG>0</Booster1CG>
+      <Booster1NozzleDiameter>0</Booster1NozzleDiameter>
+      <IncludeBooster1>False</IncludeBooster1>
+      <Booster2LaunchWt>0</Booster2LaunchWt>
+      <Booster2Delay>0</Booster2Delay>
+      <Booster2CG>0</Booster2CG>
+      <Booster2NozzleDiameter>0</Booster2NozzleDiameter>
+      <IncludeBooster2>False</IncludeBooster2>
+      <FlightTime>0</FlightTime>
+      <TimetoApogee>23.33044</TimetoApogee>
+      <MaxAltitude>12272.14</MaxAltitude>
+      <MaxVelocity>1806.933</MaxVelocity>
+      <OptimumWt>0</OptimumWt>
+      <OptimumMaxAlt>0</OptimumMaxAlt>
+    </Simulation>
+  </SimulationList>
 </RASAeroDocument>
