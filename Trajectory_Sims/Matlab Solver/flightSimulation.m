@@ -9,7 +9,7 @@ FAR = sites(:,3); NM  = sites(:,4);
 
 % Choose site and launch configuration
 site = NAR; % gives a site elevation output (for now)
-launch_site = 5; % corresponds to a configuration 
+launch_site = 4; % corresponds to a configuration 
 motor.name  = 'N2900';
 
 % Local site conditions and make rocket struct
