@@ -18,19 +18,23 @@ wind = 2.2352; % m/s
 launch_angle = 0; % deg
 site_elevation = site(1,1); % m
 ground_conditions = [Temp, wind, launch_angle, site_elevation];
-rocket = makeRocket(launch_site); clc % returns rocket struct
+rocket = makeRocket(launch_site); % returns rocket struct
+CP = NaN; % time varying - pull from RASAero!
+CM = NaN; % time varying - can set up beforehand or done in getMotorData
 
 % Set up simulation
 % t.property is a way to track when events occur.
-t.step = 0.01;              % dt
-time = 0:t.step:120;        % time
-r = [0, site_elevation, 0]; % position,     r = [x,  y,  theta]
-u = [0, 0, 0];              % velocity,     u = [vx, vy, omega]
-a = [0, 0, 0];              % acceleration, a = [ax, ay, alpha]
+t.step = 0.01;              % s, dt
+time = 0:t.step:120;        % s, time
+r = [0, site_elevation, 0]; % m, position,         r = [x,  y,  theta]
+u = [0, 0, 0];              % m/s, velocity,       u = [vx, vy, omega]
+a = [0, 0, 0];              % m/s^2, acceleration, a = [ax, ay, alpha]
+aoa = 0;                    % deg, angle of attack (changes with time)
 
 % Receive motor data [struct, Thrust curve, how many seconds of thrust]
 % t.powered is the length of time the motor is on 
 [motor, T, t.powered] = getMotorData(motor, t.step);
+rocket.mass = rocket.wetmass;
 
 for i = 1:length(time)
     % determine the set of forces on the system
@@ -39,7 +43,7 @@ for i = 1:length(time)
     % calculated in the next revision, motor thrust is calculated by the
     % motor curve (csv). 
     % pass in the t struct for both time step and time powered 
-    [f_x, f_y, f_theta] = forces(rocket, t, r, u, a, T);
+    [f_x, f_y, f_theta] = forces(rocket, time(i), r, u, a, aoa, T);
     
     % forces are passed into the solver and the next set of r, u, and a are
     % appended to their respective vectors
