@@ -25,7 +25,7 @@ CM = NaN; % time varying - can set up beforehand or done in getMotorData
 % Set up simulation
 % t.property is a way to track when events occur.
 t.step = 0.01;              % s, dt
-time = 0:t.step:120;        % s, time
+t.ime = 0:t.step:120;        % s, time
 r = [0, site_elevation, 0]; % m, position,         r = [x,  y,  theta]
 u = [0, 0, 0];              % m/s, velocity,       u = [vx, vy, omega]
 a = [0, 0, 0];              % m/s^2, acceleration, a = [ax, ay, alpha]
@@ -36,18 +36,18 @@ aoa = 0;                    % deg, angle of attack (changes with time)
 [motor, T, t.powered] = getMotorData(motor, t.step);
 rocket.mass = rocket.wetmass;
 
-for i = 1:length(time)
+for i = 2:2:length(t.ime) %????????????? by 2
     % determine the set of forces on the system
     % forces calls aerodynamics module to get those forces, gravity force
     % is calculated on the latest rocket struct, wind force will be
     % calculated in the next revision, motor thrust is calculated by the
     % motor curve (csv). 
     % pass in the t struct for both time step and time powered 
-    [f_x, f_y, f_theta] = forces(rocket, time(i), r, u, a, aoa, T);
+    [f_x, f_y, f_theta] = forces(rocket, t.ime(i), r, u, a, aoa, T, i);
     
     % forces are passed into the solver and the next set of r, u, and a are
     % appended to their respective vectors
-    [r, u, a] = solver(rocket, f_x, f_y, f_theta, r, u, a);
+    [r, u, a] = solver(rocket, f_x, f_y, f_theta, r, u, a, t, i);
 end
 
 % Plotter

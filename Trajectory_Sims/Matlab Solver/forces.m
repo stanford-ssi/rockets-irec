@@ -9,12 +9,12 @@
 % rocket contains the mass curve
 
 
-function [f_x, f_y, moment] = forces(rocket, time, r, u, a, aoa, T)
+function [f_x, f_y, moment] = forces(rocket, time, r, u, a, aoa, T, i)
 
 %thrust
 %thrust curve assumption -- 2 column tabular input
 if time < T(end,1)
-    thrust = T(time + 1,2);
+    thrust = T(i,2);
     Tx = sind(aoa)*thrust;
     Ty = cosd(aoa)*thrust;
 else
@@ -45,7 +45,7 @@ end
 %gravity
 %mass assumption -- 2 column tabular input
 %mdot proportional to thrust (relate to impulse)
-gravity = (3.986E14)/(6378000 + norm(r)) * rocket.mass(time+1,2);
+gravity = (3.986E14)/(6378000 + norm(r)) * rocket.mass(i);
 
 %Requires CM and CP distance from bottom of the rocket
 if u >= 0
