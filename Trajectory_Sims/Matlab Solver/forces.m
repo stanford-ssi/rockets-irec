@@ -9,7 +9,7 @@
 % rocket contains the mass curve
 
 
-function [f_x, f_y, moment] = forces(rocket, time, r, u, a, aoa, T, i)
+function [f_x, f_y, moment] = forces(rocket, time, r, u, aoa, T, i)
 
 %thrust
 %thrust curve assumption -- 2 column tabular input
