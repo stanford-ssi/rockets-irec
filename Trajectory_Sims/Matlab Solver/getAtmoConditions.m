@@ -36,7 +36,7 @@ elseif h < 6500
     T = 245.9;
 elseif h < 7000
     T = 242.7;
-elseif h < 7503
+elseif h < 7500
     T = 239.5;
 elseif h < 8000
     T = 236.2;

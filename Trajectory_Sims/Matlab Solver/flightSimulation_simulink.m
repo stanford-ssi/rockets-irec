@@ -23,18 +23,26 @@ CP = NaN; % time varying - pull from RASAero!
 CM = NaN; % time varying - can set up beforehand or done in getMotorData
 
 % Set up simulation
-% t.property is a way to track when events occur.
-t.step = 0.01;              % s, dt
-t.ime = 0:t.step:120;        % s, time
+t.step = 0.01; % for motor data interpolation
 rINT = [0, site_elevation, 0]; % m, position,         r = [x,  y,  theta]
 uINT = [0, 0, 0];              % m/s, velocity,       u = [vx, vy, omega]
-a = [0, 0, 0];              % m/s^2, acceleration, a = [ax, ay, alpha]
-aoa = 0;                    % deg, angle of attack (changes with time)
 
 % Receive motor data [struct, Thrust curve, how many seconds of thrust]
 % t.powered is the length of time the motor is on 
-[motor, T, t.powered] = getMotorData(motor, t.step);
+[motor, T, ~] = getMotorData(motor, t.step);
 rocket.mass = rocket.wetmass;
+
+% Pull RASAero data
+csvnum1 = 2500; csvnum2 = csvnum1*2;
+RASdata = csvread('RASAero_N2900.csv', 1, 0);
+RASMa = RASdata(1:csvnum1,1);
+CD0 = RASdata(1:csvnum1,3);
+CD2 = RASdata(csvnum1:csvnum2,3);
+CD4 = RASdata(csvnum2:end,3);
+CL0 = RASdata(1:csvnum1,8);
+CL2 = RASdata(csvnum1:csvnum2,8);
+CL4 = RASdata(csvnum2:end,8);
+aerodata = [RASMa, CD0, CD2, CD4, CL0, CL2, CL4];
 
 % sim('solver_simulink.slx')
 

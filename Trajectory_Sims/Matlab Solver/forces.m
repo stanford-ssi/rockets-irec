@@ -8,12 +8,16 @@
 % Earth Centered Earth Fixed coordinate system
 % rocket contains the mass curve
 
+% Split each force into x and y for earth centered components
 
-function [f_x, f_y, moment] = forces(rocket, time, r, u, aoa, T, i)
+function [f_x, f_y, moment] = forces(rocket, t, r, u, T)
 
-%thrust
-%thrust curve assumption -- 2 column tabular input
-if time < T(end,1)
+aoa = u(3); % angle of attack
+
+% thrust
+% thrust curve assumption -- 2 column tabular input
+% find index for this
+if t < T(end,1)
     thrust = T(i,2);
     Tx = sind(aoa)*thrust;
     Ty = cosd(aoa)*thrust;
@@ -22,9 +26,11 @@ else
     Ty = 0;
 end
 
-[Fdrag, Flift] = aerodynamics(rocket, r, u, a, aoa);
+[Fdrag, Flift] = aerodynamics(rocket, r, u, aerodata);  % mostly finished
 
-%lift
+% do we need to split again?
+
+% lift
 if u >= 0
     Lx = cosd(aoa)*Flift;
     Ly = sind(aoa)*Flift;
@@ -33,7 +39,7 @@ else
     Ly = 0;
 end
 
-%drag
+% drag
 if u>= 0
     Dx = sind(aoa)*Fdrag;
     Dy = cosd(aoa)*Fdrag;
@@ -42,12 +48,12 @@ else
     Dy = 0; %Parachute Drag and base of rocket (ignore blockage and swinging)
 end
 
-%gravity
-%mass assumption -- 2 column tabular input
-%mdot proportional to thrust (relate to impulse)
+% gravity
+% mass assumption -- 2 column tabular input
+% mdot proportional to thrust (relate to impulse)
 gravity = (3.986E14)/(6378000 + norm(r)) * rocket.mass(i);
 
-%Requires CM and CP distance from bottom of the rocket
+% Requires CM and CP distance from bottom of the rocket
 if u >= 0
     f_x = Tx + Lx - Dx;
     f_y = Ty - Dy - Lx - gravity;
