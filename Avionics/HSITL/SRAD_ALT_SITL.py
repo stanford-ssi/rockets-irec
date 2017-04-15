@@ -3,17 +3,17 @@ import glob
 import serial
 import struct
 import numpy
-
+import csv
 
 FILE_PATH = './fakedata/fake1.csv'
 
 
 FSTART      = b'\xaa'
-FESENSE     = b'\x01'
-FISOSENSE   = b'\x02'
-FBNO        = b'\x03'
-FMMA        = b'\x04'
-FBMP        = b'\x05' 
+FESENSE     = 1
+FISOSENSE   = 2
+FBNO        = 3
+FMMA        = 4
+FBMP        = 5 
 
 def serial_ports():
     """ Lists serial port names
@@ -46,12 +46,19 @@ def serial_ports():
 
 if __name__ == '__main__':
 	#reading CSV file into memory, sorting into arrays for each sensr
-	all_data = numpy.genfromtxt(FILE_PATH, delimiter=',')
-	bno_data = all_data[all_data[:,0] == 3.0, :][:,1:3]
+	with open(FILE_PATH, 'r') as f:
+		reader = csv.reader(f)
+		data_as_list = list(reader)
+	bmp_data = []
+	for i in range(0, len(data_as_list)):
+		row = [float(i) for i in data_as_list[i]]
+		if row[0] == 3:
+			bmp_data.append(row[1:4])
+	bmp_data = numpy.asarray((bmp_data))
+	print(bmp_data)
+	#all_data = numpy.genfromtxt(FILE_PATH, delimiter=',')
+	#bno_data = all_data[all_data[:,0] == 3.0, :][:,1:3]
 
-
-
-	print(bno_data)
 	print(serial_ports())
 	teensy = serial.Serial('COM6')
 	#wait for teensy configured for SITL testing
@@ -68,10 +75,15 @@ if __name__ == '__main__':
 		time = struct.unpack('f',request[1:5])
 		if sensor == FBMP:
 			print('SALT Requesting BMP data')
-			ind = numpy.searchsorted(bno_data[:,0],time)
-			if abs(time - bno_data[ind,0]) > abs(time - bno_data[ind-1,0]):
+			ind = numpy.searchsorted(bmp_data[:,0],time)
+			print(bmp_data[ind-1,0])
+			if abs(time - bmp_data[ind,0]) > abs(time - bmp_data[ind-1,0]):
 				ind += 1
-			fetch = bno_data[ind,1:2]
+			fetch = struct.pack('ff',bmp_data[ind,1],bmp_data[ind,2])
+			teensy.write(fetch)
+
+
+
 
 
 

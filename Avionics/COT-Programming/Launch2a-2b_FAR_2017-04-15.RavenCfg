@@ -1,0 +1,20 @@
+#Type=Raven
+#R 3
+#D Apr 29 2012 14:28:55
+Apogee=32459
+Main=31435
+3rd=32459
+4th=32493
+Tval=16996
+Hgt1=16988
+Hgt2=16466
+Hgt3=16478
+Acc1=24696
+Acc2=24148
+Vel1=20032
+Vel2=16492
+Delay=16976
+BurnoutA=16450
+BurnoutM=16450
+Burnout3=16450
+Burnout4=16450
