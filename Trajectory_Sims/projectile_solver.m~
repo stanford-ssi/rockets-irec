@@ -1,0 +1,12 @@
+y0(1,1) = 0;       % Initial height [m]
+y0(2,1) = 50;       % Initial speed [m/s]
+tspan = [0 10];
+[t,y] = ode45 ('rocket', tspan, y0); 
+ 
+plot (t,y);
+xlabel ('Time [s]')
+ylabel ('Height [m] or Velocity [m/s]')
+title ('Rocket Trajectory')
+legend ('Height', 'Velocity', 'Location', 'Northwest')
+
+
