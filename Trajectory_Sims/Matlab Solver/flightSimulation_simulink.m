@@ -37,10 +37,10 @@ csvnum1 = 2500; csvnum2 = csvnum1*2;
 RASdata = csvread('RASAero_N2900.csv', 1, 0);
 RASMa = RASdata(1:csvnum1,1);
 CD0 = RASdata(1:csvnum1,3);
-CD2 = RASdata(csvnum1:csvnum2,3);
+CD2 = RASdata(csvnum1+1:csvnum2,3);
 CD4 = RASdata(csvnum2:end,3);
 CL0 = RASdata(1:csvnum1,8);
-CL2 = RASdata(csvnum1:csvnum2,8);
+CL2 = RASdata(csvnum1+1:csvnum2,8);
 CL4 = RASdata(csvnum2:end,8);
 aerodata = [RASMa, CD0, CD2, CD4, CL0, CL2, CL4];
 

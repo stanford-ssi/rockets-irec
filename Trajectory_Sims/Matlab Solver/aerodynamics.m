@@ -14,7 +14,7 @@ aoa = r(3); % angle of attack
 
 mach = norm(u(1:2))/local_c;
 
-% 1 Check for mach number; 
+% Check for mach number; 
 k = 1; tol = 0.01;
 while(abs(mach-aerodata(k,1)) > tol)
     k = k + 1;
