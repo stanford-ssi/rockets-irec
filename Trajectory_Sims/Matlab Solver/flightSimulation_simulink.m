@@ -2,23 +2,16 @@
 % Ian Gomez, 03/5/17
 clc; clear all;
 
-% Set up launch site (currently just site elevations)
-sites = csvread('launchSites.csv',2,0);
-NAR = sites(:,1); TCC = sites(:,2);
-FAR = sites(:,3); NM  = sites(:,4);
-
-% Choose site and launch configuration
-site = NAR; % gives a site elevation output (for now)
-launch_site = 4; % corresponds to a configuration 
+NM = 1293; % m, site elevation
 motor.name  = 'N2900';
 
 % Local site conditions and make rocket struct
 Temp = 291; % K
-wind = 2.2352; % m/s
+wind = 2.2352; % m/s 
 launch_angle = 0; % deg
-site_elevation = site(1,1); % m
+site_elevation = NM; % m
 ground_conditions = [Temp, wind, launch_angle, site_elevation];
-rocket = makeRocket(launch_site); % returns rocket struct
+rocket = makeRocket(); % returns rocket struct
 CP = NaN; % time varying - pull from RASAero!
 CM = NaN; % time varying - can set up beforehand or done in getMotorData
 
@@ -30,7 +23,10 @@ uINT = [0, 0, 0];              % m/s, velocity,       u = [vx, vy, omega]
 % Receive motor data [struct, Thrust curve, how many seconds of thrust]
 % t.powered is the length of time the motor is on 
 [motor, T, ~] = getMotorData(motor, t.step);
-rocket.mass = rocket.wetmass;
+T = [(0:t.step:motor.burntime)', T'];  % make thrust a paired vector
+mdot = (rocket.wetmass-rocket.drymass)./motor.burntime;
+mass = [(0:t.step:motor.burntime)',... % make thrust a paired vector
+    (rocket.wetmass:-mdot*t.step:rocket.drymass)']; 
 
 % Pull RASAero data
 csvnum1 = 2500; csvnum2 = csvnum1*2;

@@ -7,7 +7,10 @@ function [Fdrag, Flift] = aerodynamics(rocket, r, u, aerodata)
 % rev 1 = use CD table from RASAero 
 % rev 2 = use OpenRocket subsonic drag and call RASAero drag past transonic
 
-aoa = r(3); % angle of attack
+% find angle of attack; vector addition of axial velocity and wind 
+% for constant case
+ux = u(1); uy = u(2); 
+
 
 % Calculate atmosphere 
 [~,~,rho,local_c] = getAtmoConditions(r(2));

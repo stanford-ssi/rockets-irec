@@ -10,9 +10,9 @@
 
 % Split each force into x and y for earth centered components
 
-function [f_x, f_y, moment] = forces(rocket, t, r, u, T)
+function [f_x, f_y, moment] = forces(rocket, t, r, u, T, current_mass)
 
-% figure out index of time
+ind = t/t.step;
 
 theta = r(3); % wrt to the vertical (normal to the earth's surface)
 
@@ -20,7 +20,7 @@ theta = r(3); % wrt to the vertical (normal to the earth's surface)
 % thrust curve assumption -- 2 column tabular input
 % find index for this
 if t < T(end,1)
-    thrust = T(i,2);
+    thrust = T(ind,2);
     Tx = sind(theta)*thrust;
     Ty = cosd(theta)*thrust;
 else
@@ -48,7 +48,7 @@ Dy = cosd(theta)*Fdrag;
 % mass assumption -- 2 column tabular input
 % mdot proportional to thrust (relate to impulse)
 G = 3.986E14; r_earth = 6378000;
-gravity = (G)/(r_earth + norm(r(1:2))) * rocket.mass(i);
+gravity = (G)/(r_earth + norm(r(1:2))) * current_mass;
 
 % Requires CM and CP distance from bottom of the rocket
 if u >= 0
