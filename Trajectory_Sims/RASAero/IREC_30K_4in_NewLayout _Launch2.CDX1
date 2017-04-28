@@ -12,10 +12,10 @@
     </NoseCone>
     <BodyTube>
       <PartType>BodyTube</PartType>
-      <Length>114</Length>
+      <Length>115.1</Length>
       <Diameter>4</Diameter>
-      <LaunchLugDiameter>0</LaunchLugDiameter>
-      <LaunchLugLength>0</LaunchLugLength>
+      <LaunchLugDiameter>0.7</LaunchLugDiameter>
+      <LaunchLugLength>0.7</LaunchLugLength>
       <RailGuideDiameter>0</RailGuideDiameter>
       <RailGuideHeight>0</RailGuideHeight>
       <LaunchShoeArea>0</LaunchShoeArea>
@@ -124,9 +124,9 @@
     </Simulation>
     <Simulation>
       <SustainerEngine>M2500T  (AT)</SustainerEngine>
-      <SustainerLaunchWt>43.1</SustainerLaunchWt>
+      <SustainerLaunchWt>50</SustainerLaunchWt>
       <SustainerNozzleDiameter>2.5</SustainerNozzleDiameter>
-      <SustainerCG>81.5</SustainerCG>
+      <SustainerCG>71.8</SustainerCG>
       <SustainerIgnitionDelay>0</SustainerIgnitionDelay>
       <Booster1LaunchWt>0</Booster1LaunchWt>
       <Booster1SeparationDelay>0</Booster1SeparationDelay>
@@ -140,9 +140,9 @@
       <Booster2NozzleDiameter>0</Booster2NozzleDiameter>
       <IncludeBooster2>False</IncludeBooster2>
       <FlightTime>0</FlightTime>
-      <TimetoApogee>33.81033</TimetoApogee>
-      <MaxAltitude>20694.56</MaxAltitude>
-      <MaxVelocity>1562.237</MaxVelocity>
+      <TimetoApogee>32.2506</TimetoApogee>
+      <MaxAltitude>17798.74</MaxAltitude>
+      <MaxVelocity>1327.254</MaxVelocity>
       <OptimumWt>0</OptimumWt>
       <OptimumMaxAlt>0</OptimumMaxAlt>
     </Simulation>
