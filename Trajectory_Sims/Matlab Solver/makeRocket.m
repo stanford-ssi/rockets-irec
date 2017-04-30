@@ -22,7 +22,7 @@ ft2m   = 0.3048;     % m/ft
 
 %%% General Parameters
 
-rocket.OD = NaN          % in, outter diameter
+rocket.OD = 4;          % in, outter diameter
 rocket.drymass = 20     % lb
 rocket.wetmass = 40     % lb
 

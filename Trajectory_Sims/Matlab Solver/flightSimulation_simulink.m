@@ -40,7 +40,7 @@ CL2 = RASdata(csvnum1+1:csvnum2,8);
 CL4 = RASdata(csvnum2:end,8);
 aerodata = [RASMa, CD0, CD2, CD4, CL0, CL2, CL4];
 
-% sim('solver_simulink.slx')
+sim('solver_simulink.slx')
 
 % Plotter
 % makePlots(rINT, uINT, a, f_x, f_y, f_theta)

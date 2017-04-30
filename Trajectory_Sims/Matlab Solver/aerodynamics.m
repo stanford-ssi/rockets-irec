@@ -9,7 +9,6 @@ function [Fdrag, Flift] = aerodynamics(rocket, r, u, aerodata)
 
 % find angle of attack; vector addition of axial velocity and wind 
 % for constant case
-ux = u(1); uy = u(2); 
 
 
 % Calculate atmosphere 
