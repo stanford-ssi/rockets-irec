@@ -32,8 +32,7 @@ rocket_length = 11*ft2m;
 Re_rocket_y = rho*umag*rocket_length/mu;
 
 % determine what state the rocket is in aerodynamically
-% add rail length to avoid tipping; for now use if faster than rail
-% velocity
+% if rocket is falling - set theta 
 
 rail_length = 20; % m, which is pretty ridiculous
 launch_site = 1293; % m, magic number
