@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 
+#Orien is a god for helping me debug the parser
+
 #import pprint
 #from IPython.display import display
 #import platform
-
-import matplotlib.pyplot as plt #helps make histograms
-from scipy import stats
-import numpy as np
 
 #creates class wind tags that holds the date and time
 
@@ -71,9 +69,8 @@ while(True):
     
     windKey = WindDate(y,m,d,hour)
     
-    #tests hashing function
-    #if(windKey.m == 1 and windKey.d == 18 and windKey.y == 2012 and windKey.hour == 153):
-       #print(windKey)
+    if(windKey.m == 1 and windKey.d == 18 and windKey.y == 2012 and windKey.hour == 153):
+       print(windKey)
     
     #populate the wind vals class
     #skip over the empty space that gets parsed in list entry 5
@@ -82,76 +79,23 @@ while(True):
     specificWindVals = WindValues(direction,speed)
 
     #add both populated classes to the map
-    if(specificWindVals.s != 999.9 and specificWindVals.d != 999): #ensures that the error directions aren't added
-        windMap[windKey] = specificWindVals
+    windMap[windKey] = specificWindVals
 
 
 data_file.close() #frees up any system allocations taken up by the file. TODO: call closer later?
 
 #test the program by accessing different values in the map
+test = WindDate(2012,1,18,153)
+
+testWindValues = windMap[test]
+print(testWindValues.s)
 
 #TODO: break up parsing file and graphic creating file
 
-windValues = windMap.values()
-
 ###
 #create the histogram for speed
-
-HIST_PRECISION = 80 #sets the number of intervals displayed on the x axis
-
-#get the wind speeds
-histogramSpeeds = []
-
-for windVal in windValues:
-    speed = windVal.s 
-    histogramSpeeds.append(speed)
-
-#populate the histogram
-
-#error checks - if the max or min is outside the expected range of the data file, the user can infer that some value is not correctly parsed
-print("minimum speed: " + str(min(histogramSpeeds)))
-print("maximum speed: " + str(max(histogramSpeeds)))
-
-
-plt.hist(histogramSpeeds, bins= HIST_PRECISION, normed=True)
-plt.title('ASOS Wind Speeds 2012-2017 Recorded Hourly')
-plt.xlabel('wind speed (m/s)')
-plt.ylabel('probability')
-plt.show()
 ###
 
 ###
 #create the polar plot for direction
-
-#create the subplot with the angle backgrounds
-
-polarPlot = plt.subplot(111, polar = True)
-
-#get the direction values from the map
-polarDirections = [] #TODO: may need to change the data format into a vector so that pyplot will plot
-for windVal in windValues:
-    direction = windVal.d 
-    polarDirections.append(direction)
-    
-#make a polar plot with the plt function#
-directionProbabilities, theta, _ = plt.hist(polarDirections, bins = 360, normed = True)
-
-print(directionProbabilities[1])
-print(directionProbabilities[0])
-#create the direction value vector for the polar plot
-theta = np.arange(0,360,1)
-print("theta array size: " + str(len(theta)))
-
-width = (2*np.pi) / ((len(theta))/4)
-polarPlot = plt.subplot(111, polar=True)
-bars = polarPlot.bar(theta, directionProbabilities, width=width)
-polarPlot.set_rlabel_position(-22.5)
-polarPlot.grid(True)
-
-plt.show()
-
-#make a polar plot with the hist function#
-
-
-
 ###
