@@ -13,7 +13,6 @@ launch_angle = 0; % deg
 site_elevation = NM; % m
 ground_conditions = [Temp, wind, launch_angle, site_elevation];
 rocket = makeRocket(); % returns rocket struct
-rocketOD = rocket.OD;
 CP = 0.2032; % time varying - pull from RASAero!
 CM = 0; % time varying - can set up beforehand or done in getMotorData
 
@@ -43,7 +42,7 @@ CL4 = RASdata(csvnum2:end,8);
 aerodata = [zeros(1,7); RASMa, CD0, CD2, CD4, CL0, CL2, CL4];
 
 % figure out how to clear simulink workspace
-save('import2simulink','rocket','CP','CM')
+save('import2simulink','rocket')
 sim('solver_simulink.slx')
 
 %%
