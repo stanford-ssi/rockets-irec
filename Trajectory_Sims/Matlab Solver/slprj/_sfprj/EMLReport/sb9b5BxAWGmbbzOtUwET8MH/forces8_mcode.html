@@ -1,0 +1,69 @@
+<!-- saved from url=(0014)about:internet -->
+<pre class="code">
+<span class="srcline"><span class="lineno"><a href="7,1" id="srcline1"> 1</a></span><span class="line"><span class="comment"><span class="message fatal" id="M3F8C">%</span>%% Forces</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,2" id="srcline2"> 2</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="7,3" id="srcline3"> 3</a></span><span class="line"><span class="comment">% Fdrag, Flift, Thrust curve, and Flight data are provided as inputs</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,4" id="srcline4"> 4</a></span><span class="line"><span class="comment">% Flight Data consists of rocket dimensions, time, position, vel,</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,5" id="srcline5"> 5</a></span><span class="line"><span class="comment">% acceleration, angle of attack</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,6" id="srcline6"> 6</a></span><span class="line"><span class="comment">% Assumption is time starts at t = 0;</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,7" id="srcline7"> 7</a></span><span class="line"><span class="comment">% u &gt;= 0, haven't hit apogee yet</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,8" id="srcline8"> 8</a></span><span class="line"><span class="comment">% Earth Centered Earth Fixed coordinate system</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,9" id="srcline9"> 9</a></span><span class="line"><span class="comment">% rocket contains the mass curve</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,10" id="srcline10">10</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="7,11" id="srcline11">11</a></span><span class="line"><span class="comment">% Split each force into x and y for earth centered components</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,12" id="srcline12">12</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="7,13" id="srcline13">13</a></span><span class="line">function [f_x, f_y, moment] = forces(rocket, t, t_step <span class="message error" id="M2F8C">r</span>, u, T, current_mass)</span></span>
+<span class="srcline"><span class="lineno"><a href="7,14" id="srcline14">14</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="7,15" id="srcline15">15</a></span><span class="line">ind = t/t_step;</span></span>
+<span class="srcline"><span class="lineno"><a href="7,16" id="srcline16">16</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="7,17" id="srcline17">17</a></span><span class="line">theta = r(3); <span class="comment">% wrt to the vertical (normal to the earth's surface)</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,18" id="srcline18">18</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="7,19" id="srcline19">19</a></span><span class="line"><span class="comment">% thrust</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,20" id="srcline20">20</a></span><span class="line"><span class="comment">% thrust curve assumption -- 2 column tabular input</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,21" id="srcline21">21</a></span><span class="line"><span class="comment">% find index for this</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,22" id="srcline22">22</a></span><span class="line">if t &lt; T(end,1)</span></span>
+<span class="srcline"><span class="lineno"><a href="7,23" id="srcline23">23</a></span><span class="line">    thrust = T(ind,2);</span></span>
+<span class="srcline"><span class="lineno"><a href="7,24" id="srcline24">24</a></span><span class="line">    Tx = sind(theta)*thrust;</span></span>
+<span class="srcline"><span class="lineno"><a href="7,25" id="srcline25">25</a></span><span class="line">    Ty = cosd(theta)*thrust;</span></span>
+<span class="srcline"><span class="lineno"><a href="7,26" id="srcline26">26</a></span><span class="line">else</span></span>
+<span class="srcline"><span class="lineno"><a href="7,27" id="srcline27">27</a></span><span class="line">    Tx = 0;</span></span>
+<span class="srcline"><span class="lineno"><a href="7,28" id="srcline28">28</a></span><span class="line">    Ty = 0;</span></span>
+<span class="srcline"><span class="lineno"><a href="7,29" id="srcline29">29</a></span><span class="line">end</span></span>
+<span class="srcline"><span class="lineno"><a href="7,30" id="srcline30">30</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="7,31" id="srcline31">31</a></span><span class="line"><span class="comment">% where do we assign direction / theta and signs</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,32" id="srcline32">32</a></span><span class="line">[Fdrag, Flift] = aerodynamics(rocket, r, u, aerodata);</span></span>
+<span class="srcline"><span class="lineno"><a href="7,33" id="srcline33">33</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="7,34" id="srcline34">34</a></span><span class="line"><span class="comment">% lift</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,35" id="srcline35">35</a></span><span class="line">Lx = cosd(theta)*Flift;</span></span>
+<span class="srcline"><span class="lineno"><a href="7,36" id="srcline36">36</a></span><span class="line">Ly = sind(theta)*Flift;</span></span>
+<span class="srcline"><span class="lineno"><a href="7,37" id="srcline37">37</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="7,38" id="srcline38">38</a></span><span class="line"><span class="comment">% drag</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,39" id="srcline39">39</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="7,40" id="srcline40">40</a></span><span class="line"><span class="comment">% speed at which the drogue deploys (since it doesn't deploy at apogee)</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,41" id="srcline41">41</a></span><span class="line">drogue_deploy_speed = -1;</span></span>
+<span class="srcline"><span class="lineno"><a href="7,42" id="srcline42">42</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="7,43" id="srcline43">43</a></span><span class="line"><span class="comment">% are not assigned a sign yet</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,44" id="srcline44">44</a></span><span class="line">Dx = sind(theta)*Fdrag;</span></span>
+<span class="srcline"><span class="lineno"><a href="7,45" id="srcline45">45</a></span><span class="line">Dy = cosd(theta)*Fdrag;</span></span>
+<span class="srcline"><span class="lineno"><a href="7,46" id="srcline46">46</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="7,47" id="srcline47">47</a></span><span class="line"><span class="comment">% gravity</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,48" id="srcline48">48</a></span><span class="line"><span class="comment">% mass assumption -- 2 column tabular input</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,49" id="srcline49">49</a></span><span class="line"><span class="comment">% mdot proportional to thrust (relate to impulse)</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,50" id="srcline50">50</a></span><span class="line">G = 3.986E14; r_earth = 6378000;</span></span>
+<span class="srcline"><span class="lineno"><a href="7,51" id="srcline51">51</a></span><span class="line">gravity = (G)/(r_earth + norm(r(1:2))) * current_mass;</span></span>
+<span class="srcline"><span class="lineno"><a href="7,52" id="srcline52">52</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="7,53" id="srcline53">53</a></span><span class="line"><span class="comment">% Requires CM and CP distance from bottom of the rocket</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,54" id="srcline54">54</a></span><span class="line">if u &gt;= 0</span></span>
+<span class="srcline"><span class="lineno"><a href="7,55" id="srcline55">55</a></span><span class="line">    f_x = Tx + Lx - Dx;</span></span>
+<span class="srcline"><span class="lineno"><a href="7,56" id="srcline56">56</a></span><span class="line">    f_y = Ty + Ly - Dy  - gravity;</span></span>
+<span class="srcline"><span class="lineno"><a href="7,57" id="srcline57">57</a></span><span class="line">    moment = (Lx - Dx)*cosd(theta)*(CM-CP) + (Dy + Ly)*sind(theta)*(CM-CP);</span></span>
+<span class="srcline"><span class="lineno"><a href="7,58" id="srcline58">58</a></span><span class="line">else</span></span>
+<span class="srcline"><span class="lineno"><a href="7,59" id="srcline59">59</a></span><span class="line">    f_x = Dx;</span></span>
+<span class="srcline"><span class="lineno"><a href="7,60" id="srcline60">60</a></span><span class="line">    f_y = Dy - gravity;</span></span>
+<span class="srcline"><span class="lineno"><a href="7,61" id="srcline61">61</a></span><span class="line">    moment = 0; <span class="comment">%not worth it</span></span></span>
+<span class="srcline"><span class="lineno"><a href="7,62" id="srcline62">62</a></span><span class="line">end</span></span>
+<span class="srcline"><span class="lineno"><a href="7,63" id="srcline63">63</a></span><span class="line"></span></span>
+<span class="srcline"><span class="lineno"><a href="7,64" id="srcline64">64</a></span><span class="line">end</span></span>
+<span class="srcline"><span class="lineno"><a href="7,65" id="srcline65">65</a></span><span class="line"> </span></span>
+</pre>
+</div>
