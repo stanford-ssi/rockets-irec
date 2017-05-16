@@ -14,8 +14,7 @@ site_elevation = NM; % m
 goal = site_elevation + 9144;
 
 % Set up simulation
-t_step = 0.05; % for motor data interpolation
-rINT = [0, site_elevation, 0]; % m, position,         r = [x,  y,  theta]
+t_step = 0.01; % for motor data interpolation
 uINT = [0, 0, 0];              % m/s, velocity,       u = [vx, vy, omega]
 
 % Receive motor data [struct, Thrust curve, how many seconds of thrust]
