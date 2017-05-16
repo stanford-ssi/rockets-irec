@@ -44,8 +44,11 @@ k = 1.4;                    % Air specific heats ratio
 P = P_sl.*exp((-m_air.*g.*h)./(k_boltz.*T)); % Pa
 
 % Density [kg/m^3]
-rho = 1.2250.*(288.15./(288.15-0.0065.*h)).^...
-    (1+9.80665.*0.0289644./(8.31432.*0.0065));
+rho0 = 1.225;
+R = 287;
+% rho = rho0.*(288.15./(288.15-0.0065.*h)).^...
+%     (1+9.80665.*0.0289644./(8.31432.*0.0065));
+rho = rho0.*exp(-(g/(R.*T)).*h);
 
 % Mach number
 a  = sqrt(k.*R_air.*T); % m/s, local speed of sound

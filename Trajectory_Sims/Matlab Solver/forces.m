@@ -10,7 +10,7 @@
 
 % Split each force into x and y for earth centered components
 
-function [f_x, f_y, moment] = forces(t, t_step, r, u, T, current_mass, wind, aerodata, rocket, CP, CM)
+function [f_x, f_y, moment, Fdrag, Flift, CD, CL, aoa, gravity] = forces(t, t_step, r, u, T, current_mass, wind, aerodata, rocket, CP, CM)
 
 theta = r(3); % wrt to the vertical (normal to the earth's surface)
 
@@ -33,7 +33,7 @@ else
 end
 
 % where do we assign direction / theta and signs
-[Fdrag, Flift] = aerodynamics(t, r, u, wind, aerodata, rocket);
+[Fdrag, Flift, CD, CL, aoa] = aerodynamics(r, u, wind, aerodata, rocket);
 
 % lift
 Lx = cosd(theta)*Flift;
@@ -54,13 +54,15 @@ if r(2) <= site_elevation
     gravity = 0;
 end
 
+if wind >= 0; dir = 1; else dir = -1; end % change direction of wind
+
 % Requires CM and CP distance from bottom of the rocket
 if u(2) >= 0
-    f_x = Tx + Lx - Dx;
+    f_x = Tx + Lx + dir*Dx;
     f_y = Ty + Ly - Dy  - gravity;
     moment = (Lx - Dx)*cosd(theta)*(CP-CM) + (Dy + Ly)*sind(theta)*(CP-CM);
 else
-    f_x = Dx;
+    f_x = dir*Dx;
     f_y = Dy - gravity;
     moment = 0; %not worth it
 end

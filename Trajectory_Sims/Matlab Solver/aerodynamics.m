@@ -2,13 +2,15 @@
 % Defines the aerodynamic forces acting on the rocket
 % Ian Gomez, Rushal Rege 04/11/2017
 
-function [Fdrag, Flift] = aerodynamics(t, r, u, wind, aerodata, rocket)
+function [Fdrag, Flift, CD, CL, aoa] = aerodynamics(r, u, wind, aerodata, rocket)
 % rev 0 = simple drag model (1/2 rho CD v^2)
 % rev 1 = use CD table from RASAero
 % rev 2 = use OpenRocket subsonic drag and call RASAero drag past transonic
 
 % find angle of attack; see photo for help
 % mathisfun.com/algebra/trig-solving-sas-triangles
+ux = u(1);
+uy = u(2);
 umag = norm(u(1:2));
 phi = 90-r(3);
 resultant = umag.^2 + wind.^2 - 2.*umag.*wind.*cosd(phi);
@@ -54,8 +56,8 @@ if u(2) >= 0
         CD = weight * aerodata(k,4) + (1-weight) * aerodata(k,3);
         CL = weight * aerodata(k,7) + (1-weight) * aerodata(k,6);
     else
-        CD = 1e8; % yikes
-        CL = 1e8; % yikes
+        CD = 1e3; % yikes
+        CL = 1e3; % yikes
         disp('yo, aoa > 4')
     end
     
@@ -66,10 +68,19 @@ if u(2) >= 0
     Flift = CL .* S .* 0.5 .* rho .* (sind(aoa) .* umag).^2;
     
 elseif u(2) < rocket.drogue.deploy_u && r(2) > rocket.main.deploy_h
-    Fdrag = 20;
-    Flift = 0;
-else
-    Fdrag = 100;
+    CD = 0;
+    CL = 1;
+    Fdrag = rocket.drogue.Cd.*rocket.drogue.S.*0.5.*rho.*umag.^2;
+    Flift = CL.*rocket.l.*rocket.OD.*0.5.*rho.*(ux-wind).^2; % need to fix
+elseif r(2) < rocket.main.deploy_h
+    CD = 0;
+    CL = 1;
+    Fdrag = rocket.main.Cd.*rocket.main.S.*0.5.*rho.*umag.^2;
+    Flift = CL.*rocket.l.*rocket.OD.*0.5.*rho.*(ux-wind).^2; % need to fix
+else 
+    CD = 0; 
+    CL = 0;
+    Fdrag = 0;
     Flift = 0;
 end
 
