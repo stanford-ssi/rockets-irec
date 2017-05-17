@@ -48,34 +48,34 @@ var keyBindings = {
 var functionInfoTable = {
  MATLABcode1: "dot1_mcode.html",
  fpath1: "#solver_simulink:10",
- lines1: [1, 1, 41],
+ lines1: [1, 1, 40],
  watch1: "dot1_watch.html",
  title1: "Function: <span class='functionname'><a title='' class='functionlink' href=\"matlab: sfprivate('eml_report_manager', 'openEditorFromChecksum', 'UuZMioJFSMo1LARZRVd4fD');\">dot</a></span>",
  tcall1: [  ],
- scall1: [ , [ "From line 28 to forces", "35#srcline13" ] ],
- positions1: [1, 1125],
+ scall1: [ , [ "From line 27 to forces", "35#srcline13" ] ],
+ positions1: [1, 1094],
  MATLABcode35: "forces35_mcode.html",
  fpath35: "C:/Users/ME123/Github/rockets-irec/Trajectory_Sims/Matlab Solver/forces.m",
- lines35: [1, 13, 72],
+ lines35: [1, 13, 78],
  watch35: "forces35_watch.html",
  title35: "Function: <span class='functionname'><a title='C:&nbsp;\\Users\\ME123\\Github\\rockets-irec\\Trajectory_Sims\\Matlab&nbsp;Solver\\forces.m' class='functionlink' href=\"matlab: open('C:\\Users\\ME123\\Github\\rockets-irec\\Trajectory_Sims\\Matlab Solver\\forces.m')\">forces</a></span>",
- tcall35: [ [ "From dot line 28", "1#F35N5:B132" ] ],
- scall35: [ [ "From line 37 to aerodynamics", "49#srcline5" ] ],
- positions35: [395, 1818],
+ tcall35: [ [ "From dot line 27", "1#F35N5:B132" ] ],
+ scall35: [ [ "From line 38 to aerodynamics", "49#srcline5" ] ],
+ positions35: [395, 1971],
  MATLABcode49: "aerodynamics49_mcode.html",
  fpath49: "C:/Users/ME123/Github/rockets-irec/Trajectory_Sims/Matlab Solver/aerodynamics.m",
- lines49: [1, 5, 93],
+ lines49: [1, 5, 94],
  watch49: "aerodynamics49_watch.html",
  title49: "Function: <span class='functionname'><a title='C:&nbsp;\\Users\\ME123\\Github\\rockets-irec\\Trajectory_Sims\\Matlab&nbsp;Solver\\aerodynamics.m' class='functionlink' href=\"matlab: open('C:\\Users\\ME123\\Github\\rockets-irec\\Trajectory_Sims\\Matlab Solver\\aerodynamics.m')\">aerodynamics</a></span>",
- tcall49: [ [ "From forces line 37", "35#F49N2:B115" ] ],
- scall49: [ [ "From line 20 to getAtmoConditions", "68#srcline8" ],  ],
- positions49: [107, 2750],
+ tcall49: [ [ "From forces line 38", "35#F49N2:B121" ] ],
+ scall49: [ [ "From line 18 to getAtmoConditions", "68#srcline8" ],  ],
+ positions49: [107, 2688],
  MATLABcode68: "getAtmoConditions68_mcode.html",
  fpath68: "C:/Users/ME123/Github/rockets-irec/Trajectory_Sims/Matlab Solver/getAtmoConditions.m",
  lines68: [1, 8, 57],
  watch68: "getAtmoConditions68_watch.html",
  title68: "Function: <span class='functionname'><a title='C:&nbsp;\\Users\\ME123\\Github\\rockets-irec\\Trajectory_Sims\\Matlab&nbsp;Solver\\getAtmoConditions.m' class='functionlink' href=\"matlab: open('C:\\Users\\ME123\\Github\\rockets-irec\\Trajectory_Sims\\Matlab Solver\\getAtmoConditions.m')\">getAtmoConditions</a></span>",
- tcall68: [ [ "From aerodynamics line 20", "49#F68N6:B95" ] ],
+ tcall68: [ [ "From aerodynamics line 18", "49#F68N6:B95" ] ],
  scall68: [  ],
  positions68: [213, 1608],
  rootFcnID: "1",
@@ -176,10 +176,10 @@ var scriptInfoTable = {
 <option value="68">1 x 7</option>
 <option value="68">1 x 8</option>
 <option value="1 35 49">1 x 9</option>
-<option value="1 35">126 x 2</option>
-<option value="1 35 49">2501 x 7</option>
+<option value="1 35 49">2501 x 10</option>
 <option value="35 49">3 x 1</option>
 <option value="1">6 x 1</option>
+<option value="1 35">628 x 2</option>
 </select>
 </div>
 
@@ -213,9 +213,9 @@ var scriptInfoTable = {
 <div class="functionwrapper" onmouseover="callTreeMouseOver(event);" onmouseout="callTreeMouseOut(event);" onclick="functionTreeClick(event);">
 <ol class="tree">
 <!-- Begin Function Tree Roots -->
-<li class="leaf  failed"><a href="#" class="fcn  ED20 ED21 ED22 ED23 ED24 " id="F49N2:F1">aerodynamics</a></li>
-<li class="leaf  failed"><a href="#" class="fcn  ED1 ED2 ED3 " id="F1N4:F2">dot</a></li>
-<li class="leaf  failed"><a href="#" class="fcn  ED4 ED5 ED6 ED7 ED8 ED9 ED10 ED11 ED12 ED13 ED14 ED15 ED16 ED17 ED18 ED19 " id="F35N5:F3">forces</a></li>
+<li class="leaf  passed"><a href="#" class="fcn  " id="F49N2:F1">aerodynamics</a></li>
+<li class="leaf  failed"><a href="#" class="fcn  ED1 ED2 ED3 ED4 ED5 ED6 ED7 ED8 ED9 ED10 ED11 ED12 ED13 ED14 ED15 ED16 ED17 " id="F1N4:F2">dot</a></li>
+<li class="leaf  failed"><a href="#" class="fcn  ED18 " id="F35N5:F3">forces</a></li>
 <li class="leaf  passed"><a href="#" class="fcn  " id="F68N6:F4">getAtmoConditions</a></li>
 <!-- End Function Tree Roots -->
 </ol>
@@ -252,13 +252,13 @@ var scriptInfoTable = {
 
 <li class="node collapsed failed"><a href="#" class="fcn " id="F35N5:l3">forces</a>
 <ul>
-<li class="node collapsed failed"><a href="#" class="fcn " id="F49N2:l4">aerodynamics</a></li>
+<li class="node collapsed passed"><a href="#" class="fcn " id="F49N2:l4">aerodynamics</a></li>
 </ul>
 </li>
 </ol>
 <ol class="callstacknode" id="callstacknode49">
 
-<li class="node collapsed failed"><a href="#" class="fcn " id="F49N2:l5">aerodynamics</a>
+<li class="node collapsed passed"><a href="#" class="fcn " id="F49N2:l5">aerodynamics</a>
 <ul>
 <li class="leaf passed"><a href="#" class="fcn " id="F68N6:l6">getAtmoConditions</a></li>
 </ul>
@@ -280,8 +280,8 @@ var scriptInfoTable = {
 <div class="tooltips">
 <div class="tooltip" id="TT1"><table class="tooltip"><tr><th>Size</th><td>6 x 1</td></tr><tr><th>Class</th><td>double</td></tr><tr><th>Complex</th><td>No</td></tr></table></div>
 <div class="tooltip" id="TT2"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>double</td></tr><tr><th>Complex</th><td>No</td></tr></table></div>
-<div class="tooltip" id="TT3"><table class="tooltip"><tr><th>Size</th><td>126 x 2</td></tr><tr><th>Class</th><td>double</td></tr><tr><th>Complex</th><td>No</td></tr></table></div>
-<div class="tooltip" id="TT4"><table class="tooltip"><tr><th>Size</th><td>2501 x 7</td></tr><tr><th>Class</th><td>double</td></tr><tr><th>Complex</th><td>No</td></tr></table></div>
+<div class="tooltip" id="TT3"><table class="tooltip"><tr><th>Size</th><td>628 x 2</td></tr><tr><th>Class</th><td>double</td></tr><tr><th>Complex</th><td>No</td></tr></table></div>
+<div class="tooltip" id="TT4"><table class="tooltip"><tr><th>Size</th><td>2501 x 10</td></tr><tr><th>Class</th><td>double</td></tr><tr><th>Complex</th><td>No</td></tr></table></div>
 <div class="tooltip" id="TT5"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>struct</td></tr></table></div>
 <div class="tooltip" id="TT6"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>struct</td></tr></table></div>
 <div class="tooltip" id="TT7"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>struct</td></tr></table></div>
@@ -293,37 +293,38 @@ var scriptInfoTable = {
 <div class="tooltip" id="TT13"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>struct</td></tr></table></div>
 <div class="tooltip" id="TT14"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>struct</td></tr></table></div>
 <div class="tooltip" id="TT15"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>struct</td></tr></table></div>
-<div class="tooltip" id="TT16"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>logical</td></tr></table></div>
-<div class="tooltip" id="TT17"><table class="tooltip"><tr><th>Size</th><td>1 x 3</td></tr><tr><th>Class</th><td>char</td></tr></table></div>
-<div class="tooltip" id="TT18"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>function_handle</td></tr></table></div>
-<div class="tooltip" id="TT19"><table class="tooltip"><tr><th>Size</th><td>1 x 0</td></tr><tr><th>Class</th><td>cell</td></tr></table></div>
-<div class="tooltip" id="TT20"><table class="tooltip"><tr><th>Size</th><td>1 x 2</td></tr><tr><th>Class</th><td>cell</td></tr></table></div>
-<div class="tooltip" id="TT21"><table class="tooltip"><tr><th>Size</th><td>1 x 6</td></tr><tr><th>Class</th><td>char</td></tr></table></div>
-<div class="tooltip" id="TT22"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>cell</td></tr></table></div>
-<div class="tooltip" id="TT23"><table class="tooltip"><tr><th>Size</th><td>1 x 14</td></tr><tr><th>Class</th><td>char</td></tr></table></div>
-<div class="tooltip" id="TT24"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>function_handle</td></tr></table></div>
-<div class="tooltip" id="TT25"><table class="tooltip"><tr><th>Size</th><td>1 x 5</td></tr><tr><th>Class</th><td>char</td></tr></table></div>
-<div class="tooltip" id="TT26"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>function_handle</td></tr></table></div>
-<div class="tooltip" id="TT27"><table class="tooltip"><tr><th>Size</th><td>1 x 31</td></tr><tr><th>Class</th><td>char</td></tr></table></div>
-<div class="tooltip" id="TT28"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>mxArray</td></tr></table></div>
-<div class="tooltip" id="TT29"><table class="tooltip"><tr><th>Size</th><td>3 x 1</td></tr><tr><th>Class</th><td>double</td></tr><tr><th>Complex</th><td>No</td></tr></table></div>
-<div class="tooltip" id="TT30"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>double</td></tr><tr><th>Complex</th><td>No</td></tr></table></div>
-<div class="tooltip" id="TT31"><table class="tooltip"><tr><th>Size</th><td>2 x 1</td></tr><tr><th>Class</th><td>double</td></tr><tr><th>Complex</th><td>No</td></tr></table></div>
-<div class="tooltip" id="TT32"><table class="tooltip"><tr><th>Size</th><td>1 x 4</td></tr><tr><th>Class</th><td>char</td></tr></table></div>
-<div class="tooltip" id="TT33"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>function_handle</td></tr></table></div>
+<div class="tooltip" id="TT16"><table class="tooltip"><tr><th>Size</th><td>1 x 3</td></tr><tr><th>Class</th><td>double</td></tr><tr><th>Complex</th><td>No</td></tr></table></div>
+<div class="tooltip" id="TT17"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>logical</td></tr></table></div>
+<div class="tooltip" id="TT18"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>double</td></tr><tr><th>Complex</th><td>No</td></tr></table></div>
+<div class="tooltip" id="TT19"><table class="tooltip"><tr><th>Size</th><td>3 x 1</td></tr><tr><th>Class</th><td>double</td></tr><tr><th>Complex</th><td>No</td></tr></table></div>
+<div class="tooltip" id="TT20"><table class="tooltip"><tr><th>Size</th><td>1 x 3</td></tr><tr><th>Class</th><td>char</td></tr></table></div>
+<div class="tooltip" id="TT21"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>function_handle</td></tr></table></div>
+<div class="tooltip" id="TT22"><table class="tooltip"><tr><th>Size</th><td>1 x 0</td></tr><tr><th>Class</th><td>cell</td></tr></table></div>
+<div class="tooltip" id="TT23"><table class="tooltip"><tr><th>Size</th><td>1 x 2</td></tr><tr><th>Class</th><td>cell</td></tr></table></div>
+<div class="tooltip" id="TT24"><table class="tooltip"><tr><th>Size</th><td>1 x 6</td></tr><tr><th>Class</th><td>char</td></tr></table></div>
+<div class="tooltip" id="TT25"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>cell</td></tr></table></div>
+<div class="tooltip" id="TT26"><table class="tooltip"><tr><th>Size</th><td>1 x 14</td></tr><tr><th>Class</th><td>char</td></tr></table></div>
+<div class="tooltip" id="TT27"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>function_handle</td></tr></table></div>
+<div class="tooltip" id="TT28"><table class="tooltip"><tr><th>Size</th><td>1 x 5</td></tr><tr><th>Class</th><td>char</td></tr></table></div>
+<div class="tooltip" id="TT29"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>function_handle</td></tr></table></div>
+<div class="tooltip" id="TT30"><table class="tooltip"><tr><th>Size</th><td>1 x 31</td></tr><tr><th>Class</th><td>char</td></tr></table></div>
+<div class="tooltip" id="TT31"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>mxArray</td></tr></table></div>
+<div class="tooltip" id="TT32"><table class="tooltip"><tr><th>Size</th><td>2 x 1</td></tr><tr><th>Class</th><td>double</td></tr><tr><th>Complex</th><td>No</td></tr></table></div>
+<div class="tooltip" id="TT33"><table class="tooltip"><tr><th>Size</th><td>1 x 4</td></tr><tr><th>Class</th><td>char</td></tr></table></div>
 <div class="tooltip" id="TT34"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>function_handle</td></tr></table></div>
 <div class="tooltip" id="TT35"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>function_handle</td></tr></table></div>
-<div class="tooltip" id="TT36"><table class="tooltip"><tr><th>Size</th><td>1 x 11</td></tr><tr><th>Class</th><td>char</td></tr></table></div>
-<div class="tooltip" id="TT37"><table class="tooltip"><tr><th>Size</th><td>1 x 7</td></tr><tr><th>Class</th><td>char</td></tr></table></div>
-<div class="tooltip" id="TT38"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>function_handle</td></tr></table></div>
+<div class="tooltip" id="TT36"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>function_handle</td></tr></table></div>
+<div class="tooltip" id="TT37"><table class="tooltip"><tr><th>Size</th><td>1 x 11</td></tr><tr><th>Class</th><td>char</td></tr></table></div>
+<div class="tooltip" id="TT38"><table class="tooltip"><tr><th>Size</th><td>1 x 7</td></tr><tr><th>Class</th><td>char</td></tr></table></div>
 <div class="tooltip" id="TT39"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>function_handle</td></tr></table></div>
 <div class="tooltip" id="TT40"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>function_handle</td></tr></table></div>
-<div class="tooltip" id="TT41"><table class="tooltip"><tr><th>Size</th><td>1 x 30</td></tr><tr><th>Class</th><td>char</td></tr></table></div>
-<div class="tooltip" id="TT42"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>function_handle</td></tr></table></div>
-<div class="tooltip" id="TT43"><table class="tooltip"><tr><th>Size</th><td>1 x 8</td></tr><tr><th>Class</th><td>double</td></tr><tr><th>Complex</th><td>No</td></tr></table></div>
-<div class="tooltip" id="TT44"><table class="tooltip"><tr><th>Size</th><td>1 x 7</td></tr><tr><th>Class</th><td>double</td></tr><tr><th>Complex</th><td>No</td></tr></table></div>
-<div class="tooltip" id="TT45"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>function_handle</td></tr></table></div>
+<div class="tooltip" id="TT41"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>function_handle</td></tr></table></div>
+<div class="tooltip" id="TT42"><table class="tooltip"><tr><th>Size</th><td>1 x 30</td></tr><tr><th>Class</th><td>char</td></tr></table></div>
+<div class="tooltip" id="TT43"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>function_handle</td></tr></table></div>
+<div class="tooltip" id="TT44"><table class="tooltip"><tr><th>Size</th><td>1 x 8</td></tr><tr><th>Class</th><td>double</td></tr><tr><th>Complex</th><td>No</td></tr></table></div>
+<div class="tooltip" id="TT45"><table class="tooltip"><tr><th>Size</th><td>1 x 7</td></tr><tr><th>Class</th><td>double</td></tr><tr><th>Complex</th><td>No</td></tr></table></div>
 <div class="tooltip" id="TT46"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>function_handle</td></tr></table></div>
+<div class="tooltip" id="TT47"><table class="tooltip"><tr><th>Size</th><td>1 x 1</td></tr><tr><th>Class</th><td>function_handle</td></tr></table></div>
 </div>
 </div>
 <!-- End Tooltips -->
@@ -331,7 +332,7 @@ var scriptInfoTable = {
 <div class="south">
 <ul class="ui-tabs-nav">
 <li class="ui-tabs-nav-item"><span class="tab-link" id="summary"><span>Summary</span></span></li>
-<li class="ui-tabs-nav-item ui-tabs-selected"><span class="tab-link" id="messages"><span>All Messages (24)</span></span></li>
+<li class="ui-tabs-nav-item ui-tabs-selected"><span class="tab-link" id="messages"><span>All Messages (18)</span></span></li>
 <li class="ui-tabs-nav-item"><span class="tab-link" id="watchlist"><span>Variables</span></span></li>
 <li class="ui-tabs-nav-item hidden"><span class="tab-link" id="watchload"><span>Variables</span></span></li>
 </ul>
@@ -339,8 +340,8 @@ var scriptInfoTable = {
 <!-- Compilation Summary -->
 <div id="summarybody" class="ui-tabs-panel hidden">
 <table cellpadding="1" cellspacing="4">
-<tr><td>MATLAB code generation attempted on:</td><td>16-May-2017 01:31:28</td></tr>
-<tr><td>Number of errors:</td><td><a href="javascript:selectMessagesTab();">24</a></td></tr>
+<tr><td>MATLAB code generation attempted on:</td><td>16-May-2017 23:41:42</td></tr>
+<tr><td>Number of errors:</td><td><a href="javascript:selectMessagesTab();">18</a></td></tr>
 <tr><td>Number of warnings:</td><td><a href="javascript:selectMessagesTab();">0</a></td></tr>
 <tr><td>Number of notices:</td><td><a href="javascript:selectMessagesTab();">0</a></td></tr>
 </table>
@@ -364,173 +365,131 @@ var scriptInfoTable = {
 </tr>
 </thead>
 <tbody onmouseover="messagesMouseOver(event);" onmouseout="messagesMouseOut(event);" onclick="messagesClick(event);">
-<tr class="message error" id="M20F49">
+<tr class="message error" id="M18F35">
 <td class="msgorder" headers="msgorder"><a href="#">1</a></td>
 <td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>aerodynamics</div></td>
-<td class="location" headers="location"><div>53</div></td>
-<td class="text" headers="text"><div>Index expression out of bounds. Attempted to access element 9. The valid range is 1-7.<br/><a href="matlab:helpview('C:/Program Files/MATLAB/R2016b/help/coder/helptargets.map','msginfo_Coder_builtins_IndexOutOfBounds');">More information</a></div></td>
-</tr>
-<tr class="message error" id="M21F49">
-<td class="msgorder" headers="msgorder"><a href="#">2</a></td>
-<td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>aerodynamics</div></td>
-<td class="location" headers="location"><div>58</div></td>
-<td class="text" headers="text"><div>Index expression out of bounds. Attempted to access element 10. The valid range is 1-7.<br/><a href="matlab:helpview('C:/Program Files/MATLAB/R2016b/help/coder/helptargets.map','msginfo_Coder_builtins_IndexOutOfBounds');">More information</a></div></td>
-</tr>
-<tr class="message error" id="M22F49">
-<td class="msgorder" headers="msgorder"><a href="#">3</a></td>
-<td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>aerodynamics</div></td>
-<td class="location" headers="location"><div>75</div></td>
-<td class="text" headers="text"><div>Index expression out of bounds. Attempted to access element 8. The valid range is 1-7.<br/><a href="matlab:helpview('C:/Program Files/MATLAB/R2016b/help/coder/helptargets.map','msginfo_Coder_builtins_IndexOutOfBounds');">More information</a></div></td>
-</tr>
-<tr class="message error" id="M23F49">
-<td class="msgorder" headers="msgorder"><a href="#">4</a></td>
-<td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>aerodynamics</div></td>
-<td class="location" headers="location"><div>81</div></td>
-<td class="text" headers="text"><div>Index expression out of bounds. Attempted to access element 8. The valid range is 1-7.<br/><a href="matlab:helpview('C:/Program Files/MATLAB/R2016b/help/coder/helptargets.map','msginfo_Coder_builtins_IndexOutOfBounds');">More information</a></div></td>
-</tr>
-<tr class="message error" id="M24F49">
-<td class="msgorder" headers="msgorder"><a href="#">5</a></td>
-<td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>aerodynamics</div></td>
-<td class="location" headers="location"><div>87</div></td>
-<td class="text" headers="text"><div>Index expression out of bounds. Attempted to access element 8. The valid range is 1-7.<br/><a href="matlab:helpview('C:/Program Files/MATLAB/R2016b/help/coder/helptargets.map','msginfo_Coder_builtins_IndexOutOfBounds');">More information</a></div></td>
-</tr>
-<tr class="message error" id="M4F35">
-<td class="msgorder" headers="msgorder"><a href="#">6</a></td>
-<td class="failed" headers="msgtype"></td>
 <td class="function" headers="function"><div>forces</div></td>
-<td class="location" headers="location"><div>37</div></td>
-<td class="text" headers="text"><div>Function call failed.</div></td>
-</tr>
-<tr class="message error" id="M5F35">
-<td class="msgorder" headers="msgorder"><a href="#">7</a></td>
-<td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>forces</div></td>
-<td class="location" headers="location"><div>37</div></td>
-<td class="text" headers="text"><div>Undefined function or variable 'Fdrag'. The first assignment to a local variable determines its class.</div></td>
-</tr>
-<tr class="message error" id="M6F35">
-<td class="msgorder" headers="msgorder"><a href="#">8</a></td>
-<td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>forces</div></td>
-<td class="location" headers="location"><div>37</div></td>
-<td class="text" headers="text"><div>Undefined function or variable 'Flift'. The first assignment to a local variable determines its class.</div></td>
-</tr>
-<tr class="message error" id="M7F35">
-<td class="msgorder" headers="msgorder"><a href="#">9</a></td>
-<td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>forces</div></td>
-<td class="location" headers="location"><div>37</div></td>
-<td class="text" headers="text"><div>Undefined function or variable 'CD'. The first assignment to a local variable determines its class.</div></td>
-</tr>
-<tr class="message error" id="M8F35">
-<td class="msgorder" headers="msgorder"><a href="#">10</a></td>
-<td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>forces</div></td>
-<td class="location" headers="location"><div>37</div></td>
-<td class="text" headers="text"><div>Undefined function or variable 'CL'. The first assignment to a local variable determines its class.</div></td>
-</tr>
-<tr class="message error" id="M9F35">
-<td class="msgorder" headers="msgorder"><a href="#">11</a></td>
-<td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>forces</div></td>
-<td class="location" headers="location"><div>37</div></td>
-<td class="text" headers="text"><div>Undefined function or variable 'aoa'. The first assignment to a local variable determines its class.</div></td>
-</tr>
-<tr class="message error" id="M10F35">
-<td class="msgorder" headers="msgorder"><a href="#">12</a></td>
-<td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>forces</div></td>
-<td class="location" headers="location"><div>37</div></td>
-<td class="text" headers="text"><div>Undefined function or variable 'CP'. The first assignment to a local variable determines its class.</div></td>
-</tr>
-<tr class="message error" id="M11F35">
-<td class="msgorder" headers="msgorder"><a href="#">13</a></td>
-<td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>forces</div></td>
-<td class="location" headers="location"><div>40</div></td>
-<td class="text" headers="text"><div>Undefined function or variable 'Flift'. The first assignment to a local variable determines its class.</div></td>
-</tr>
-<tr class="message error" id="M12F35">
-<td class="msgorder" headers="msgorder"><a href="#">14</a></td>
-<td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>forces</div></td>
-<td class="location" headers="location"><div>41</div></td>
-<td class="text" headers="text"><div>Undefined function or variable 'Flift'. The first assignment to a local variable determines its class.</div></td>
-</tr>
-<tr class="message error" id="M13F35">
-<td class="msgorder" headers="msgorder"><a href="#">15</a></td>
-<td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>forces</div></td>
-<td class="location" headers="location"><div>44</div></td>
-<td class="text" headers="text"><div>Undefined function or variable 'Fdrag'. The first assignment to a local variable determines its class.</div></td>
-</tr>
-<tr class="message error" id="M14F35">
-<td class="msgorder" headers="msgorder"><a href="#">16</a></td>
-<td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>forces</div></td>
-<td class="location" headers="location"><div>45</div></td>
-<td class="text" headers="text"><div>Undefined function or variable 'Fdrag'. The first assignment to a local variable determines its class.</div></td>
-</tr>
-<tr class="message error" id="M15F35">
-<td class="msgorder" headers="msgorder"><a href="#">17</a></td>
-<td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>forces</div></td>
-<td class="location" headers="location"><div>62</div></td>
-<td class="text" headers="text"><div>Undefined function or variable 'Lx'. The first assignment to a local variable determines its class.</div></td>
-</tr>
-<tr class="message error" id="M16F35">
-<td class="msgorder" headers="msgorder"><a href="#">18</a></td>
-<td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>forces</div></td>
-<td class="location" headers="location"><div>63</div></td>
-<td class="text" headers="text"><div>Undefined function or variable 'Ly'. The first assignment to a local variable determines its class.</div></td>
-</tr>
-<tr class="message error" id="M17F35">
-<td class="msgorder" headers="msgorder"><a href="#">19</a></td>
-<td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>forces</div></td>
-<td class="location" headers="location"><div>64</div></td>
-<td class="text" headers="text"><div>Undefined function or variable 'Lx'. The first assignment to a local variable determines its class.</div></td>
-</tr>
-<tr class="message error" id="M18F35">
-<td class="msgorder" headers="msgorder"><a href="#">20</a></td>
-<td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>forces</div></td>
-<td class="location" headers="location"><div>66</div></td>
-<td class="text" headers="text"><div>Undefined function or variable 'Dx'. The first assignment to a local variable determines its class.</div></td>
-</tr>
-<tr class="message error" id="M19F35">
-<td class="msgorder" headers="msgorder"><a href="#">21</a></td>
-<td class="failed" headers="msgtype"></td>
-<td class="function" headers="function"><div>forces</div></td>
-<td class="location" headers="location"><div>67</div></td>
-<td class="text" headers="text"><div>Undefined function or variable 'Dy'. The first assignment to a local variable determines its class.</div></td>
+<td class="location" headers="location"><div>13</div></td>
+<td class="text" headers="text"><div>Output argument 'f_x' is not assigned on some execution paths.</div></td>
 </tr>
 <tr class="message error" id="M1F1">
-<td class="msgorder" headers="msgorder"><a href="#">22</a></td>
+<td class="msgorder" headers="msgorder"><a href="#">2</a></td>
 <td class="failed" headers="msgtype"></td>
 <td class="function" headers="function"><div>dot</div></td>
-<td class="location" headers="location"><div>28</div></td>
+<td class="location" headers="location"><div>27</div></td>
 <td class="text" headers="text"><div>Function call failed.</div></td>
 </tr>
 <tr class="message error" id="M2F1">
-<td class="msgorder" headers="msgorder"><a href="#">23</a></td>
+<td class="msgorder" headers="msgorder"><a href="#">3</a></td>
 <td class="failed" headers="msgtype"></td>
 <td class="function" headers="function"><div>dot</div></td>
-<td class="location" headers="location"><div>28</div></td>
+<td class="location" headers="location"><div>27</div></td>
 <td class="text" headers="text"><div>Undefined function or variable 'f_x'. The first assignment to a local variable determines its class.</div></td>
 </tr>
-<tr class="message fatal" id="M3F1">
-<td class="msgorder" headers="msgorder"><a href="#">24</a></td>
+<tr class="message error" id="M3F1">
+<td class="msgorder" headers="msgorder"><a href="#">4</a></td>
 <td class="failed" headers="msgtype"></td>
 <td class="function" headers="function"><div>dot</div></td>
-<td class="location" headers="location"><div>28</div></td>
-<td class="text" headers="text"><div>Error limit reached.  Suppressing further error messages.</div></td>
+<td class="location" headers="location"><div>27</div></td>
+<td class="text" headers="text"><div>Undefined function or variable 'f_y'. The first assignment to a local variable determines its class.</div></td>
+</tr>
+<tr class="message error" id="M4F1">
+<td class="msgorder" headers="msgorder"><a href="#">5</a></td>
+<td class="failed" headers="msgtype"></td>
+<td class="function" headers="function"><div>dot</div></td>
+<td class="location" headers="location"><div>27</div></td>
+<td class="text" headers="text"><div>Undefined function or variable 'moment'. The first assignment to a local variable determines its class.</div></td>
+</tr>
+<tr class="message error" id="M5F1">
+<td class="msgorder" headers="msgorder"><a href="#">6</a></td>
+<td class="failed" headers="msgtype"></td>
+<td class="function" headers="function"><div>dot</div></td>
+<td class="location" headers="location"><div>27</div></td>
+<td class="text" headers="text"><div>Undefined function or variable 'drag'. The first assignment to a local variable determines its class.</div></td>
+</tr>
+<tr class="message error" id="M6F1">
+<td class="msgorder" headers="msgorder"><a href="#">7</a></td>
+<td class="failed" headers="msgtype"></td>
+<td class="function" headers="function"><div>dot</div></td>
+<td class="location" headers="location"><div>27</div></td>
+<td class="text" headers="text"><div>Undefined function or variable 'lift'. The first assignment to a local variable determines its class.</div></td>
+</tr>
+<tr class="message error" id="M7F1">
+<td class="msgorder" headers="msgorder"><a href="#">8</a></td>
+<td class="failed" headers="msgtype"></td>
+<td class="function" headers="function"><div>dot</div></td>
+<td class="location" headers="location"><div>27</div></td>
+<td class="text" headers="text"><div>Undefined function or variable 'CD'. The first assignment to a local variable determines its class.</div></td>
+</tr>
+<tr class="message error" id="M8F1">
+<td class="msgorder" headers="msgorder"><a href="#">9</a></td>
+<td class="failed" headers="msgtype"></td>
+<td class="function" headers="function"><div>dot</div></td>
+<td class="location" headers="location"><div>27</div></td>
+<td class="text" headers="text"><div>Undefined function or variable 'CL'. The first assignment to a local variable determines its class.</div></td>
+</tr>
+<tr class="message error" id="M9F1">
+<td class="msgorder" headers="msgorder"><a href="#">10</a></td>
+<td class="failed" headers="msgtype"></td>
+<td class="function" headers="function"><div>dot</div></td>
+<td class="location" headers="location"><div>27</div></td>
+<td class="text" headers="text"><div>Undefined function or variable 'aoa'. The first assignment to a local variable determines its class.</div></td>
+</tr>
+<tr class="message error" id="M10F1">
+<td class="msgorder" headers="msgorder"><a href="#">11</a></td>
+<td class="failed" headers="msgtype"></td>
+<td class="function" headers="function"><div>dot</div></td>
+<td class="location" headers="location"><div>27</div></td>
+<td class="text" headers="text"><div>Undefined function or variable 'W'. The first assignment to a local variable determines its class.</div></td>
+</tr>
+<tr class="message error" id="M11F1">
+<td class="msgorder" headers="msgorder"><a href="#">12</a></td>
+<td class="failed" headers="msgtype"></td>
+<td class="function" headers="function"><div>dot</div></td>
+<td class="location" headers="location"><div>29</div></td>
+<td class="text" headers="text"><div>Undefined function or variable 'f_x'. The first assignment to a local variable determines its class.</div></td>
+</tr>
+<tr class="message error" id="M12F1">
+<td class="msgorder" headers="msgorder"><a href="#">13</a></td>
+<td class="failed" headers="msgtype"></td>
+<td class="function" headers="function"><div>dot</div></td>
+<td class="location" headers="location"><div>32</div></td>
+<td class="text" headers="text"><div>Undefined function or variable 'f_x'. The first assignment to a local variable determines its class.</div></td>
+</tr>
+<tr class="message error" id="M13F1">
+<td class="msgorder" headers="msgorder"><a href="#">14</a></td>
+<td class="failed" headers="msgtype"></td>
+<td class="function" headers="function"><div>dot</div></td>
+<td class="location" headers="location"><div>33</div></td>
+<td class="text" headers="text"><div>Undefined function or variable 'f_y'. The first assignment to a local variable determines its class.</div></td>
+</tr>
+<tr class="message error" id="M14F1">
+<td class="msgorder" headers="msgorder"><a href="#">15</a></td>
+<td class="failed" headers="msgtype"></td>
+<td class="function" headers="function"><div>dot</div></td>
+<td class="location" headers="location"><div>34</div></td>
+<td class="text" headers="text"><div>Undefined function or variable 'moment'. The first assignment to a local variable determines its class.</div></td>
+</tr>
+<tr class="message error" id="M15F1">
+<td class="msgorder" headers="msgorder"><a href="#">16</a></td>
+<td class="failed" headers="msgtype"></td>
+<td class="function" headers="function"><div>dot</div></td>
+<td class="location" headers="location"><div>35</div></td>
+<td class="text" headers="text"><div>Undefined function or variable 'a_x'. The first assignment to a local variable determines its class.</div></td>
+</tr>
+<tr class="message error" id="M16F1">
+<td class="msgorder" headers="msgorder"><a href="#">17</a></td>
+<td class="failed" headers="msgtype"></td>
+<td class="function" headers="function"><div>dot</div></td>
+<td class="location" headers="location"><div>36</div></td>
+<td class="text" headers="text"><div>Undefined function or variable 'a_y'. The first assignment to a local variable determines its class.</div></td>
+</tr>
+<tr class="message error" id="M17F1">
+<td class="msgorder" headers="msgorder"><a href="#">18</a></td>
+<td class="failed" headers="msgtype"></td>
+<td class="function" headers="function"><div>dot</div></td>
+<td class="location" headers="location"><div>37</div></td>
+<td class="text" headers="text"><div>Undefined function or variable 'alpha'. The first assignment to a local variable determines its class.</div></td>
 </tr>
 </tbody>
 </table>
