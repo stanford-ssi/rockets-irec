@@ -26,6 +26,8 @@ int xBeeRX = 7; // Connect Arduino pin 8 to Xbee TX pin
 int xBeeTX = 8; // Connect Arduino pin 9 to Xbee RX pin
 int rssi = 9; // RSSI digitalPin
 int ledPin = 13; //LED
+int val = 0; // storage value
+float alpha = 2.0/(1+15);
 
 SoftwareSerial xBeeSerial(xBeeRX, xBeeTX);// Define SoftwareSerial xBeeSerial RX/TX pins
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
@@ -43,16 +45,19 @@ void setup() {
 
 void loop() {
   rssiDur = pulseIn(rssi, LOW);
-//  Serial.print(" Strength: ");
-//  Serial.print(rssiDur);
-//  Serial.println();
+  val = (alpha * rssiDur) + ((1.0 - alpha) * val);
+  Serial.print(" Strength: ");
+  Serial.print(val);
+  Serial.println();
   lcd.clear();
   lcd.print(" Strength: ");
-  lcd.print(rssiDur);
+  lcd.print(val);
   digitalWrite(ledPin, HIGH);
-  delay(50);
+  delay(100);
   digitalWrite(ledPin, LOW);
 }
+
+
 
 //  
 //  if (xBeeSerial.available()) {
