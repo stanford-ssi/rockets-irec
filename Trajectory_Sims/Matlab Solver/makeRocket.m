@@ -13,7 +13,7 @@
 
 % Note: Only final launch will be simulated for now
 
-function [rocket] = makeRocket()
+function [rocket] = makeRocket(ballast)
 
 lbs2kg = 0.453592;   % kg/lbs
 in2m   = 0.0254;     % m/in
@@ -22,8 +22,8 @@ ft2m   = 0.3048;     % m/ft
 %%% General Parameters
 
 rocket.OD = 4*in2m;          % in, outter diameter
-rocket.drymass = 43*lbs2kg;     % lb
-rocket.wetmass = 62.8*lbs2kg;     % lb
+rocket.drymass = (43+ballast)*lbs2kg;     % lb
+rocket.wetmass = (62.8+ballast)*lbs2kg;     % lb
 
 %%% Structures
 % Assumptions: nose cone shoulder diameter is the same as the body

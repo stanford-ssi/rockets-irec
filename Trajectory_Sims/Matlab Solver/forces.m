@@ -10,7 +10,8 @@
 
 % Split each force into x and y for earth centered components
 
-function [f_x, f_y, moment, Fdrag, Flift, CD, CL, aoa, gravity] = forces(t, t_step, r, u, T, current_mass, wind, aerodata, rocket, CP, CM)
+function [f_x, f_y, moment, Fdrag, Flift, CD, CL, aoa, gravity] = ...
+    forces(t, t_step, r, u, T, current_mass, wind, aerodata, rocket, CM)
 
 theta = r(3); % wrt to the vertical (normal to the earth's surface)
 
@@ -33,7 +34,7 @@ else
 end
 
 % where do we assign direction / theta and signs
-[Fdrag, Flift, CD, CL, aoa] = aerodynamics(r, u, wind, aerodata, rocket);
+[Fdrag, Flift, CD, CL, aoa, CP] = aerodynamics(r, u, wind, aerodata, rocket);
 
 % lift
 Lx = cosd(theta)*Flift;
