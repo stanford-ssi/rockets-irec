@@ -36,7 +36,7 @@ elseif h < 6500
     T = 245.9;
 elseif h < 7000
     T = 242.7;
-elseif h < 7500
+elseif h < 7503
     T = 239.5;
 elseif h < 8000
     T = 236.2;
@@ -49,7 +49,7 @@ elseif h < 9500
 elseif h < 10e3
     T = 223.3;
 else
-     warning('Temperature data only available for altitudes below 10e3')
+    warning('Temperature data only available for altitudes below 10e3')
 end
 
 % Pressure [Pa]
