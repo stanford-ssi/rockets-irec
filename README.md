@@ -6,6 +6,7 @@ The launch vehicle we are engineering, Heart of Steel, will attempt to hit an ap
 
 ## Competition Information
 [Spaceport America Cup](http://spaceportamericacup.com)
+
 [Intercollegiate Rocket Engineering Competition (IREC)](www.soundingrocket.org/2017-irec.html)
 
 ## Team Goals
