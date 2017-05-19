@@ -4,7 +4,8 @@
  * Stanford SSI Rockets IREC 2017
  * R.Wong
  * 
- * rev 1.0 2017-05-01
+ * rev 1.0 2017-05-01 Working Serial Display
+ * rev 1.1 2017-05-18 Working with LCD Display.
  * 
  * LCD Display Circuit:
  * LCD RS pin to digital pin 12
@@ -27,7 +28,7 @@ int xBeeTX = 8; // Connect Arduino pin 9 to Xbee RX pin
 int rssi = 9; // RSSI digitalPin
 int ledPin = 13; //LED
 int val = 0; // storage value
-float alpha = 2.0/(1+15);
+float alpha = 2.0/(1+15); // filter constant (smaller = longer delay)
 
 SoftwareSerial xBeeSerial(xBeeRX, xBeeTX);// Define SoftwareSerial xBeeSerial RX/TX pins
 LiquidCrystal lcd(12, 11, 5, 4, 3, 2);
