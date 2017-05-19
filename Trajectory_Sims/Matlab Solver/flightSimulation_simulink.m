@@ -28,7 +28,7 @@ CM = 73.673*in2m; % inches from nose
 % set up sim length
 ind = 2; times = {'60', '80' '120', '480'};
 stoptime = times{ind};
-maxstep = 0.1;
+maxstep = 0.001;
 
 % run the sim
 save('import2simulink','rocket');
