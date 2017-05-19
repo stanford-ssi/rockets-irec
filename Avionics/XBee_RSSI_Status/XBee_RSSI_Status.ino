@@ -36,8 +36,8 @@ unsigned long rssiDur;
 
 void setup() {
   // initialize both serial ports:
-  Serial.begin(115200);
-  xBeeSerial.begin(115200);
+  Serial.begin(9600);
+  xBeeSerial.begin(9600);
   lcd.begin(16, 2);
   pinMode(rssi, INPUT);
   pinMode(ledPin, OUTPUT);
