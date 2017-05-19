@@ -46,10 +46,10 @@ void setup() {
 
 void loop() {
   rssiDur = pulseIn(rssi, LOW);
-  val = (alpha * rssiDur) + ((1.0 - alpha) * val);
-  Serial.print(" Strength: ");
-  Serial.print(val);
-  Serial.println();
+  val = (alpha * rssiDur) + ((1.0 - alpha) * val); // exp running average filter
+//  Serial.print(" Strength: ");
+//  Serial.print(val);
+//  Serial.println();
   lcd.clear();
   lcd.print(" Strength: ");
   lcd.print(val);
