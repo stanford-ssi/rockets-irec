@@ -2,7 +2,8 @@
 % Defines the aerodynamic forces acting on the rocket
 % Ian Gomez, Rushal Rege 04/11/2017
 
-function [Fdrag, Flift, CD, CL, aoa, CP] = aerodynamics(r, u, wind, aerodata, rocket)
+function [Fdrag, Flift, CD, CL, aoa, CP] = aerodynamics(r, u, wind, ...
+    aerodata, rocket, site_elevation, T0)
 % rev 2 = use OpenRocket subsonic drag and call RASAero drag past transonic
 
 % find angle of attack; see photo for help
@@ -16,7 +17,7 @@ lambda = asind(wind.*sind(phi)./resultant);
 aoa = 180 - lambda - phi; %%
 
 % Calculate atmosphere
-[~, ~, rho, local_c, mu] = getAtmoConditions(r(2));
+[~, ~, rho, local_c, mu] = getAtmoConditions(r(2), site_elevation, T0);
 
 % Check for mach number
 mach = umag/local_c;

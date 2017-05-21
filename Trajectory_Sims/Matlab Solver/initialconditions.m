@@ -13,6 +13,7 @@ motor.name  = 'N2900';
 % Local site conditions and make rocket struct
 % Note: measure CP and CM from nose of rocket
 site_elevation = NM; % m
+T0 = 288;
 goal = 9144;
 goalkft = 30e3; % ft
 band = 2e3; % ft

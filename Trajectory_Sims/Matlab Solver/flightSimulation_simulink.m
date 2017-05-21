@@ -14,7 +14,7 @@ disp('%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%')
 %% Setup and run sim
 wind = 0; % m/s
 launch_angle = 7;
-rINT = [0, site_elevation, launch_angle]; % m, position,         r = [x,  y,  theta]
+rINT = [0, site_elevation, launch_angle]; % m, position, r = [x,  y,  theta]
 %     ballast = ballasts(i);
 ballast = 0;
 
@@ -28,7 +28,7 @@ CM = 73.673*in2m; % inches from nose
 % set up sim length
 ind = 2; times = {'60', '80' '120', '480'};
 stoptime = times{ind};
-maxstep = 0.001;
+maxstep = 0.1;
 
 % run the sim
 save('import2simulink','rocket');
@@ -90,10 +90,10 @@ titlestring = strcat(ballaststring, thetastring);
 figure(1); set(gcf,'color','w'); hold on % in imperial units
 goal_line = goalkft.*ones(1,length(tout));
 alt = ry.*m2ft;
-p = patch([0, xend, xend, 0],...
-    [(goalkft-band)/scaling, (goalkft-band)/scaling,...
-    (goalkft+band)/scaling, (goalkft+band)/scaling],'g', 'EdgeColor', 'none'); 
-set(p,'FaceAlpha',0.25);
+% p = patch([0, xend, xend, 0],...
+%     [(goalkft-band)/scaling, (goalkft-band)/scaling,...
+%     (goalkft+band)/scaling, (goalkft+band)/scaling],'g', 'EdgeColor', 'none'); 
+% set(p,'FaceAlpha',0.25);
 plot(tout, goal_line./scaling,'--')
 plot(tout, alt./scaling)
 plot(ras_t,ras_alt./scaling)
