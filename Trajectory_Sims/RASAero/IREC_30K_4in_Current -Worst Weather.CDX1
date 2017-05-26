@@ -6,13 +6,13 @@
       <Length>15.52</Length>
       <Diameter>4.04</Diameter>
       <Shape>Parabolic</Shape>
-      <BluntRadius>0.0625</BluntRadius>
+      <BluntRadius>0</BluntRadius>
       <Location>0</Location>
       <Color>Black</Color>
     </NoseCone>
     <BodyTube>
       <PartType>BodyTube</PartType>
-      <Length>116.1</Length>
+      <Length>114.1</Length>
       <Diameter>4.04</Diameter>
       <LaunchLugDiameter>0</LaunchLugDiameter>
       <LaunchLugLength>0</LaunchLugLength>
@@ -53,10 +53,10 @@
   <LaunchSite>
     <Altitude>4596</Altitude>
     <Pressure>0</Pressure>
-    <RodAngle>5</RodAngle>
+    <RodAngle>7</RodAngle>
     <RodLength>18</RodLength>
-    <Temperature>95</Temperature>
-    <WindSpeed>8</WindSpeed>
+    <Temperature>75</Temperature>
+    <WindSpeed>20</WindSpeed>
   </LaunchSite>
   <Recovery>
     <Altitude1>1000</Altitude1>
@@ -76,7 +76,7 @@
   <SimulationList>
     <Simulation>
       <SustainerEngine>N2900-CL  (CTI)</SustainerEngine>
-      <SustainerLaunchWt>72.49</SustainerLaunchWt>
+      <SustainerLaunchWt>70</SustainerLaunchWt>
       <SustainerNozzleDiameter>2</SustainerNozzleDiameter>
       <SustainerCG>75.91</SustainerCG>
       <SustainerIgnitionDelay>0</SustainerIgnitionDelay>
@@ -92,17 +92,17 @@
       <Booster2NozzleDiameter>0</Booster2NozzleDiameter>
       <IncludeBooster2>False</IncludeBooster2>
       <FlightTime>0</FlightTime>
-      <TimetoApogee>42.08894</TimetoApogee>
-      <MaxAltitude>30005.98</MaxAltitude>
-      <MaxVelocity>1687.558</MaxVelocity>
+      <TimetoApogee>41.07911</TimetoApogee>
+      <MaxAltitude>29333.59</MaxAltitude>
+      <MaxVelocity>1750.834</MaxVelocity>
       <OptimumWt>0</OptimumWt>
       <OptimumMaxAlt>0</OptimumMaxAlt>
     </Simulation>
     <Simulation>
       <SustainerEngine>N2900-CL  (CTI)</SustainerEngine>
-      <SustainerLaunchWt>68</SustainerLaunchWt>
+      <SustainerLaunchWt>67.8</SustainerLaunchWt>
       <SustainerNozzleDiameter>2</SustainerNozzleDiameter>
-      <SustainerCG>76</SustainerCG>
+      <SustainerCG>74.2</SustainerCG>
       <SustainerIgnitionDelay>0</SustainerIgnitionDelay>
       <Booster1LaunchWt>0</Booster1LaunchWt>
       <Booster1SeparationDelay>0</Booster1SeparationDelay>
@@ -116,9 +116,9 @@
       <Booster2NozzleDiameter>0</Booster2NozzleDiameter>
       <IncludeBooster2>False</IncludeBooster2>
       <FlightTime>0</FlightTime>
-      <TimetoApogee>40.04929</TimetoApogee>
-      <MaxAltitude>28667.05</MaxAltitude>
-      <MaxVelocity>1763.403</MaxVelocity>
+      <TimetoApogee>44.54853</TimetoApogee>
+      <MaxAltitude>34035.13</MaxAltitude>
+      <MaxVelocity>1836.225</MaxVelocity>
       <OptimumWt>0</OptimumWt>
       <OptimumMaxAlt>0</OptimumMaxAlt>
     </Simulation>

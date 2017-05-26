@@ -45,12 +45,21 @@ legend('Probable', 'Worst Case', 'Location', 'best')
 %set(gca,'fontsize', 14)
 figure() 
 %% Surface Finish Variations
-SF = [ 1 2 3 4 5 6 7]
-Altitude_SF = [45.138 45.137 45.001 44.417 42.408 39.499 38.397]
-scatter (SF, Altitude_SF, 'filled')
+close all 
+clear all
+SF = [ 1 2 3 4 5 6 7];
+Altitude_SF = [45.138 45.137 45.001 44.417 42.408 39.499 38.397];
+for i =1:7
+    scatter (SF(i), Altitude_SF(i), 'filled')
+    hold on 
+end
+
+legendd = legend('Smooth', 'Polished', 'Sheet Metal', 'Smooth Paint', 'Camo Paint', 'Rough Camo Paint', 'Galvanized Metal', 'Cast Iron');
+rect = [0.2, 0.25, .25, .25];
+set(legendd, 'Position', rect, 'FontSize',12);
 xlabel('Surface Finish')
 ylabel('Apogee (kft)')
-title('Surface Finish Variations')
+title('Surface Finish vs. Altitude')
 axis([1, 7, 38, 46])
 grid on 
 set(gca,'fontsize', 14)
