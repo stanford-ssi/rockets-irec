@@ -13,18 +13,17 @@
 
 % Note: Only final launch will be simulated for now
 
-function [rocket] = makeRocket()
+function [rocket] = makeRocket(ballast)
 
 lbs2kg = 0.453592;   % kg/lbs
-in22m2 = 0.00064516; % m^2/in^2
 in2m   = 0.0254;     % m/in
 ft2m   = 0.3048;     % m/ft
 
 %%% General Parameters
 
 rocket.OD = 4*in2m;          % in, outter diameter
-rocket.drymass = 30*lbs2kg;     % lb
-rocket.wetmass = 61.27*lbs2kg;     % lb
+rocket.drymass = (43+ballast)*lbs2kg;     % lb
+rocket.wetmass = (62.8+ballast)*lbs2kg;     % lb
 
 %%% Structures
 % Assumptions: nose cone shoulder diameter is the same as the body
@@ -57,7 +56,8 @@ rocket.fin.num = 3;
 
 %-----------------------------------------
 
-rocket.l = rocket.nose.l + rocket.fore.l + rocket.aft.l;
+% rocket.l = rocket.nose.l + rocket.fore.l + rocket.aft.l;
+rocket.l = 10.9167*ft2m;
 
 %%% Recovery
 
@@ -65,7 +65,7 @@ rocket.l = rocket.nose.l + rocket.fore.l + rocket.aft.l;
 rocket.drogue.d = 31*in2m; % in                          
 rocket.drogue.S = pi*(rocket.drogue.d/2).^2;
 rocket.drogue.Cd = 0.75;                         % coefficient of drag
-rocket.drogue.deploy_u = 0*ft2m;                   % ft/s
+rocket.drogue.deploy_u = -5*ft2m;                   % ft/s
 rocket.main.d =   96*in2m;                          % in
 rocket.main.S = pi.*(rocket.main.d/2).^2;      % in^2
 rocket.main.Cd = 2.2;

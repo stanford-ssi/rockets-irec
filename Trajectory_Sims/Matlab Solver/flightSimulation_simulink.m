@@ -1,63 +1,96 @@
-%%% Flight Simulation 
+%%% Flight Simulation
 % Ian Gomez, 03/5/17
-clc; clear all;
+clear all; clc;
+disp('Loading in initial conditions...')
+run('initialconditions.m')
 
-NM = 1293; % m, site elevation
-motor.name  = 'N2900';
+%% Setup and run sim
+wind = 0; % m/s
+ballast = 0; % lbs
 
-% Local site conditions and make rocket struct
-% Note: measure CP and CM from nose of rocket
-Temp = 291; % K
-wind = 2.2352; % m/s 
-launch_angle = 0; % deg
-site_elevation = NM; % m
-ground_conditions = [Temp, wind, launch_angle, site_elevation];
-rocket = makeRocket(); % returns rocket struct
-CP = 0.2032; % time varying - pull from RASAero!
-CM = 0; % time varying - can set up beforehand or done in getMotorData
-
-% Set up simulation
-t_step = 0.01; % for motor data interpolation
-rINT = [0, site_elevation, 0]; % m, position,         r = [x,  y,  theta]
-uINT = [0, 0, 0];              % m/s, velocity,       u = [vx, vy, omega]
-
-% Receive motor data [struct, Thrust curve, how many seconds of thrust]
-% t.powered is the length of time the motor is on 
-[motor, T, ~] = getMotorData(motor, t_step);
-T = [(0:t_step:motor.burntime)', T'];  % make thrust a paired vector
+% make the rocket
+rocket = makeRocket(ballast); % returns rocket struct
 mdot = (rocket.wetmass-rocket.drymass)./motor.burntime;
 mass = [(0:t_step:motor.burntime)',... % make thrust a paired vector
-    (rocket.wetmass:-mdot*t_step:rocket.drymass)']; 
+    (rocket.wetmass:-mdot*t_step:rocket.drymass)'];
+CM = 73.673; % inches from nose
 
-% Pull RASAero data
-csvnum1 = 2500; csvnum2 = csvnum1*2;
-RASdata = csvread('RASAero_N2900.csv', 1, 0);
-RASMa = RASdata(1:csvnum1,1);
-CD0 = RASdata(1:csvnum1,3);
-CD2 = RASdata(csvnum1+1:csvnum2,3);
-CD4 = RASdata(csvnum2:end,3);
-CL0 = RASdata(1:csvnum1,8);
-CL2 = RASdata(csvnum1+1:csvnum2,8);
-CL4 = RASdata(csvnum2:end,8);
-aerodata = [zeros(1,7); RASMa, CD0, CD2, CD4, CL0, CL2, CL4];
+% set up sim length
+ind = 2; times = {'60', '80' '120', '360'};
+stoptime = times{ind};
 
-% figure out how to clear simulink workspace
-save('import2simulink','rocket')
-sim('solver_simulink.slx')
+% run the sim
+save('import2simulink','rocket');
+set_param('solver_simulink', 'StopTime', stoptime);
+set_param('solver_simulink', 'MaxStep', num2str(t_step))
+disp('Beginning simulation...')
+disp('---------')
+tic; simdata = sim('solver_simulink.slx'); 
+disp('---------'); toc
 
-%%
+%%% Pull out data from simulink
+disp('Pulling data from simulink...')
+tout = simdata.get('tout');   stateout = simdata.get('stateout');
+rx   = stateout(:,1);    ry = stateout(:,2);   theta = stateout(:,3);
+ux   = stateout(:,4);    uy = stateout(:,5);   omega = stateout(:,6);
+forceout_data = simdata.get('forceout'); forceout = squeeze(forceout_data);
+fx   = forceout(1,:);  fy   = forceout(2,:);  moment = forceout(3,:);
+drag = forceout(4,:);  lift = forceout(5,:);  CD     = forceout(6,:);
+CL   = forceout(7,:);  aoa  = forceout(8,:);  weight = forceout(9,:);
 
-% Plotter
-figure(1)
-plot(tout,stateout(:,2))
-title('Altitude')
-xlabel('time (s)')
-ylabel('altitude (m)')
-ylim([site_elevation site_elevation+10e3])
+% find apogee and time of apogee
+flight.apogee = max(ry); % seems wrong
+k = 1; tol = 1e-2;
+while(1)
+    delta = abs(ry(k)-flight.apogee);
+    if delta < tol; break; end
+    k = k+1;
+end
+flight.apogee = flight.apogee.*m2ft; 
+flight.t_apogee = tout(k);
 
-figure(2)
-plot(tout,stateout(:,5))
-title('Y Velocity')
-xlabel('time (s)')
-ylabel('velocity (m/s)')
+%% Plots
+disp('Plotting...')
+close all;
+scaling = 1e3;
+xend = tout(end);
+ballaststring = strcat(strcat(': ',num2str(ballast)),'lbs Ballast');
 
+% altitude
+figure(1); set(gcf,'color','w'); hold on % in imperial units
+goal_line = (goal-site_elevation).*m2ft.*ones(1,length(tout));
+alt = ry-site_elevation;
+plot(tout, goal_line./scaling,'--','color','k') 
+plot(tout, alt.*m2ft./scaling,'color','g')
+plot(ras_t,ras_alt./scaling,'color','m')
+    
+title(strcat('Altitude',ballaststring)); 
+legend('goal','simulink','RASAero','Location','Southeast')
+xlabel('time (s)'); ylabel('altitude (kft)'); grid on
+xlim([0, xend])
+
+% % x velocity
+% figure(2); set(gcf,'color','w'); hold on % imperial units
+% plot(tout,ux.*m2ft)
+% title('X Velocity');
+% xlabel('time (s)'); ylabel('velocity (ft/s)'); grid on
+% xlim([0, xend])
+
+% y velocity
+figure(3); set(gcf,'color','w'); hold on % imperial units
+plot(tout, uy.*m2ft)
+plot(ras_t, ras_v)
+title('Y Velocity'); legend('simulink','RASAero')
+xlabel('time (s)'); ylabel('velocity (ft/s)'); grid on
+xlim([0, xend])
+
+% drag
+figure(6); set(gcf,'color','w'); hold on
+yyaxis left
+plot(tout, drag, ras_t, ras_D) 
+xlabel('time (s)'); ylabel('drag (N)'); grid on
+yyaxis right
+plot(tout, CD, ras_t, ras_CD)
+title('Drag'); legend('drag','RASAero drag','CD','RASAero CD')
+xlim([0, xend])
+disp('Done.')
