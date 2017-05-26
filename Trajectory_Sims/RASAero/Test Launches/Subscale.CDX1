@@ -39,7 +39,7 @@
         <FX3>0</FX3>
       </Fin>
     </BodyTube>
-    <Surface>Galvanized Metal</Surface>
+    <Surface>Cast Iron (Very Rough)</Surface>
     <CP>0</CP>
     <ModifiedBarrowman>False</ModifiedBarrowman>
     <Turbulence>False</Turbulence>
@@ -116,9 +116,33 @@
       <Booster2NozzleDiameter>0</Booster2NozzleDiameter>
       <IncludeBooster2>False</IncludeBooster2>
       <FlightTime>0</FlightTime>
-      <TimetoApogee>20.86038</TimetoApogee>
-      <MaxAltitude>9402.578</MaxAltitude>
-      <MaxVelocity>1443.482</MaxVelocity>
+      <TimetoApogee>20.16037</TimetoApogee>
+      <MaxAltitude>8924.447</MaxAltitude>
+      <MaxVelocity>1438.83</MaxVelocity>
+      <OptimumWt>0</OptimumWt>
+      <OptimumMaxAlt>0</OptimumMaxAlt>
+    </Simulation>
+    <Simulation>
+      <SustainerEngine>J1799N  (AT)</SustainerEngine>
+      <SustainerLaunchWt>6.37</SustainerLaunchWt>
+      <SustainerNozzleDiameter>0</SustainerNozzleDiameter>
+      <SustainerCG>31.8</SustainerCG>
+      <SustainerIgnitionDelay>0</SustainerIgnitionDelay>
+      <Booster1LaunchWt>0</Booster1LaunchWt>
+      <Booster1SeparationDelay>0</Booster1SeparationDelay>
+      <Booster1IgnitionDelay>0</Booster1IgnitionDelay>
+      <Booster1CG>0</Booster1CG>
+      <Booster1NozzleDiameter>0</Booster1NozzleDiameter>
+      <IncludeBooster1>False</IncludeBooster1>
+      <Booster2LaunchWt>0</Booster2LaunchWt>
+      <Booster2Delay>0</Booster2Delay>
+      <Booster2CG>0</Booster2CG>
+      <Booster2NozzleDiameter>0</Booster2NozzleDiameter>
+      <IncludeBooster2>False</IncludeBooster2>
+      <FlightTime>0</FlightTime>
+      <TimetoApogee>19.33035</TimetoApogee>
+      <MaxAltitude>8051.797</MaxAltitude>
+      <MaxVelocity>1282.627</MaxVelocity>
       <OptimumWt>0</OptimumWt>
       <OptimumMaxAlt>0</OptimumMaxAlt>
     </Simulation>
