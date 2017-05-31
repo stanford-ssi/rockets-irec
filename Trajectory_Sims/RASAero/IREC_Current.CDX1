@@ -42,7 +42,7 @@
     <Surface>Galvanized Metal</Surface>
     <CP>0</CP>
     <ModifiedBarrowman>True</ModifiedBarrowman>
-    <Turbulence>False</Turbulence>
+    <Turbulence>True</Turbulence>
     <SustainerNozzle>0</SustainerNozzle>
     <Booster1Nozzle>0</Booster1Nozzle>
     <Booster2Nozzle>0</Booster2Nozzle>
