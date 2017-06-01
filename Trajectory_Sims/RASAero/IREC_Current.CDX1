@@ -39,10 +39,10 @@
         <FX3>0</FX3>
       </Fin>
     </BodyTube>
-    <Surface>Galvanized Metal</Surface>
+    <Surface>Rough Camouflage Paint</Surface>
     <CP>0</CP>
     <ModifiedBarrowman>True</ModifiedBarrowman>
-    <Turbulence>True</Turbulence>
+    <Turbulence>False</Turbulence>
     <SustainerNozzle>0</SustainerNozzle>
     <Booster1Nozzle>0</Booster1Nozzle>
     <Booster2Nozzle>0</Booster2Nozzle>
@@ -148,9 +148,9 @@
     </Simulation>
     <Simulation>
       <SustainerEngine>N2900-CL  (CTI)</SustainerEngine>
-      <SustainerLaunchWt>72.5</SustainerLaunchWt>
+      <SustainerLaunchWt>58</SustainerLaunchWt>
       <SustainerNozzleDiameter>2</SustainerNozzleDiameter>
-      <SustainerCG>76.4</SustainerCG>
+      <SustainerCG>77.77</SustainerCG>
       <SustainerIgnitionDelay>0</SustainerIgnitionDelay>
       <Booster1LaunchWt>0</Booster1LaunchWt>
       <Booster1SeparationDelay>0</Booster1SeparationDelay>
@@ -164,17 +164,17 @@
       <Booster2NozzleDiameter>0</Booster2NozzleDiameter>
       <IncludeBooster2>False</IncludeBooster2>
       <FlightTime>0</FlightTime>
-      <TimetoApogee>42.04895</TimetoApogee>
-      <MaxAltitude>29953.94</MaxAltitude>
-      <MaxVelocity>1686.675</MaxVelocity>
+      <TimetoApogee>41.11911</TimetoApogee>
+      <MaxAltitude>32487.73</MaxAltitude>
+      <MaxVelocity>2076.883</MaxVelocity>
       <OptimumWt>0</OptimumWt>
       <OptimumMaxAlt>0</OptimumMaxAlt>
     </Simulation>
     <Simulation>
       <SustainerEngine>N2900-CL  (CTI)</SustainerEngine>
-      <SustainerLaunchWt>77.8</SustainerLaunchWt>
+      <SustainerLaunchWt>58</SustainerLaunchWt>
       <SustainerNozzleDiameter>2</SustainerNozzleDiameter>
-      <SustainerCG>74.8</SustainerCG>
+      <SustainerCG>77.77</SustainerCG>
       <SustainerIgnitionDelay>0</SustainerIgnitionDelay>
       <Booster1LaunchWt>0</Booster1LaunchWt>
       <Booster1SeparationDelay>0</Booster1SeparationDelay>
@@ -188,9 +188,9 @@
       <Booster2NozzleDiameter>0</Booster2NozzleDiameter>
       <IncludeBooster2>False</IncludeBooster2>
       <FlightTime>0</FlightTime>
-      <TimetoApogee>42.10894</TimetoApogee>
-      <MaxAltitude>28966.67</MaxAltitude>
-      <MaxVelocity>1577.022</MaxVelocity>
+      <TimetoApogee>46.82815</TimetoApogee>
+      <MaxAltitude>39781.54</MaxAltitude>
+      <MaxVelocity>2173.438</MaxVelocity>
       <OptimumWt>0</OptimumWt>
       <OptimumMaxAlt>0</OptimumMaxAlt>
     </Simulation>
