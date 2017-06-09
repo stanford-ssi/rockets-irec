@@ -86,7 +86,7 @@ thetastring = strcat(strcat(...
     ' & launch angle = ', num2str(launch_angle)),'deg');
 titlestring = strcat(ballaststring, thetastring);
 
-% altitude with rasaero
+% altitude with rasaero in imperial
 figure(1); set(gcf,'color','w'); hold on % in imperial units
 goal_line = goalkft.*ones(1,length(tout));
 alt = ry.*m2ft;
@@ -100,6 +100,22 @@ plot(ras_t,ras_alt./scaling)
 title(strcat('Altitude',titlestring));
 legend('scoring band','goal','simulink','RASAero','Location','Southeast')
 xlabel('time (s)'); ylabel('altitude (kft)'); grid on
+xlim([0, xend])
+
+% altitude with rasaero in metric
+figure(12); set(gcf,'color','w'); hold on % in imperial units
+goal_line = goal.*ones(1,length(tout));
+alt = ry;
+% p = patch([0, xend, xend, 0],...
+%     [(goalkft-band)/scaling, (goalkft-band)/scaling,...
+%     (goalkft+band)/scaling, (goalkft+band)/scaling],'g', 'EdgeColor', 'none'); 
+% set(p,'FaceAlpha',0.25);
+plot(tout, goal_line,'--')
+plot(tout, alt)
+plot(ras_t,ras_alt.*ft2m)
+title(strcat('Altitude',titlestring));
+legend('scoring band','goal','simulink','RASAero','Location','Southeast')
+xlabel('time (s)'); ylabel('altitude (m)'); grid on
 xlim([0, xend])
 
 % % altitude (mulitple ballast)

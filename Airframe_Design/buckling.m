@@ -17,7 +17,3 @@ for i = 1:length(L)
     SF(i) = crit_load/motor(i);
 end
 
-SF
-
-
-30*100

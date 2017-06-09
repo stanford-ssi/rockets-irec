@@ -6,6 +6,7 @@ m2mi = 0.000621371;
 in2m = 0.0254;
 m2ft = 3.28084;
 lbs2N = 4.44822162825;
+ft2m = 1/m2ft;
 
 NM = 1293; % m, site elevation
 motor.name  = 'N2900';
