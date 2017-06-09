@@ -16,6 +16,7 @@
 \usepackage{gensymb}
 \usepackage{wrapfig}
 \usepackage[font={small,it}]{caption}
+\usepackage{dirtytalk}
 
 %More special packages to help deal with long requirements tables 
 %that might span multiple pages.
@@ -37,13 +38,14 @@
 \usepackage{designreport}           
 %%%%%%%END DOCUMENT STYLE SETTINGS%%%%%%%%%%
 
+\setlength\parindent{0pt} % no indentation
 
 %%%%%%%%%%BEGIN TITLE PAGE%%%%%%%%%%%%%%%%
 %Replace the strings below with what's right  for you.
 
 %%Insert your Document Title here. Use \\ to force a newline.
 \title{Rockets IREC Systems Engineering Handbook}
-
+\author{}
 %% If you don't want it to use the printing date, replace "\today"
 %% with the date that you want.
 \date{\today}
@@ -78,7 +80,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%
 % Load file "Executive.tex" for the Executive summary.
 % Remember, this is a stand-alone section for executives to read.
-\include{1Executive}
+\include{01Executive}
 
 %%%%%%%%%%%%%%%%%%%%%%%%
 % TOC and LOF are automatically generated -- Note that sometimes have to "compile" Latex THREE
@@ -91,30 +93,20 @@
 \renewcommand{\chaptitlefont}{\normalfont\Huge\bfseries}
 %%%%%%%%%%%%%%%%%%%%%%%%
 
-\include{2Background}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\include{3Design+Logistics}   %Results of benchmarking, need-finding, CFP, CEP etc.
-\include{4PerformanceAnalysis} %Analysis of the performance, based on test data
-\include{5Redesign}   %A redesign based on what you now know
-\include{6Conclusions}
+\include{02RocketLifecycle}
+\include{03ProjectManagement}   
+\include{04MissionPlanning}
+\include{05Simulations}
+\include{06Structures}
+\include{07Avionics}
+\include{08Recovery}
+\include{09Propulsion}
+\include{10Integration}
+\include{11Onsite}
 %% Appendices are below
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \include{Description}  %Description of the design and some explanation of its evolution
-
-
-%%%%%BEGIN BIBLIOGRAPHY%%%%%%%%%
-%%%% If you don't have references, comment out the \bibliography stuff below
-%%
-% This is a two-step process in which you first create a ".bib" file, which is processed
-% by bibtex into a ".bbl" file for loading into the document. 
-% Many online journals and databases now have a feature to automatically download Bib
-% citations.  GoogleScholar also produces .bib citations for references.
-%
-% Alternatively, you can create your own bibliography list by hand.
-% In that case, comment out the last line above and replace with  \input{OurBibFile} 
-%%%%%END BIBLIOGRAPHY%%%%%%%%%
 
 %%%%%BEGIN APPENDIX SECTIONS%%%%%%%%%%%%%%%
 \begin{appendices}
