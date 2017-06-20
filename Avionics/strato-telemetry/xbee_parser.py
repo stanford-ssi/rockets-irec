@@ -1,4 +1,6 @@
+from __future__ import print_function
 import sys
+import time
 import glob
 import serial
 import struct
@@ -6,7 +8,8 @@ import numpy
 import csv
 import matplotlib.pyplot as plat
 
-FLIGHT_NAME = "SA_flight4"
+now = time.strftime("%Y%m%d-%H%M")
+FNAME = "IREC_STRATO-TELEMETRY_" + now + ".log"
 
 def serial_ports():
     """ Lists serial port names
@@ -36,17 +39,17 @@ def serial_ports():
             pass
     return result
 
-print(serial_ports())
-xbee = serial.Serial('COM4',115200)
-f = open(append(FLIGHT_NAME, ".log"), "a")
+print("test")
+#print(serial_ports())
+xbee = serial.Serial('COM11',9600)
+f = open(FNAME, "a")
 print(f)
 while(1):
     #try:
         byte = xbee.read(1)
-        c = struct.unpack('c',1)
-        f.write(c)
+        print(byte,end="")
+        s = str(byte)
+        #print(s)
+        f.write(s)
         f.close()
-        f = open(append(FLIGHT_NAME, ".log"), "a")
-
-
-
+        f = open(FNAME, "a")
