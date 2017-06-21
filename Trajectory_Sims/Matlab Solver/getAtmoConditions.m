@@ -5,9 +5,9 @@
 
 % Input = altitude [m]; Output = temperature [K]
 
-function [T, P, rho, a, mu] = getAtmoConditions(h)
+function [T, P, rho, a, mu] = getAtmoConditions(h, h0, Tlaunch)
 
-Tlaunch = 288.16; % [K] launch site temp
+% h = h + h0;
 T0 = [Tlaunch, 216.66, 216.66, 282.66, 282.66, 165.66, 165.66, 225.66];
 Trate = [-6.5e-3, 0, 3e-3, 0, -4.5e-3, 0, 4e-3]; % uses standard model lapse rate
 hpos  = [11e3, 25e3, 47e3, 53e3, 79e3, 90e3, 105e3];
@@ -44,11 +44,8 @@ k = 1.4;                    % Air specific heats ratio
 P = P_sl.*exp((-m_air.*g.*h)./(k_boltz.*T)); % Pa
 
 % Density [kg/m^3]
-rho0 = 1.225;
-R = 287;
-% rho = rho0.*(288.15./(288.15-0.0065.*h)).^...
-%     (1+9.80665.*0.0289644./(8.31432.*0.0065));
-rho = rho0.*exp(-(g/(R.*T)).*h);
+rho_sl = 1.225;
+rho = rho_sl.*exp(-(g/(R_air.*T)).*h);
 
 % Mach number
 a  = sqrt(k.*R_air.*T); % m/s, local speed of sound

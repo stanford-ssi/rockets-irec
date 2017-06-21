@@ -1,0 +1,126 @@
+% Adapted from ME310 document template
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%BEGIN DOCUMENT STYLE SETTINGS%%%%%%%%%%%
+% Don't modify this stuff unless you know what you're doing...
+% We are using the "memoir" class, a widely used set of macros book-like documents.
+% If you get errors that you are missing the "memoir" package you can download and 
+% install it:   http://www.ctan.org/tex-archive/macros/latex/contrib/memoir/
+
+% memoir document class for standard USA letter paper, printed one side
+\documentclass[11pt,letterpaper,oneside]{memoir}
+\chapterstyle{section}
+\usepackage{graphicx}      			  % standard LaTeX graphics 
+\usepackage{color}               	  % support for colored fonts
+\usepackage{url}  \urlstyle{same}     % deal with url strings in bibliography
+\usepackage{gensymb}
+\usepackage{wrapfig}
+\usepackage[font={small,it}]{caption}
+
+%More special packages to help deal with long requirements tables 
+%that might span multiple pages.
+\usepackage{multirow} %deal with merged cells in tables
+\usepackage{supertabular}
+\usepackage{longtable}
+\usepackage{morefloats}
+
+\usepackage[pdftex,           %hyperlink cross references, etc.
+    pdfsubject={ME112 Documentation},
+    colorlinks={true},
+    linkcolor={black},
+    citecolor={blue},
+    bookmarksopenlevel=1,
+]{hyperref}				  
+
+%The file "designreport.sty" should be in the same directory as this file.
+% It contains formatting for page setup, titlepage, glossary, references, etc.
+\usepackage{designreport}           
+%%%%%%%END DOCUMENT STYLE SETTINGS%%%%%%%%%%
+
+
+%%%%%%%%%%BEGIN TITLE PAGE%%%%%%%%%%%%%%%%
+%Replace the strings below with what's right  for you.
+
+%%Insert your Document Title here. Use \\ to force a newline.
+\title{Rockets IREC Systems Engineering Handbook}
+
+%% If you don't want it to use the printing date, replace "\today"
+%% with the date that you want.
+\date{\today}
+%%%%%%%%%%%END TITLE PAGE%%%%%%%%%%%%%
+
+
+%%%%%%%%%BEGIN ANY CUSTOM ABBREVIATIONS%%%%%%
+% Define any useful abbreviations to save typing.
+% For example:
+\def\pmt{ {\em papier m\^{a}ch\`{e}} }  %Define "\pmt" to print "Papier Mache" with accents +1space
+%%%%%%%%%END CUSTOM ABBREVIATIONS%%%%%%%%%
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   BEGIN THE MAIN DOCUMENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%If you want a figure on the cover page, this is where it goes.
+%9 cm is about max figure height before messing up title spacing.
+\begin{figure}[t]
+\centering
+  %An example cover image
+  \includegraphics[height= 9cm]{Figures/logo.png}
+%\vspace{3 cm}    %Use this instead when you have no cover picture 
+\end{figure}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Make the title page using arguments defined above.
+\titlep
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% Load file "Executive.tex" for the Executive summary.
+% Remember, this is a stand-alone section for executives to read.
+\include{1Executive}
+
+%%%%%%%%%%%%%%%%%%%%%%%%
+% TOC and LOF are automatically generated -- Note that sometimes have to "compile" Latex THREE
+% times to update the main .aux files, the TOC etc. files, and finally the PDF output with all changes
+% propagated to the printout.
+% Make Table of Contents title smaller than a normal Chapter heading:
+\renewcommand{\chaptitlefont}{\normalfont\Large\bfseries}
+\newpage
+\tableofcontents*  %asterisk to prevent it from getting a number
+\renewcommand{\chaptitlefont}{\normalfont\Huge\bfseries}
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\include{2Background}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{3Design+Logistics}   %Results of benchmarking, need-finding, CFP, CEP etc.
+\include{4PerformanceAnalysis} %Analysis of the performance, based on test data
+\include{5Redesign}   %A redesign based on what you now know
+\include{6Conclusions}
+%% Appendices are below
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{Description}  %Description of the design and some explanation of its evolution
+
+
+%%%%%BEGIN BIBLIOGRAPHY%%%%%%%%%
+%%%% If you don't have references, comment out the \bibliography stuff below
+%%
+% This is a two-step process in which you first create a ".bib" file, which is processed
+% by bibtex into a ".bbl" file for loading into the document. 
+% Many online journals and databases now have a feature to automatically download Bib
+% citations.  GoogleScholar also produces .bib citations for references.
+%
+% Alternatively, you can create your own bibliography list by hand.
+% In that case, comment out the last line above and replace with  \input{OurBibFile} 
+%%%%%END BIBLIOGRAPHY%%%%%%%%%
+
+%%%%%BEGIN APPENDIX SECTIONS%%%%%%%%%%%%%%%
+\begin{appendices}
+ \include{Appendix1}       % There could be multiple appendix files like this
+ \end{appendices}
+ %%%%%END APPENDIX SECTIONS%%%%%%%%%%%%%%%
+ 
+\end{document}
+

@@ -2,20 +2,22 @@
 % Defines the aerodynamic forces acting on the rocket
 % Ian Gomez, Rushal Rege 04/11/2017
 
-function [Fdrag, Flift, CD, CL, aoa, CP] = aerodynamics(r, u, wind, aerodata, rocket)
+function [Fdrag, Flift, CD, CL, aoa, CP] = aerodynamics(r, u, wind, ...
+    aerodata, rocket, site_elevation, T0)
 % rev 2 = use OpenRocket subsonic drag and call RASAero drag past transonic
 
 % find angle of attack; see photo for help
 % mathisfun.com/algebra/trig-solving-sas-triangles
-ux = u(1); uy = u(2);
+ux = u(1); 
+uy = u(2);
 umag = norm(u(1:2));
 phi = 90-r(3);
 resultant = umag.^2 + wind.^2 - 2.*umag.*wind.*cosd(phi);
 lambda = asind(wind.*sind(phi)./resultant);
-aoa = 180 - lambda - phi;
+aoa = 180 - lambda - phi; %%
 
 % Calculate atmosphere
-[~, ~, rho, local_c, mu] = getAtmoConditions(r(2));
+[~, ~, rho, local_c, mu] = getAtmoConditions(r(2), site_elevation, T0);
 
 % Check for mach number
 mach = umag/local_c;
@@ -34,9 +36,13 @@ Re_rocket_y = rho*umag*rocket_length/mu;
 % determine what state the rocket is in aerodynamically
 % if rocket is falling - set theta
 
-rail_length = 20; % m, which is pretty ridiculous
+rail_length = 5.4864; % m, which is pretty ridiculous
 launch_site = 1293; % m, magic number
 aoa = 0;
+
+Sdrag = pi .* (rocket.OD.^2)./4; % axial surface area
+Slift = rocket.l.*rocket.OD;     % projected surface area
+
 if u(2) >= 0
     
     if r(2) <= rail_length+launch_site
@@ -62,24 +68,22 @@ if u(2) >= 0
         disp('yo, aoa > 4')
     end
     
-    S = pi .* (rocket.OD.^2)./4; % axial surface area
-    
-    % do signs
-    Fdrag = CD .* S .* 0.5 .* rho .* (cosd(aoa) .* umag).^2;
-    Flift = CL .* S .* 0.5 .* rho .* (sind(aoa) .* umag).^2;
+    Fdrag = CD .* Sdrag .* 0.5 .* rho .* (cosd(aoa) .* umag).^2;
+    Flift = CL .* Slift .* 0.5 .* rho .* (sind(aoa) .* umag).^2;
     
 elseif u(2) < rocket.drogue.deploy_u && r(2) > rocket.main.deploy_h
     CD = 0;
     CL = 1;
     CP = aerodata(1,8);
-    Fdrag = rocket.drogue.Cd.*rocket.drogue.S.*0.5.*rho.*umag.^2;
-    Flift = CL.*rocket.l.*rocket.OD.*0.5.*rho.*(ux-wind).^2; % need to fix
+    Fdrag = rocket.drogue.Cd.*rocket.drogue.S.*0.5.*rho.*uy.^2;
+    Flift = CL.*Slift.*0.5.*rho.*(ux-wind).^2; 
+    
 elseif r(2) < rocket.main.deploy_h
     CD = 0;
     CL = 1;
     CP = aerodata(1,8);
-    Fdrag = rocket.main.Cd.*rocket.main.S.*0.5.*rho.*umag.^2;
-    Flift = CL.*rocket.l.*rocket.OD.*0.5.*rho.*(ux-wind).^2; % need to fix
+    Fdrag = rocket.main.Cd.*rocket.main.S.*0.5.*rho.*uy.^2;
+    Flift = CL.*Slift.*0.5.*rho.*(ux-wind).^2;
 else
     CD = 0;
     CL = 0;
