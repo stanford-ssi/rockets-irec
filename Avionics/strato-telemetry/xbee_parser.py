@@ -41,7 +41,7 @@ def serial_ports():
 
 print("test")
 #print(serial_ports())
-xbee = serial.Serial('COM11',9600)
+xbee = serial.Serial('COM10',9600)
 f = open(FNAME, "a")
 print(f)
 while(1):
