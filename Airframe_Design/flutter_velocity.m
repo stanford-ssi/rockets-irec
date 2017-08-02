@@ -23,7 +23,7 @@ k = 1.4; % ratio of specific heats
 a = sqrt(T.*Rair_imperial.*k); % ft/s, should be around 1,126ft/s
 
 fin.lambda = fin.tiplength/fin.rootlength;
-G.CF = 12 *145000; % shear modulus of fin (psi)
+G.CF = 5 *145000; % shear modulus of fin (psi)
 G.Al = 24*145000;
 
 scaling = 1e3;
@@ -40,7 +40,7 @@ end
 
 set(gcf,'color','w');
 plot(RAD.h./scaling,RAD.Ma,'LineWidth',line)
-title('Flutter velocity with changing height')
+title('Flutter velocity with changing fin thickness')
 ylabel('Speed (Ma)')
 xlabel('Height(kft)')
 xlim([0 max(RAD.h./scaling)])
