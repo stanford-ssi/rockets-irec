@@ -1,0 +1,27 @@
+
+The file "proc_dat.pickle" contains a dataframe of processed flight data.
+It can be read using the python pickle module.
+
+Ex:
+with open('proc_dat.pickle','rb') as f:
+	proc_dat = pickle.load(f)
+
+The DataFrame is organized as follows (as of Oct 15 2017):
+indexes are time in seconds. Launch happens after a few seconds.
+
+'abs_a' : 3 dimensional vector of acceleration in reference frame of launch site
+'abs_v' : 3 dimensional vector of velocity in reference frame of launch site
+'abs_x' : 3 dimensional vector of position in reference frame of launch site
+'abs_dir' : 3 dimensional unit vector pointing in the direction the rocket is pointing, relative to the launch site
+'rel_a' : 3 dimensional vector of acceleration in the reference frame of the rocket
+'rel_v' : 3 dimensional vector of velocity in the orientation of the rocket (note: not implemented)
+'alpha' : angle of attack
+
+In the reference frame of the rocket, the x axis (e.i. element 0) is 'up', (e.i. the rocket feels the acceleration of the motor in that axis.
+
+In the reference frame of the launch site, the z axis (e.i. element 2) is up.
+
+The reason for the difference the orientation of the IMU in the rocket. This will be fixed in firmware in the future so that then the rocket is pointing up, the frame of the launch site and the rocket align.
+
+Author: John Dean
+Date: Oct 2017
