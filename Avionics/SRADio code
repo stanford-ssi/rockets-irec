@@ -1,0 +1,345 @@
+
+
+#include <Arduino.h>
+#include <Wire.h>
+#include <SPI.h>
+#include <SD.h>
+#include <RH_RF24.h>
+#include <Audio.h>
+#include <SerialFlash.h>
+#include <aprs.h>
+#include "RadioInterface.h"
+
+const int MESSAGE_LENGTH = 50;
+#define NPAR 40
+
+#include "ecc.h"
+
+#define   PAYLOAD_1          4
+#define   EN_5V              30
+#define   GFSK_SDN           6
+#define   GFSK_IRQ           2
+#define   GFSK_GATE          5
+#define   GFSK_GPIO_0        21
+#define   GFSK_GPIO_1        20
+#define   GFSK_GPIO_2        7
+#define   GFSK_GPIO_3        8
+#define   GFSK_CS            25
+#define   BOOST_EN           16
+#define   SD_CS              23
+#define   PAYLOAD_4          3
+#define   BAT_V              A11       // Battery voltage analog input.
+#define   UART_MAINBOARD     Serial2
+
+File                     logfile;                    // SD Card Logfile
+AudioPlaySdWav           playWav1;                   // SSTV Audio File
+AudioOutputAnalog        audioOutput;
+AudioConnection          patchCord1(playWav1, 0, audioOutput, 0);
+AudioConnection          patchCord2(playWav1, 1, audioOutput, 1);
+AudioControlSGTL5000     sgtl5000_1;
+
+// Constants and Tuneable Variables
+const int     DRA818V_PTT_DELAY =      150;             // Milliseconds to wait after PTT to transmit
+const int     DRA818V_COMMAND_DELAY =  250;             // Milliseconds to wait after sending a UART command
+#define       S_CALLSIGN               "KK6MIS"         // FCC Callsign
+#define       S_CALLSIGN_ID            1                // 11 is usually for balloons
+#define       D_CALLSIGN               "APRS"           // Destination callsign: APRS (with SSID=0) is usually okay.
+#define       D_CALLSIGN_ID            0                // Desination ID
+#define       SYMBOL_TABLE             '/'              // Symbol Table: '/' is primary table '\' is secondary table
+#define       SYMBOL_CHAR              'v'              // Primary Table Symbols: /O=balloon, /-=House, /v=Blue Van, />=Red Car
+
+struct PathAddress addresses[] = {
+  { (char *)D_CALLSIGN, D_CALLSIGN_ID },  // Destination callsign
+  { (char *)S_CALLSIGN, S_CALLSIGN_ID },  // Source callsign
+  { (char *)NULL, 0 }, // Digi1 (first digi in the chain)
+  { (char *)NULL, 0 }  // Digi2 (second digi in the chain)
+};
+
+RH_RF24                  rf24(GFSK_CS, GFSK_IRQ, GFSK_SDN);
+
+typedef enum {
+        DO_THE_THINGS,
+        GFSK_CONFIG,
+        TRANSMIT_GFSK,
+} states;
+
+states        currentState = GFSK_CONFIG;
+states        previousState;
+states        nextState;
+
+const int AUTOMATIC = 1;
+const int MANUAL = 2;
+
+int RADIO_MODE = AUTOMATIC;
+
+vb_rf_message message;
+bool parsing = true;
+uint8_t parse_pos = 0;
+uint8_t last_bytes[4] = {0};
+uint8_t frame_size;
+uint8_t latest_frame[256];
+
+const char* callsign_message = "This is ValBal, callsign KK6MIS, a Stanford balloon payload, visit habmc.stanfordssi.org. ";
+
+#include "BoardUtils.h"
+
+double configFrequency = 433.5;
+float configAPRSInterval = 10*60*1000;
+int configConfig = 5; //defines modulation
+int configCallsignDivider = 100;
+
+int sendRadioTimer = millis() + 3000;
+int sendAPRSTimer = sendRadioTimer + 60*1000;
+
+void parse_radio_config(vb_rf_config* config) {
+  switch (config->config) {
+  case VB_FREQUENCY:
+    Serial.print("   - Setting ValBal frequency to ");
+    configFrequency = config->data[0] + ((float) config->data[1])/65536.;
+    Serial.println(configFrequency);
+    nextState = GFSK_CONFIG;
+    break;
+  case BEC_INTERVAL:
+    Serial.print("   - Setting BEC interval to ");
+    Serial.println(config->data[0]);
+    break;
+  case VB_DATARATE:
+    Serial.print("   - Setting datarate to ");
+    Serial.println(config->data[0]);
+    configConfig = config->data[0];
+    if (configConfig > 10 || configConfig < 1) configConfig = 5;
+    nextState = GFSK_CONFIG;
+    break;
+  case RF_MODE:
+    Serial.print("   - Setting RF mode to ");
+    Serial.println(config->data[0]);
+    if (config->data[0] == 1776) {
+      RADIO_MODE = AUTOMATIC;
+      nextState = GFSK_CONFIG;
+      sendRadioTimer = millis() + 6000;
+      sendAPRSTimer = sendRadioTimer + configAPRSInterval;
+    } else {
+      RADIO_MODE = MANUAL;
+      GFSKOff();
+    }
+    break;
+  case CALLSIGN_DIVIDER:
+    configCallsignDivider = config->data[0];
+    if (configCallsignDivider == 0) configCallsignDivider = 100;
+  }
+}
+
+void parse_radio_command() {
+  //Serial.println("Parsing radio command.");
+  switch (message.type) {
+
+  case HEARTBEAT:
+    //Serial.print(" > Answering to heartbeat ");
+    //Serial.println(message.data[0], DEC);
+    digitalWrite(PAYLOAD_4, message.data[0] == 0 ? LOW : HIGH);
+    break;
+
+  case SET_CONFIG:
+    Serial.print(" > Getting config, ");
+    Serial.print(message.data[0]);
+    Serial.println(" changes.");
+    for (int i=0; i<message.data[0]; i++) {
+      parse_radio_config((vb_rf_config*)(message.data + 1 + sizeof(vb_rf_config)*i));
+    }
+    break;
+
+  case DATA_FRAME:
+    Serial.print(" >");
+    int sz = message.data[0];
+    yeLatitude = *(float*)(message.data+1);
+    yeLongitude = *(float*)(message.data+5);
+    if (fabs(yeLatitude) > 0.01 && fabs(yeLongitude) > 0.01) {
+      goodLatitude = yeLatitude;
+      goodLongitude = yeLongitude;
+    }
+    Serial.print("Got ");
+    Serial.print(yeLatitude);
+    Serial.print(" ");
+    Serial.println(yeLongitude);
+    memcpy(latest_frame, message.data+9, sz);
+    frame_size = sz;
+    break;
+  }
+
+}
+
+
+void receive_byte() {
+  if (Serial2.available() > 0) {
+    uint8_t byte = Serial2.read();
+    last_bytes[0] = last_bytes[1];
+    last_bytes[1] = last_bytes[2];
+    last_bytes[2] = last_bytes[3];
+    last_bytes[3] = byte;
+    if (*(uint32_t*)RADIO_START_SEQUENCE == *(uint32_t*)last_bytes) {
+      parsing = true;
+      parse_pos = 0;
+      memset(&message, 0, sizeof(vb_rf_message));
+      return;
+    }
+    if (*(uint32_t*)RADIO_END_SEQUENCE == *(uint32_t*)last_bytes) {
+      parsing = false;
+      ((uint8_t*)&message)[parse_pos] = 0;
+      ((uint8_t*)&message)[parse_pos-1] = 0;
+      ((uint8_t*)&message)[parse_pos-2] = 0;
+      ((uint8_t*)&message)[parse_pos-3] = 0;
+      parse_radio_command();
+    }
+    if (parsing && parse_pos < sizeof(vb_rf_message)) {
+      ((uint8_t*)&message)[parse_pos] = byte;
+      parse_pos++;
+    }
+  }
+}
+
+void playFile(const char *filenamew) {
+  Serial.print("Playing SSTV file: ");
+  Serial.println(filenamew);
+  Serial.println(playWav1.play(filenamew));
+  delay(5);
+  while (playWav1.isPlaying()) {
+  }
+}
+
+int main() {
+  pinMode(EN_5V, OUTPUT);
+  pinMode(GFSK_GATE, OUTPUT);
+  pinMode(GFSK_SDN,OUTPUT);
+  amBusy();
+  FiveVOff();
+  Wire.begin();//I2C_MASsTER, 0x00, I2C_PINS_18_19, I2C_PULLUP_EXT, I2C_RATE_400);
+  lowBoostPower();
+  //highBoostPower();
+  SPI.setSCK(13);       // SCK on pin 13
+  SPI.setMOSI(11);      // MOSI on pin 11
+  SPI.setMISO(12);      // MOSI on pin 11
+  SPI.setDataMode(SPI_MODE0);
+  SPI.setClockDivider(SPI_CLOCK_DIV2);  // Setting clock speed to 8mhz, as 10 is the max for the rfm22
+  SPI.begin();
+  Serial.begin(115200);
+  Serial.println("ValBal 8.1 Radio Board, Summer 2017");
+  analogReadResolution(12);
+  analogReference(INTERNAL);
+  //setupSDCard();
+  AudioMemory(8);
+  UART_DORJI.begin(DORJI_BAUD);
+  aprs_setup(50, // number of preamble flags to send
+    DORJI_PTT, // Use PTT pin
+    500, // ms to wait after PTT to transmit
+    0, 0 // No VOX ton
+  );
+
+  pinMode(PAYLOAD_1, OUTPUT);
+  pinMode(PAYLOAD_4, OUTPUT);
+
+  initialize_ecc();
+
+  delay(3000);
+  Serial2.begin(VBRF_BAUD_RATE);
+
+
+  uint8_t data[256] = {0};
+  uint8_t leng = MESSAGE_LENGTH + NPAR;
+  int nAddresses = 0;
+  int msgNum = 0;
+
+  sendRadioTimer = millis() + 3000;
+
+  while (true) {
+        uint32_t st = micros();
+    switch (currentState) {
+    /*receives the parsed byte from the teensy and sets to transmit state if the appropriate time (radio timer based on frequency) has passed. otherwise, does DO_THE_THINGS state again*/
+    case DO_THE_THINGS:
+    //radio mode is default set to automatic
+      if (RADIO_MODE == MANUAL || (RADIO_MODE == AUTOMATIC)) amFree(); //always true
+      else amBusy();
+      receive_byte(); //parses the b from the teensy
+      if (nextState != DO_THE_THINGS) {
+        parsing = false;
+        parse_pos = 0;
+        break;
+      }
+      if (RADIO_MODE == AUTOMATIC) {
+         if (millis() > sendRadioTimer) {
+          nextState = TRANSMIT_GFSK;
+        }
+      } else {
+        nextState = DO_THE_THINGS;
+      }
+      break;
+
+    /*chooses the GFSK frequency and data rate*/
+    case GFSK_CONFIG:
+      amBusy();
+      GFSKOff();
+      delay(500);
+      GFSKOn();
+      rf24.init(MESSAGE_LENGTH+NPAR);
+      uint8_t buf[8];
+      if (!rf24.command(RH_RF24_CMD_PART_INFO, 0, 0, buf, sizeof(buf))) {
+        Serial.println("SPI ERROR");
+      } else {
+        Serial.println("SPI OK");
+      }
+      if (!rf24.setFrequency(configFrequency)) {
+        Serial.println("setFrequency failed");
+      } else {
+        Serial.print("Frequency set to ");
+        Serial.print(configFrequency);
+        Serial.println(" MHz.");
+      }
+
+      /*defines the modulation and data rate (all data sent using Gaussian Frequency Shift Keying)*/
+      if (configConfig == 5) rf24.setModemConfig(rf24.GFSK_Rb0_5Fd1);   // GFSK 500 bps
+      if (configConfig == 6) rf24.setModemConfig(rf24.GFSK_Rb5Fd10);    // GFSK 5   kbps
+      if (configConfig == 7) rf24.setModemConfig(rf24.GFSK_Rb50Fd100);  // GFSK 50  kbps
+      if (configConfig == 8) rf24.setModemConfig(rf24.GFSK_Rb150Fd300); // GFSK 150 kbps
+
+      Serial.println("set up");
+
+      rf24.setTxPower(0x7f);
+      nextState = DO_THE_THINGS;
+      break;
+
+    /*encodes the data and calls on rf24 to send bits to the silabs chip*/
+    case TRANSMIT_GFSK:
+      amBusy(); //defined in boardUtils.h
+
+      if (frame_size > MESSAGE_LENGTH) { //to protect against coder errors
+        Serial.println("WELL CRAP");
+      }
+
+      if ((msgNum % configCallsignDivider == 10)) {
+        memcpy(data, callsign_message, 90);
+      } else { 
+        encode_data(latest_frame, frame_size, data);
+        Serial.println("encoded data");
+        for (int i=0; i<frame_size+NPAR; i++) {
+          int k = data[i];
+          Serial.print(k);
+          if (k < 10) Serial.print(" ");
+          if (k < 100) Serial.print(" ");
+          Serial.print(" ");
+        }
+        Serial.println();
+      }
+      msgNum++;
+
+      rf24.send(data, MESSAGE_LENGTH + NPAR);
+      rf24.waitPacketSent();
+
+      Serial.print((micros()-st)/1000.);
+      Serial.println(" ms");
+
+      sendRadioTimer = millis() + 2000;
+
+      nextState = DO_THE_THINGS;
+      break;
+
+  }
+}
